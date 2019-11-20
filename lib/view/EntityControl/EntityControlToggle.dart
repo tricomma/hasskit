@@ -15,15 +15,16 @@ class EntityControlToggle extends StatefulWidget {
 
 class _EntityControlToggleState extends State<EntityControlToggle> {
   double buttonValue = 150;
-  double buttonHeight = 255.0;
+  double buttonHeight = 300.0;
   double buttonWidth = 90.0;
   double currentPosX;
   double currentPosY;
   double startPosX;
   double startPosY;
+  double upperPartHeight = 30.0;
   double buttonWidthInner = 82.0;
   double buttonHeightInner = 123.5;
-  double onPos = 255.0 - 123.5 - 4.0;
+  double onPos = 300.0 - 123.5 - 4.0;
   double offPos = 4.0;
   double diffY = 0;
   double snap = 10;
@@ -58,64 +59,87 @@ class _EntityControlToggleState extends State<EntityControlToggle> {
               ),
               Positioned(
                 bottom: gd.entities[widget.entityId].isStateOn
-                    ? onPos + diffY
+                    ? onPos + diffY - upperPartHeight
                     : offPos + diffY,
-                child: Stack(
-                  alignment: Alignment.topCenter,
-                  children: <Widget>[
-                    Container(
-                      width: buttonWidthInner,
-                      height: buttonHeightInner,
-                      padding: const EdgeInsets.all(2.0),
-                      decoration: new BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: gd.entities[widget.entityId].isStateOn
-                            ? Colors.white.withOpacity(1)
-                            : Colors.white.withOpacity(1),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black54,
-                            blurRadius:
-                                1.0, // has the effect of softening the shadow
-                            spreadRadius:
-                                0.5, // has the effect of extending the shadow
-                            offset: Offset(
-                              0.0, // horizontal, move right 10
-                              1.0, // vertical, move down 10
-                            ),
-                          ),
-                        ],
+                child: Container(
+                  width: buttonWidthInner,
+                  height: buttonHeightInner,
+                  padding: const EdgeInsets.all(2.0),
+                  decoration: new BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(12),
+                        bottomLeft: Radius.circular(12)),
+                    color: gd.entities[widget.entityId].isStateOn
+                        ? Colors.white.withOpacity(1)
+                        : Colors.white.withOpacity(1),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black54,
+                        blurRadius:
+                            1.0, // has the effect of softening the shadow
+                        spreadRadius:
+                            0.5, // has the effect of extending the shadow
+                        offset: Offset(
+                          0.0, // horizontal, move right 10
+                          1.0, // vertical, move down 10
+                        ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                              MaterialDesignIcons.getIconDataFromIconName(
-                                  gd.entities[widget.entityId].getDefaultIcon),
-                              size: 70,
-                              color: gd.entities[widget.entityId].isStateOn
-                                  ? ThemeInfo.colorIconActive
-                                  : ThemeInfo.colorIconInActive),
-                          SizedBox(height: 8),
-                          Text(
-                            gd.textToDisplay(
-                                gd.entities[widget.entityId].state),
-                            style: ThemeInfo.textStatusButtonActive,
-                            maxLines: 1,
-                            textScaleFactor:
-                                gd.textScaleFactor * 3 / gd.itemsPerRow,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                          MaterialDesignIcons.getIconDataFromIconName(
+                              gd.entities[widget.entityId].getDefaultIcon),
+                          size: 70,
+                          color: gd.entities[widget.entityId].isStateOn
+                              ? ThemeInfo.colorIconActive
+                              : ThemeInfo.colorIconInActive),
+                      SizedBox(height: 8),
+                      Text(
+                        gd.textToDisplay(gd.entities[widget.entityId].state),
+                        style: ThemeInfo.textStatusButtonActive,
+                        maxLines: 1,
+                        textScaleFactor:
+                            gd.textScaleFactor * 3 / gd.itemsPerRow,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
+              Positioned(
+                top: 4,
+                child: Container(
+                  width: buttonWidth - 8,
+                  height: upperPartHeight,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black54,
+                        blurRadius:
+                            0.5, // has the effect of softening the shadow
+                        spreadRadius:
+                            0.5, // has the effect of extending the shadow
+                        offset: Offset(
+                          0.0, // horizontal, move right 10
+                          -0.5, // vertical, move down 10
+                        ),
+                      ),
+                    ],
+                  ),
+                  alignment: Alignment.center,
+                  child: RequireSlideToOpen(entityId: widget.entityId),
+                ),
+              )
             ],
           ),
-          RequireSlideToOpen(entityId: widget.entityId),
         ],
       ),
     );
@@ -150,13 +174,15 @@ class _EntityControlToggleState extends State<EntityControlToggle> {
       diffY = startPosY - currentPosY;
       if (gd.entities[widget.entityId].isStateOn && diffY > 0) diffY = 0;
       if (gd.entities[widget.entityId].isStateOn &&
-          diffY < buttonHeightInner - buttonHeight + 8 + snap) {
+          diffY <
+              buttonHeightInner - buttonHeight + 8 + snap + upperPartHeight) {
         diffY = buttonHeightInner - buttonHeight + 8;
         gd.toggleStatus(gd.entities[widget.entityId]);
       }
       if (!gd.entities[widget.entityId].isStateOn && diffY < 0) diffY = 0;
       if (!gd.entities[widget.entityId].isStateOn &&
-          diffY > buttonHeight - buttonHeightInner - 8 - snap) {
+          diffY >
+              buttonHeight - buttonHeightInner - 8 - snap - upperPartHeight) {
         diffY = buttonHeight - buttonHeightInner - 8;
         gd.toggleStatus(gd.entities[widget.entityId]);
       }
@@ -183,83 +209,34 @@ class RequireSlideToOpen extends StatelessWidget {
       required = true;
     }
 
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 8),
-        InkWell(
-          onTap: () {
-            gd.requireSlideToOpenAddRemove(entityId);
-            Flushbar(
-              title: required
-                  ? "Require Slide to Open Disabled"
-                  : "Require Slide to Open Enabled",
-              message: required
-                  ? "${gd.textToDisplay(gd.entities[entityId].getOverrideName)} now can be opened with 1 touch"
-                  : "Prevent accidentally open ${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
-              duration: Duration(seconds: 3),
-            )..show(context);
-          },
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                      width: 4, color: ThemeInfo.colorBottomSheetReverse),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black54,
-                      blurRadius: 1.0, // has the effect of softening the shadow
-                      spreadRadius:
-                          0.5, // has the effect of extending the shadow
-                      offset: Offset(
-                        0.0, // horizontal, move right 10
-                        1.0, // vertical, move down 10
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      width: 4, color: ThemeInfo.colorBottomSheetReverse),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black54,
-                      blurRadius: 1.0, // has the effect of softening the shadow
-                      spreadRadius:
-                          0.5, // has the effect of extending the shadow
-                      offset: Offset(
-                        0.0, // horizontal, move right 10
-                        1.0, // vertical, move down 10
-                      ),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  required
-                      ? MaterialDesignIcons.getIconDataFromIconName("mdi:lock")
-                      : MaterialDesignIcons.getIconDataFromIconName(
-                          "mdi:lock-open"),
-                  color: required
-                      ? ThemeInfo.colorIconActive
-                      : ThemeInfo.colorIconInActive,
-                  size: 70,
-                ),
-              ),
-            ],
+    return InkWell(
+      onTap: () {
+        gd.requireSlideToOpenAddRemove(entityId);
+        Flushbar(
+          title: required
+              ? "Require Slide to Open Disabled"
+              : "Require Slide to Open Enabled",
+          message: required
+              ? "${gd.textToDisplay(gd.entities[entityId].getOverrideName)} now can be opened with 1 touch"
+              : "Prevent accidentally open ${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
+          duration: Duration(seconds: 3),
+        )..show(context);
+      },
+      child: Container(
+        width: double.infinity,
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: Icon(
+            required
+                ? MaterialDesignIcons.getIconDataFromIconName("mdi:lock")
+                : MaterialDesignIcons.getIconDataFromIconName("mdi:lock-open"),
+            color: required
+                ? ThemeInfo.colorIconActive
+                : ThemeInfo.colorIconInActive,
+            size: 100,
           ),
         ),
-      ],
+      ),
     );
   }
 }

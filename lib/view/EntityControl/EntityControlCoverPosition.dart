@@ -109,7 +109,7 @@ class CoverSliderState extends State<CoverSlider> {
                         color: gd.entities[widget.entityId].isStateOn
                             ? ThemeInfo.colorIconActive
                             : ThemeInfo.colorIconInActive,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       alignment: Alignment.bottomCenter,
                       child: Container(
@@ -218,10 +218,8 @@ class CoverSliderState extends State<CoverSlider> {
     setState(
       () {
         draggingTime = DateTime.now().add(Duration(seconds: 1));
-        var sendValue = gd
-            .mapNumber(buttonValue, lowerPartHeight,
-                buttonHeight - upperPartHeight - 8, 0, 100)
-            .toInt();
+        var sendValue = gd.mapNumber(buttonValue, lowerPartHeight,
+            buttonHeight - upperPartHeight - 8, 0, 100);
 
         log.d("_onVerticalDragEnd $sendValue");
         var outMsg;
@@ -243,7 +241,7 @@ class CoverSliderState extends State<CoverSlider> {
             "service": "set_cover_position",
             "service_data": {
               "entity_id": entity.entityId,
-              "position": sendValue,
+              "position": sendValue.toInt(),
             },
           };
         }

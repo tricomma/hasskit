@@ -71,16 +71,16 @@ class LightSlider extends StatefulWidget {
 }
 
 class LightSliderState extends State<LightSlider> {
-  double buttonHeight = 255.0;
+  double buttonHeight = 300.0;
   double buttonWidth = 90.0;
   double currentPosX;
   double currentPosY;
   double startPosX;
   double startPosY;
   Offset buttonPos;
-  Size buttonSize;
-  double buttonValue = 50.0;
-  double buttonValueMin = 50.0;
+  double buttonValue = 0;
+  double upperPartHeight = 30.0;
+  double lowerPartHeight = 50.0;
   double buttonValueOnTapDown = 0;
   String raisedButtonLabel = "";
   //creating Key for red panel
@@ -99,13 +99,15 @@ class LightSliderState extends State<LightSlider> {
         if (draggingTime.millisecondsSinceEpoch <
             DateTime.now().millisecondsSinceEpoch) {
           if (!gd.entities[widget.entityId].isStateOn) {
-            buttonValue = buttonValueMin;
+            buttonValue = lowerPartHeight;
           } else {
-            var currentPosition =
-                gd.entities[widget.entityId].brightness.toDouble();
-            currentPosition = gd.mapNumber(
-                currentPosition, 0, 255, 0, buttonHeight - buttonValueMin);
-            buttonValue = buttonValueMin + currentPosition;
+            var mapValue = gd.mapNumber(
+                gd.entities[widget.entityId].brightness.toDouble(),
+                0,
+                255,
+                lowerPartHeight,
+                buttonHeight - upperPartHeight);
+            buttonValue = mapValue;
           }
         }
         var colorForeground = ThemeInfo.colorBottomSheetReverse;
@@ -181,50 +183,88 @@ class LightSliderState extends State<LightSlider> {
                   ),
                   Positioned(
                     top: 4,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: buttonWidth - 8,
+                      height: buttonHeight - 8,
+                      decoration: BoxDecoration(
+                        color: sliderColor.color.withOpacity(1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      alignment: Alignment.bottomCenter,
                       child: Container(
                         width: buttonWidth - 8,
-                        height: buttonHeight - 8,
-                        color: sliderColor.color.withOpacity(1),
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          width: buttonWidth - 8,
-                          height: buttonValue - 8,
-                          alignment: Alignment.topCenter,
-                          decoration: BoxDecoration(
-//                            color: sliderColor.color.withOpacity(1),
-                            color: gd.entities[widget.entityId].isStateOn
-                                ? Colors.white
-                                : ThemeInfo.colorIconInActive,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black54,
-                                blurRadius:
-                                    1.0, // has the effect of softening the shadow
-                                spreadRadius:
-                                    1.0, // has the effect of extending the shadow
-                                offset: Offset(
-                                  0.0, // horizontal, move right 10
-                                  0.0, // vertical, move down 10
-                                ),
+                        height: buttonValue - 8,
+                        alignment: Alignment.topCenter,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(12),
+                              bottomRight: Radius.circular(12)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black54,
+                              blurRadius:
+                                  0.5, // has the effect of softening the shadow
+                              spreadRadius:
+                                  0.5, // has the effect of extending the shadow
+                              offset: Offset(
+                                0.0, // horizontal, move right 10
+                                0.5,
                               ),
-                            ],
-                          ),
-                          child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Icon(
-                              MaterialDesignIcons.getIconDataFromIconName(
-                                  gd.entities[widget.entityId].getDefaultIcon),
-                              size: 45,
-                              color: sliderColor.color.withOpacity(1),
                             ),
+                          ],
+                        ),
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Icon(
+                            MaterialDesignIcons.getIconDataFromIconName(
+                                gd.entities[widget.entityId].getDefaultIcon),
+                            size: 45,
+                            color: ThemeInfo.colorIconInActive,
                           ),
                         ),
                       ),
                     ),
                   ),
+                  Positioned(
+                    top: 4,
+                    child: Container(
+                      width: buttonWidth - 8,
+                      height: upperPartHeight,
+                      decoration: BoxDecoration(
+                        color: sliderColor.color.withOpacity(1),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black54,
+                            blurRadius:
+                                0.5, // has the effect of softening the shadow
+                            spreadRadius:
+                                0.5, // has the effect of extending the shadow
+                            offset: Offset(
+                              0.0, // horizontal, move right 10
+                              -0.5, // vertical, move down 10
+                            ),
+                          ),
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        gd
+                            .mapNumber(buttonValue, lowerPartHeight,
+                                buttonHeight - upperPartHeight, 0, 100)
+                            .toInt()
+                            .toString(),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
 //              Text("${gd.entities[widget.entityId].rgbColor}"),
@@ -253,9 +293,11 @@ class LightSliderState extends State<LightSlider> {
     setState(
       () {
         draggingTime = DateTime.now().add(Duration(seconds: 1));
-        log.d("_onVerticalDragEnd");
+        var sendValue = gd.mapNumber(buttonValue, lowerPartHeight,
+            buttonHeight - upperPartHeight, 0, 255);
+        log.d("_onVerticalDragEnd $sendValue");
         var outMsg;
-        if (buttonValue.toInt() <= buttonValueMin + buttonHeight / 50) {
+        if (sendValue <= 0) {
           outMsg = {
             "id": gd.socketId,
             "type": "call_service",
@@ -273,10 +315,7 @@ class LightSliderState extends State<LightSlider> {
             "service": "turn_on",
             "service_data": {
               "entity_id": entity.entityId,
-//              "brightness": buttonValue.toInt()
-              "brightness": gd
-                  .mapNumber(buttonValue, buttonValueMin, buttonHeight, 0, 255)
-                  .toInt()
+              "brightness": sendValue.toInt()
             },
           };
         }
@@ -297,7 +336,8 @@ class LightSliderState extends State<LightSlider> {
 //      log.d(
 //          "_onVerticalDragUpdate currentPosX ${currentPosX.toStringAsFixed(0)} currentPosY ${currentPosY.toStringAsFixed(0)}");
       buttonValue = buttonValueOnTapDown + (startPosY - currentPosY);
-      buttonValue = buttonValue.clamp(buttonValueMin, buttonHeight);
+      buttonValue =
+          buttonValue.clamp(lowerPartHeight, buttonHeight - upperPartHeight);
     });
   }
 }

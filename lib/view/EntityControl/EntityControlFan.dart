@@ -18,15 +18,16 @@ class EntityControlFan extends StatefulWidget {
 
 class _EntityControlFanState extends State<EntityControlFan> {
   double buttonValue = 150;
-  double buttonHeight = 255.0;
+  double buttonHeight = 300.0;
   double buttonWidth = 90.0;
   double currentPosX;
   double currentPosY;
   double startPosX;
   double startPosY;
+  double upperPartHeight = 30.0;
   double buttonWidthInner = 82.0;
   double buttonHeightInner = 82.0;
-  double onPos = 255.0 - 82.0 - 4.0;
+  double onPos = 300.0 - 30 - 82.0 - 4.0;
   double offPos = 4.0;
   double diffY = 0;
   double snap = 10;
@@ -40,7 +41,8 @@ class _EntityControlFanState extends State<EntityControlFan> {
     super.initState();
     Entity entity = gd.entities[widget.entityId];
     division = entity.speedList.length - 1;
-    stepLength = (buttonHeight - buttonHeightInner - 8) / division;
+    stepLength =
+        (buttonHeight - upperPartHeight - buttonHeightInner - 8) / division;
     print(
         "entityId ${widget.entityId} division $division steps stepLength $stepLength");
 
@@ -108,65 +110,88 @@ class _EntityControlFanState extends State<EntityControlFan> {
                   ),
                   Positioned(
                     bottom: 4 + diffY,
-                    child: Stack(
-                      alignment: Alignment.topCenter,
-                      children: <Widget>[
-                        Container(
-                          width: buttonWidthInner,
-                          height: buttonHeightInner,
-                          padding: const EdgeInsets.all(2.0),
-                          decoration: new BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: currentStep > 0 ||
-                                    gd.entities[widget.entityId].isStateOn
-                                ? Colors.white.withOpacity(1)
-                                : Colors.white.withOpacity(1),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black54,
-                                blurRadius:
-                                    1.0, // has the effect of softening the shadow
-                                spreadRadius:
-                                    0.5, // has the effect of extending the shadow
-                                offset: Offset(
-                                  0.0, // horizontal, move right 10
-                                  1.0, // vertical, move down 10
-                                ),
-                              ),
-                            ],
+                    child: Container(
+                      width: buttonWidthInner,
+                      height: buttonHeightInner,
+                      padding: const EdgeInsets.all(2.0),
+                      decoration: new BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(12),
+                            bottomRight: Radius.circular(12)),
+                        color: currentStep > 0 ||
+                                gd.entities[widget.entityId].isStateOn
+                            ? Colors.white.withOpacity(1)
+                            : Colors.white.withOpacity(1),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black54,
+                            blurRadius:
+                                1.0, // has the effect of softening the shadow
+                            spreadRadius:
+                                0.5, // has the effect of extending the shadow
+                            offset: Offset(
+                              0.0, // horizontal, move right 10
+                              1.0, // vertical, move down 10
+                            ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                  MaterialDesignIcons.getIconDataFromIconName(gd
-                                      .entities[widget.entityId]
-                                      .getDefaultIcon),
-                                  size: 50,
-                                  color: currentStep > 0 ||
-                                          gd.entities[widget.entityId].isStateOn
-                                      ? ThemeInfo.colorIconActive
-                                      : ThemeInfo.colorIconInActive),
-                              SizedBox(height: 4),
-                              Text(
-                                gd.textToDisplay(
-                                    "${gd.entities[widget.entityId].getStateDisplay}"),
-                                style: ThemeInfo.textStatusButtonActive,
-                                maxLines: 1,
-                                textScaleFactor:
-                                    gd.textScaleFactor * 3 / gd.itemsPerRow,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(
+                              MaterialDesignIcons.getIconDataFromIconName(
+                                  gd.entities[widget.entityId].getDefaultIcon),
+                              size: 50,
+                              color: currentStep > 0 ||
+                                      gd.entities[widget.entityId].isStateOn
+                                  ? ThemeInfo.colorIconActive
+                                  : ThemeInfo.colorIconInActive),
+                          SizedBox(height: 4),
+                          Text(
+                            gd.textToDisplay(
+                                "${gd.entities[widget.entityId].getStateDisplay}"),
+                            style: ThemeInfo.textStatusButtonActive,
+                            maxLines: 1,
+                            textScaleFactor:
+                                gd.textScaleFactor * 3 / gd.itemsPerRow,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
+                  Positioned(
+                    top: 4,
+                    child: Container(
+                      width: buttonWidth - 8,
+                      height: upperPartHeight,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black54,
+                            blurRadius:
+                                0.5, // has the effect of softening the shadow
+                            spreadRadius:
+                                0.5, // has the effect of extending the shadow
+                            offset: Offset(
+                              0.0, // horizontal, move right 10
+                              -0.5, // vertical, move down 10
+                            ),
+                          ),
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: Oscillating(entityId: widget.entityId),
+                    ),
+                  )
                 ],
               ),
-              Oscillating(entityId: widget.entityId),
             ],
           ),
         );
@@ -257,91 +282,48 @@ class Oscillating extends StatelessWidget {
     bool oscillating = entity.oscillating;
 //    print("entity.oscillating ${oscillating}");
 
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 8),
-        InkWell(
-          onTap: () {
-            var outMsg = {
-              "id": gd.socketId,
-              "type": "call_service",
-              "domain": "fan",
-              "service": "oscillate",
-              "service_data": {
-                "entity_id": entity.entityId,
-                "oscillating": !oscillating,
-              }
-            };
+    return InkWell(
+      onTap: () {
+        var outMsg = {
+          "id": gd.socketId,
+          "type": "call_service",
+          "domain": "fan",
+          "service": "oscillate",
+          "service_data": {
+            "entity_id": entity.entityId,
+            "oscillating": !oscillating,
+          }
+        };
 
-            gd.setFanOscillating(entity, !oscillating, json.encode(outMsg));
+        gd.setFanOscillating(entity, !oscillating, json.encode(outMsg));
 
-            Flushbar(
-              title: !entity.oscillating
-                  ? "Disable ${gd.textToDisplay(gd.entities[entityId].getOverrideName)} Oscilation"
-                  : "Enable ${gd.textToDisplay(gd.entities[entityId].getOverrideName)} Oscilation",
-              message: "Prevent accidentally open the secure doors...",
-              duration: Duration(seconds: 3),
-            )..show(context);
-          },
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                width: 90,
-                height: 90,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                      width: 4, color: ThemeInfo.colorBottomSheetReverse),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black54,
-                      blurRadius: 1.0, // has the effect of softening the shadow
-                      spreadRadius:
-                          0.5, // has the effect of extending the shadow
-                      offset: Offset(
-                        0.0, // horizontal, move right 10
-                        1.0, // vertical, move down 10
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                      width: 4, color: ThemeInfo.colorBottomSheetReverse),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black54,
-                      blurRadius: 1.0, // has the effect of softening the shadow
-                      spreadRadius:
-                          0.5, // has the effect of extending the shadow
-                      offset: Offset(
-                        0.0, // horizontal, move right 10
-                        1.0, // vertical, move down 10
-                      ),
-                    ),
-                  ],
-                ),
-                child: Icon(
+        Flushbar(
+          title: !entity.oscillating
+              ? "Oscilation Disabled"
+              : "Oscilation Enabled",
+          message: "${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
+          duration: Duration(seconds: 3),
+        )..show(context);
+      },
+      child: Container(
+        width: double.infinity,
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: !oscillating
+              ? Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
-                      "mdi:swap-horizontal"),
-                  color: oscillating
-                      ? ThemeInfo.colorIconActive
-                      : ThemeInfo.colorIconInActive,
-                  size: 70,
+                      "mdi:arrow-horizontal-lock"),
+                  color: ThemeInfo.colorIconInActive,
+                  size: 100,
+                )
+              : Icon(
+                  MaterialDesignIcons.getIconDataFromIconName(
+                      "mdi:arrow-left-right"),
+                  color: ThemeInfo.colorIconActive,
+                  size: 100,
                 ),
-              ),
-            ],
-          ),
         ),
-      ],
+      ),
     );
   }
 }
