@@ -18,7 +18,6 @@ import 'EntityControlToggle.dart';
 class EntityControlParent extends StatefulWidget {
   final String entityId;
   const EntityControlParent({@required this.entityId});
-
   @override
   _EntityControlParentState createState() => _EntityControlParentState();
 }
@@ -47,6 +46,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
           "${generalData.entities[widget.entityId].getOverrideIcon} " +
           "${jsonEncode(generalData.entitiesOverride[widget.entityId])} ",
       builder: (context, data, child) {
+        print("entityIdentityIdentityId ${widget.entityId}");
         final Entity entity = gd.entities[widget.entityId];
         if (entity == null) {
           log.e('Cant find entity name ${widget.entityId}');
