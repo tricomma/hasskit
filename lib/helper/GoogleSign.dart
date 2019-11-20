@@ -44,7 +44,6 @@ class _GoogleSignState extends State<GoogleSign> {
                   color: ThemeInfo.colorBottomSheet.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(8)),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   gd.googleSignInAccount != null
                       ? CircleAvatar(
@@ -67,6 +66,9 @@ class _GoogleSignState extends State<GoogleSign> {
                   gd.googleSignInAccount != null
                       ? GoogleLoggedIn()
                       : GoogleLoggedOut(),
+                  gd.googleSignInAccount != null
+                      ? GoogleCloudAction()
+                      : Container(),
                   Text(
                     "Keep your rooms layout and device customization synchronized accross devices. HassKit won't upload your login data online...",
                     style: Theme.of(context).textTheme.caption,
@@ -84,110 +86,19 @@ class _GoogleSignState extends State<GoogleSign> {
 class GoogleLoggedIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-//            Spacer(),
-            RaisedButton(
-              padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-              child: Row(
-                children: <Widget>[
-                  Icon(MaterialDesignIcons.getIconDataFromIconName(
-                      "mdi:logout")),
-                  SizedBox(width: 4),
-                  Text("Sign Out"),
-                ],
-              ),
-              onPressed: _handleSignOut,
-            ),
-//            Spacer(),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            InkWell(
-              onTap: () {
-                Flushbar flush;
-                flush = Flushbar<bool>(
-                  title: "Force download data from cloud",
-                  message: "Use ONLY when you have sync issue",
-                  duration: Duration(seconds: 3),
-                  icon: Icon(
-                    Icons.warning,
-                    color: ThemeInfo.colorIconActive,
-                  ),
-                  mainButton: FlatButton(
-                    onPressed: () {
-                      gd.downloadCloudData();
-                      flush.dismiss(true);
-                    },
-                    child: Text(
-                      "OK",
-                      style: Theme.of(context).textTheme.title,
-                    ),
-                  ),
-                )..show(context);
-              },
-              child: Icon(MaterialDesignIcons.getIconDataFromIconName(
-                  "mdi:cloud-download")),
-            ),
-            SizedBox(width: 4),
-            InkWell(
-                onTap: () {
-                  Flushbar flush;
-                  flush = Flushbar<bool>(
-                    title: "Force upload data from cloud",
-                    message: "Use ONLY when you have sync issue",
-                    duration: Duration(seconds: 3),
-                    icon: Icon(
-                      Icons.warning,
-                      color: ThemeInfo.colorIconActive,
-                    ),
-                    mainButton: FlatButton(
-                      onPressed: () {
-                        gd.uploadCloudData();
-                        flush.dismiss(true);
-                      },
-                      child: Text(
-                        "OK",
-                        style: Theme.of(context).textTheme.title,
-                      ),
-                    ),
-                  )..show(context);
-                },
-                child: Icon(MaterialDesignIcons.getIconDataFromIconName(
-                    "mdi:cloud-upload"))),
-            SizedBox(width: 4),
-            InkWell(
-                onTap: () {
-                  Flushbar flush;
-                  flush = Flushbar<bool>(
-                    title: "Force reset data on cloud",
-                    message: "Use ONLY when you have sync issue",
-                    duration: Duration(seconds: 3),
-                    icon: Icon(
-                      Icons.warning,
-                      color: ThemeInfo.colorIconActive,
-                    ),
-                    mainButton: FlatButton(
-                      onPressed: () {
-                        gd.deleteCloudData();
-                        flush.dismiss(true);
-                      },
-                      child: Text(
-                        "OK",
-                        style: Theme.of(context).textTheme.title,
-                      ),
-                    ),
-                  )..show(context);
-                },
-                child: Icon(MaterialDesignIcons.getIconDataFromIconName(
-                    "mdi:cloud-alert"))),
-            SizedBox(width: 4),
-          ],
+        RaisedButton(
+          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+          child: Row(
+            children: <Widget>[
+              Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:logout")),
+              SizedBox(width: 4),
+              Text("Sign Out"),
+            ],
+          ),
+          onPressed: _handleSignOut,
         ),
       ],
     );
@@ -195,6 +106,103 @@ class GoogleLoggedIn extends StatelessWidget {
 
   Future<void> _handleSignOut() async {
     googleSignIn.disconnect();
+  }
+}
+
+class GoogleCloudAction extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        InkWell(
+          onTap: () {
+            Flushbar flush;
+            flush = Flushbar<bool>(
+              title: "Force download data from cloud",
+              message: "Use ONLY when you have sync issue",
+              duration: Duration(seconds: 3),
+              icon: Icon(
+                Icons.warning,
+                color: ThemeInfo.colorIconActive,
+              ),
+              mainButton: FlatButton(
+                onPressed: () {
+                  gd.downloadCloudData();
+                  flush.dismiss(true);
+                },
+                child: Text(
+                  "OK",
+                  style: Theme.of(context).textTheme.title,
+                ),
+              ),
+            )..show(context);
+          },
+          child: Icon(
+            MaterialDesignIcons.getIconDataFromIconName("mdi:cloud-download"),
+            color: ThemeInfo.colorIconActive.withOpacity(0.5),
+          ),
+        ),
+        SizedBox(width: 12),
+        InkWell(
+          onTap: () {
+            Flushbar flush;
+            flush = Flushbar<bool>(
+              title: "Force upload data from cloud",
+              message: "Use ONLY when you have sync issue",
+              duration: Duration(seconds: 3),
+              icon: Icon(
+                Icons.warning,
+                color: ThemeInfo.colorIconActive,
+              ),
+              mainButton: FlatButton(
+                onPressed: () {
+                  gd.uploadCloudData();
+                  flush.dismiss(true);
+                },
+                child: Text(
+                  "OK",
+                  style: Theme.of(context).textTheme.title,
+                ),
+              ),
+            )..show(context);
+          },
+          child: Icon(
+            MaterialDesignIcons.getIconDataFromIconName("mdi:cloud-upload"),
+            color: ThemeInfo.colorIconActive.withOpacity(0.5),
+          ),
+        ),
+        SizedBox(width: 12),
+        InkWell(
+          onTap: () {
+            Flushbar flush;
+            flush = Flushbar<bool>(
+              title: "Force reset data on cloud",
+              message: "Use ONLY when you have sync issue",
+              duration: Duration(seconds: 3),
+              icon: Icon(
+                Icons.warning,
+                color: ThemeInfo.colorIconActive,
+              ),
+              mainButton: FlatButton(
+                onPressed: () {
+                  gd.deleteCloudData();
+                  flush.dismiss(true);
+                },
+                child: Text(
+                  "OK",
+                  style: Theme.of(context).textTheme.title,
+                ),
+              ),
+            )..show(context);
+          },
+          child: Icon(
+            MaterialDesignIcons.getIconDataFromIconName("mdi:cloud-alert"),
+            color: ThemeInfo.colorIconActive.withOpacity(0.5),
+          ),
+        ),
+      ],
+    );
   }
 }
 
