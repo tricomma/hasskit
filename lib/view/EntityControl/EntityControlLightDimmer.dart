@@ -260,7 +260,7 @@ class LightSliderState extends State<LightSlider> {
                             .toString(),
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.white,
+                          color: Colors.black54,
                         ),
                       ),
                     ),
