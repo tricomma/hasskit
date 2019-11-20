@@ -402,7 +402,7 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
                           "service": "turn_on",
                           "service_data": {
                             "entity_id": widget.entityId,
-                            "brightness": 255,
+//                            "brightness": 255,
                             "rgb_color": [
                               selectedColor.red,
                               selectedColor.green,
@@ -478,7 +478,7 @@ class _TempColorSelectorState extends State<TempColorSelector> {
                           "service": "turn_on",
                           "service_data": {
                             "entity_id": widget.entityId,
-                            "brightness": 255,
+//                            "brightness": 255,
                             "color_temp": gd
                                 .mapNumber(
                                     index.toDouble(),
