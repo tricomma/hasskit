@@ -75,7 +75,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
           entityControl = EntityControlCoverPosition(entityId: widget.entityId);
         } else if (entity.entityType == EntityType.lightSwitches ||
             entity.entityType == EntityType.mediaPlayers ||
-            entity.entityId.contains("group.")) {
+            entity.entityId.contains("group.") ||
+            entity.entityId.contains("scene.")) {
           entityControl = EntityControlToggle(entityId: widget.entityId);
         } else {
           entityControl = EntityControlGeneral(entityId: widget.entityId);

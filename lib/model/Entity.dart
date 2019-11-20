@@ -155,15 +155,13 @@ class Entity {
     } else if (state == 'off' || state == 'turning off...') {
       this.state = 'turning on...';
       service = 'turn_on';
-    }
-    if (state == 'open' || state == 'opening...') {
+    } else if (state == 'open' || state == 'opening...') {
       this.state = 'closing...';
       service = 'close_cover';
     } else if (state == 'closed' || state == 'closing...') {
       this.state = 'opening...';
       service = 'open_cover';
-    }
-    if (state == 'locked' || state == 'locking...') {
+    } else if (state == 'locked' || state == 'locking...') {
       this.state = 'unlocking...';
       domain = "lock";
       service = 'unlock';
@@ -171,6 +169,8 @@ class Entity {
       this.state = 'locking...';
       domain = "lock";
       service = 'lock';
+    } else if (domain == "scene") {
+      service = 'turn_on';
     }
     var outMsg = {
       "id": gd.socketId,
@@ -194,7 +194,8 @@ class Entity {
     } else if (entityId.contains('group.')) {
       return EntityType.group;
     } else if (entityId.contains('script.') ||
-        entityId.contains('automation.')) {
+        entityId.contains('automation.') ||
+        entityId.contains('scene.')) {
       return EntityType.scriptAutomation;
     } else if (entityId.contains('light.') ||
         entityId.contains('switch.') ||
