@@ -5,14 +5,19 @@ An Elegant Home Assistant Control App
 <table width="100%">
 <tbody>
 <tr align="center">
-<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202019-11-13%20at%2000.54.43.png"></td>
-<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202019-11-13%20at%2001.28.48.png"></td>
-<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202019-11-13%20at%2001.29.27.png"></td>
+<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/Screenshot_1574148362.png?raw=true"></td>
+<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/Screenshot_1574148393.png?raw=true"></td>
+<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/Screenshot_1574148419.png?raw=true"></td>
 </tr>
 <tr align="center">
 <td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/climate.gif"></td>
 <td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/fan.gif"></td>
 <td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/garage.gif"></td>
+</tr>
+<tr align="center">
+<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/camera.gif"></td>
+<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/light.gif"></td>
+<td><img width="400" src="https://github.com/tuanha2000vn/hasskit/blob/master/graphic%20template/Promo/lock.gif"></td>
 </tr>
 </tbody>
 </table>
