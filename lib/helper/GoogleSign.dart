@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -83,60 +84,111 @@ class _GoogleSignState extends State<GoogleSign> {
 class GoogleLoggedIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
       children: <Widget>[
-//          RaisedButton(
-//            padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-//            child: Row(
-//              children: <Widget>[
-//                Icon(MaterialDesignIcons.getIconDataFromIconName(
-//                    "mdi:cloud-download")),
-//                SizedBox(width: 4),
-//                Text("Download"),
-//              ],
-//            ),
-//            onPressed: () {
-//              Flushbar(
-//                title: "Force downloading data from cloud",
-//                message: "Use when auto sync not working",
-//                duration: Duration(seconds: 3),
-//              )..show(context);
-//              gd.downloadCloudData();
-//            },
-//          ),
-//          SizedBox(width: 4),
-//          RaisedButton(
-//            padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-//            child: Row(
-//              children: <Widget>[
-//                Icon(MaterialDesignIcons.getIconDataFromIconName(
-//                    "mdi:cloud-upload")),
-//                SizedBox(width: 4),
-//                Text("Upload"),
-//              ],
-//            ),
-//            onPressed: () {
-//              Flushbar(
-//                title: "Force downloading data from cloud",
-//                message: "Use when auto sync not working",
-//                duration: Duration(seconds: 3),
-//              )..show(context);
-//              gd.uploadCloudData();
-//            },
-//          ),
-//          SizedBox(width: 4),
-        RaisedButton(
-          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-          child: Row(
-            children: <Widget>[
-              Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:logout")),
-              SizedBox(width: 4),
-              Text("Sign Out"),
-            ],
-          ),
-          onPressed: _handleSignOut,
-        )
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+//            Spacer(),
+            RaisedButton(
+              padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+              child: Row(
+                children: <Widget>[
+                  Icon(MaterialDesignIcons.getIconDataFromIconName(
+                      "mdi:logout")),
+                  SizedBox(width: 4),
+                  Text("Sign Out"),
+                ],
+              ),
+              onPressed: _handleSignOut,
+            ),
+//            Spacer(),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            InkWell(
+              onTap: () {
+                Flushbar flush;
+                flush = Flushbar<bool>(
+                  title: "Force download data from cloud",
+                  message: "Use ONLY when you have sync issue",
+                  duration: Duration(seconds: 3),
+                  icon: Icon(
+                    Icons.warning,
+                    color: ThemeInfo.colorIconActive,
+                  ),
+                  mainButton: FlatButton(
+                    onPressed: () {
+                      gd.downloadCloudData();
+                      flush.dismiss(true);
+                    },
+                    child: Text(
+                      "OK",
+                      style: Theme.of(context).textTheme.title,
+                    ),
+                  ),
+                )..show(context);
+              },
+              child: Icon(MaterialDesignIcons.getIconDataFromIconName(
+                  "mdi:cloud-download")),
+            ),
+            SizedBox(width: 4),
+            InkWell(
+                onTap: () {
+                  Flushbar flush;
+                  flush = Flushbar<bool>(
+                    title: "Force upload data from cloud",
+                    message: "Use ONLY when you have sync issue",
+                    duration: Duration(seconds: 3),
+                    icon: Icon(
+                      Icons.warning,
+                      color: ThemeInfo.colorIconActive,
+                    ),
+                    mainButton: FlatButton(
+                      onPressed: () {
+                        gd.uploadCloudData();
+                        flush.dismiss(true);
+                      },
+                      child: Text(
+                        "OK",
+                        style: Theme.of(context).textTheme.title,
+                      ),
+                    ),
+                  )..show(context);
+                },
+                child: Icon(MaterialDesignIcons.getIconDataFromIconName(
+                    "mdi:cloud-upload"))),
+            SizedBox(width: 4),
+            InkWell(
+                onTap: () {
+                  Flushbar flush;
+                  flush = Flushbar<bool>(
+                    title: "Force reset data on cloud",
+                    message: "Use ONLY when you have sync issue",
+                    duration: Duration(seconds: 3),
+                    icon: Icon(
+                      Icons.warning,
+                      color: ThemeInfo.colorIconActive,
+                    ),
+                    mainButton: FlatButton(
+                      onPressed: () {
+                        gd.deleteCloudData();
+                        flush.dismiss(true);
+                      },
+                      child: Text(
+                        "OK",
+                        style: Theme.of(context).textTheme.title,
+                      ),
+                    ),
+                  )..show(context);
+                },
+                child: Icon(MaterialDesignIcons.getIconDataFromIconName(
+                    "mdi:cloud-alert"))),
+            SizedBox(width: 4),
+          ],
+        ),
       ],
     );
   }

@@ -1097,13 +1097,14 @@ class GeneralData with ChangeNotifier {
         Timer(Duration(seconds: seconds), roomListSaveFirebase);
   }
 
-  void roomListSaveFirebase() {
+  void roomListSaveFirebase() async {
     var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
     url = url.replaceAll("/", "-");
     url = url.replaceAll(":", "-");
     if (gd.firebaseUser != null) {
       log.w(
           'roomListSaveFirebase roomListSave $url roomList.length ${roomList.length}');
+
       Firestore.instance
           .collection('UserData')
           .document('${gd.firebaseUser.uid}')
@@ -1143,8 +1144,8 @@ class GeneralData with ChangeNotifier {
 //        }
       else {
         log.w('CAN NOT FIND roomList adding default data');
-//        roomList.clear();
-//        roomList = [];
+        roomList.clear();
+        roomList = [];
         gd.roomListString = "";
         for (var room in roomListDefault) {
           roomList.add(room);
@@ -1559,6 +1560,7 @@ class GeneralData with ChangeNotifier {
     if (gd.firebaseUser != null) {
       log.w(
           'entitiesOverrideSaveFirebase entitiesOverride.length ${entitiesOverride.length}');
+
       Firestore.instance
           .collection('UserData')
           .document('${gd.firebaseUser.uid}')
@@ -1716,37 +1718,39 @@ class GeneralData with ChangeNotifier {
   set firebaseUser(FirebaseUser val) {
     if (_firebaseUser != val) {
       _firebaseUser = val;
-
-      if (_firebaseUser != null) {
-        log.d(
-            "_firebaseUser uid ${_firebaseUser.uid} email ${_firebaseUser.email} "
-            "photoUrl ${_firebaseUser.photoUrl} phoneNumber ${_firebaseUser.phoneNumber} displayName ${_firebaseUser.displayName}");
-
-        Firestore.instance
-            .collection('UserData')
-            .document('${gd.firebaseUser.uid}')
-            .get()
-            .then(
-          (DocumentSnapshot ds) {
-            // use ds as a snapshot
-//            log.d("ds.exists ${ds.exists}");
-            if (!ds.exists) {
-              Firestore.instance
-                  .collection('UserData')
-                  .document('${gd.firebaseUser.uid}')
-                  .setData(
-                {
-                  'created': DateTime.now(),
-                },
-              );
-            }
-          },
-        );
-        getSettings("_firebaseUser != null");
-        getStreamData();
-      }
-      log.e("firebaseUser notifyListeners");
+      getSettings("_firebaseUser != null");
+      createFirebaseDocument();
+      getStreamData();
       notifyListeners();
+    }
+  }
+
+  void createFirebaseDocument() async {
+    if (_firebaseUser != null) {
+      log.d(
+          "_firebaseUser uid ${_firebaseUser.uid} email ${_firebaseUser.email} "
+          "photoUrl ${_firebaseUser.photoUrl} phoneNumber ${_firebaseUser.phoneNumber} displayName ${_firebaseUser.displayName}");
+
+      Firestore.instance
+          .collection('UserData')
+          .document('${gd.firebaseUser.uid}')
+          .get()
+          .then(
+        (DocumentSnapshot ds) {
+          // use ds as a snapshot
+//            log.d("ds.exists ${ds.exists}");
+          if (!ds.exists) {
+            Firestore.instance
+                .collection('UserData')
+                .document('${gd.firebaseUser.uid}')
+                .setData(
+              {
+                'created': DateTime.now(),
+              },
+            );
+          }
+        },
+      );
     }
   }
 
@@ -1905,6 +1909,14 @@ class GeneralData with ChangeNotifier {
   void uploadCloudData() async {
     roomListSaveFirebase();
     entitiesOverrideSaveFirebase();
+  }
+
+  void deleteCloudData() async {
+    var adaRef = Firestore.instance
+        .collection('UserData')
+        .document('${gd.firebaseUser.uid}');
+    await adaRef.delete();
+    createFirebaseDocument();
   }
 
   String _currentUrl = "";
