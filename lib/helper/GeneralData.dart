@@ -951,7 +951,7 @@ class GeneralData with ChangeNotifier {
     String removedString = entitiesRef.removeAt(oldIndex);
     entitiesRef.insert(newIndex, removedString);
     notifyListeners();
-    roomListSave();
+    roomListSave(true);
   }
 
   AssetImage getRoomImage(int roomIndex) {
@@ -988,7 +988,7 @@ class GeneralData with ChangeNotifier {
       room.imageIndex = backgroundImageIndex;
       notifyListeners();
     }
-    roomListSave();
+    roomListSave(true);
   }
 
   setRoomName(Room room, String name) {
@@ -997,7 +997,7 @@ class GeneralData with ChangeNotifier {
       room.name = name;
       notifyListeners();
     }
-    roomListSave();
+    roomListSave(true);
   }
 
   setRoomBackgroundAndName(Room room, int backgroundImageIndex, String name) {
@@ -1018,7 +1018,7 @@ class GeneralData with ChangeNotifier {
       pageController.jumpToPage(roomIndex - 1);
       notifyListeners();
     }
-    roomListSave();
+    roomListSave(true);
   }
 
   PageController pageController;
@@ -1045,7 +1045,7 @@ class GeneralData with ChangeNotifier {
       curve: Curves.easeOut,
     );
 
-    roomListSave();
+    roomListSave(true);
     notifyListeners();
   }
 
@@ -1068,17 +1068,17 @@ class GeneralData with ChangeNotifier {
     pageController.animateToPage(newRoomIndex - 1,
         duration: Duration(milliseconds: 500), curve: Curves.ease);
 
-    roomListSave();
+    roomListSave(true);
     notifyListeners();
   }
 
-  void roomListSave() {
+  void roomListSave(bool saveFirebase) {
     try {
       var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
       url = url.replaceAll("/", "-");
       url = url.replaceAll(":", "-");
       gd.saveString('roomList $url', jsonEncode(roomList));
-      roomListSaveFirebaseTimer(5);
+      if (saveFirebase) roomListSaveFirebaseTimer(5);
       log.w('roomListSave $url roomList.length ${roomList.length}');
     } catch (e) {
       log.w("roomListSave $e");
@@ -1275,7 +1275,7 @@ class GeneralData with ChangeNotifier {
         message: "Removed $friendlyName from ${roomList[roomIndex].name}",
         duration: Duration(seconds: 3),
       )..show(context);
-      roomListSave();
+      roomListSave(true);
     }
     delayCancelEditModeTimer(300);
   }
@@ -1291,7 +1291,7 @@ class GeneralData with ChangeNotifier {
         message: "Added $friendlyName to ${roomList[roomIndex].name}",
         duration: Duration(seconds: 3),
       )..show(context);
-      roomListSave();
+      roomListSave(true);
     }
     delayCancelEditModeTimer(300);
   }
@@ -1444,7 +1444,7 @@ class GeneralData with ChangeNotifier {
       gd.entitiesOverride[entityId] = entitiesOverride;
     }
     notifyListeners();
-    entitiesOverrideSave();
+    entitiesOverrideSave(true);
   }
 
   String _baseSettingString;
@@ -1520,7 +1520,7 @@ class GeneralData with ChangeNotifier {
     }
   }
 
-  void entitiesOverrideSave() {
+  void entitiesOverrideSave(bool saveFirebase) {
     try {
       Map<String, EntityOverride> entitiesOverrideClean = {};
 
@@ -1538,7 +1538,7 @@ class GeneralData with ChangeNotifier {
       entitiesOverride = entitiesOverrideClean;
       gd.saveString('entitiesOverride', jsonEncode(entitiesOverride));
       log.w('save entitiesOverride.length ${entitiesOverride.length}');
-      entitiesOverrideSaveFirebaseTimer(5);
+      if (saveFirebase) entitiesOverrideSaveFirebaseTimer(5);
     } catch (e) {
       log.w("entitiesOverrideSave $e");
     }
@@ -1863,6 +1863,11 @@ class GeneralData with ChangeNotifier {
 
     log.e("gd.firebaseCurrentUser != null");
 
+    downloadCloudData();
+  }
+
+  void downloadCloudData() async {
+    log.w("getCloudData");
     Firestore.instance
         .collection('UserData')
         .document('${gd.firebaseUser.uid}')
@@ -1870,9 +1875,6 @@ class GeneralData with ChangeNotifier {
         .then(
       (DocumentSnapshot ds) {
         log.e("gd.firebaseCurrentUser != null ds.exists");
-        //force the trigger reset
-//        gd.baseSettingString = "";
-//        gd.baseSettingString = ds["baseSetting"];
         //force the trigger reset
         gd.entitiesOverrideString = "";
         gd.entitiesOverrideString = ds["entitiesOverride"];
@@ -1892,6 +1894,17 @@ class GeneralData with ChangeNotifier {
         }
       },
     );
+
+    await Future.delayed(const Duration(milliseconds: 5000));
+
+    roomListSave(false);
+    entitiesOverrideSave(false);
+    baseSettingSave();
+  }
+
+  void uploadCloudData() async {
+    roomListSaveFirebase();
+    entitiesOverrideSaveFirebase();
   }
 
   String _currentUrl = "";

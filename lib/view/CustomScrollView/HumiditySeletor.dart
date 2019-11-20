@@ -175,7 +175,7 @@ class _HumiditySelectorState extends State<HumiditySelector> {
                                     log.d(
                                         "humidEntityId ${gd.roomList[widget.roomIndex].humidEntityId}");
                                   }
-                                  gd.roomListSave();
+                                  gd.roomListSave(true);
                                   setState(() {});
                                 },
                               ),

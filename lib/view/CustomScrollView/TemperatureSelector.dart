@@ -187,7 +187,7 @@ class _TemperatureSelectorState extends State<TemperatureSelector> {
                                     log.w(
                                         "tempEntityId ${gd.roomList[widget.roomIndex].tempEntityId}");
                                   }
-                                  gd.roomListSave();
+                                  gd.roomListSave(true);
                                   gd.notify();
                                 },
                               ),

@@ -323,7 +323,7 @@ class __EditItemsState extends State<_EditItems> {
                           .add(entities[index].entityId);
                     }
 
-                    gd.roomListSave();
+                    gd.roomListSave(true);
                     setState(() {});
                     gd.delayCancelEditModeTimer(300);
                   },
@@ -363,7 +363,7 @@ class __EditItemsState extends State<_EditItems> {
                       gd.roomList[widget.roomIndex].entities
                           .add(entities[index].entityId);
                     }
-                    gd.roomListSave();
+                    gd.roomListSave(true);
                     setState(() {});
                     gd.delayCancelEditModeTimer(300);
                   },
@@ -403,7 +403,7 @@ class __EditItemsState extends State<_EditItems> {
                       gd.roomList[widget.roomIndex].row3
                           .add(entities[index].entityId);
                     }
-                    gd.roomListSave();
+                    gd.roomListSave(true);
                     setState(() {});
                     gd.delayCancelEditModeTimer(300);
                   },
@@ -443,7 +443,7 @@ class __EditItemsState extends State<_EditItems> {
                       gd.roomList[widget.roomIndex].row4
                           .add(entities[index].entityId);
                     }
-                    gd.roomListSave();
+                    gd.roomListSave(true);
                     setState(() {});
                     gd.delayCancelEditModeTimer(300);
                   },

@@ -173,7 +173,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                                   friendlyName:
                                                       _controller.text.trim());
                                         }
-                                        gd.entitiesOverrideSave();
+                                        gd.entitiesOverrideSave(true);
                                       },
                                     );
                                   },
@@ -201,7 +201,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                                 friendlyName:
                                                     _controller.text.trim());
                                       }
-                                      gd.entitiesOverrideSave();
+                                      gd.entitiesOverrideSave(true);
                                       setState(
                                         () {},
                                       );
@@ -387,7 +387,7 @@ class __IconSelectionState extends State<_IconSelection> {
                             gd.entitiesOverride[widget.entityId] =
                                 entityOverride;
                           }
-                          gd.entitiesOverrideSave();
+                          gd.entitiesOverrideSave(true);
                           widget.closeIconSelection();
 //                          setState(() {
 //                          });

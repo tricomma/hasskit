@@ -313,13 +313,13 @@ class Oscillating extends StatelessWidget {
               ? Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:arrow-horizontal-lock"),
-                  color: ThemeInfo.colorIconInActive,
+                  color: ThemeInfo.colorIconActive,
                   size: 100,
                 )
               : Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:arrow-left-right"),
-                  color: ThemeInfo.colorIconActive,
+                  color: ThemeInfo.colorIconInActive,
                   size: 100,
                 ),
         ),

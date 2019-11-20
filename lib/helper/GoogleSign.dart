@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hasskit/helper/Logger.dart';
+import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'GeneralData.dart';
 import 'ThemeInfo.dart';
 
@@ -27,19 +28,6 @@ class _GoogleSignState extends State<GoogleSign> {
 //      });
 //    });
 //    _googleSignIn.signInSilently();
-  }
-
-  Future<void> _handleSignIn() async {
-    try {
-      log.d("googleSignIn.signIn()");
-      await googleSignIn.signIn();
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> _handleSignOut() async {
-    googleSignIn.disconnect();
   }
 
   @override
@@ -76,22 +64,8 @@ class _GoogleSignState extends State<GoogleSign> {
 //                  Text(_currentUser.email ?? ''),
 //                  Text('Using Cloud Sync Data'),
                   gd.googleSignInAccount != null
-                      ? RaisedButton(
-                          child: Text("Sign Out"),
-                          onPressed: _handleSignOut,
-//                    shape: RoundedRectangleBorder(
-//                      borderRadius: new BorderRadius.circular(18.0),
-//                      side: BorderSide(color: Colors.red),
-//                    ),
-                        )
-                      : RaisedButton(
-                          child: Text("Sign In"),
-                          onPressed: _handleSignIn,
-//                    shape: RoundedRectangleBorder(
-//                      borderRadius: new BorderRadius.circular(18.0),
-//                      side: BorderSide(color: Colors.red),
-//                    ),
-                        ),
+                      ? GoogleLoggedIn()
+                      : GoogleLoggedOut(),
                   Text(
                     "Keep your rooms layout and device customization synchronized accross devices. HassKit won't upload your login data online...",
                     style: Theme.of(context).textTheme.caption,
@@ -103,5 +77,101 @@ class _GoogleSignState extends State<GoogleSign> {
         ],
       ),
     );
+  }
+}
+
+class GoogleLoggedIn extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+//          RaisedButton(
+//            padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+//            child: Row(
+//              children: <Widget>[
+//                Icon(MaterialDesignIcons.getIconDataFromIconName(
+//                    "mdi:cloud-download")),
+//                SizedBox(width: 4),
+//                Text("Download"),
+//              ],
+//            ),
+//            onPressed: () {
+//              Flushbar(
+//                title: "Force downloading data from cloud",
+//                message: "Use when auto sync not working",
+//                duration: Duration(seconds: 3),
+//              )..show(context);
+//              gd.downloadCloudData();
+//            },
+//          ),
+//          SizedBox(width: 4),
+//          RaisedButton(
+//            padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+//            child: Row(
+//              children: <Widget>[
+//                Icon(MaterialDesignIcons.getIconDataFromIconName(
+//                    "mdi:cloud-upload")),
+//                SizedBox(width: 4),
+//                Text("Upload"),
+//              ],
+//            ),
+//            onPressed: () {
+//              Flushbar(
+//                title: "Force downloading data from cloud",
+//                message: "Use when auto sync not working",
+//                duration: Duration(seconds: 3),
+//              )..show(context);
+//              gd.uploadCloudData();
+//            },
+//          ),
+//          SizedBox(width: 4),
+        RaisedButton(
+          padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+          child: Row(
+            children: <Widget>[
+              Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:logout")),
+              SizedBox(width: 4),
+              Text("Sign Out"),
+            ],
+          ),
+          onPressed: _handleSignOut,
+        )
+      ],
+    );
+  }
+
+  Future<void> _handleSignOut() async {
+    googleSignIn.disconnect();
+  }
+}
+
+class GoogleLoggedOut extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        RaisedButton(
+          onPressed: _handleSignIn,
+          child: Row(
+            children: <Widget>[
+              Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:login")),
+              SizedBox(width: 4),
+              Text("Sign In"),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _handleSignIn() async {
+    try {
+      log.d("googleSignIn.signIn()");
+      await googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
   }
 }

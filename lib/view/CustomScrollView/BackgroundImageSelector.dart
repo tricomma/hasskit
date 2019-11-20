@@ -165,7 +165,7 @@ class _BackgroundImageSelectorState extends State<BackgroundImageSelector> {
 
                                   log.d(
                                       "imageIndex ${gd.roomList[widget.roomIndex].imageIndex}");
-                                  gd.roomListSave();
+                                  gd.roomListSave(true);
                                   setState(() {});
                                 },
                               ),
