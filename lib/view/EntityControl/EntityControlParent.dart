@@ -7,6 +7,7 @@ import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/model/Entity.dart';
 import 'package:hasskit/model/EntityOverride.dart';
 import 'package:hasskit/view/EntityControl/EntityControlClimate.dart';
+import 'package:hasskit/view/EntityControl/EntityControlCoverPosition.dart';
 import 'package:hasskit/view/EntityControl/EntityControlGeneral.dart';
 import 'package:provider/provider.dart';
 
@@ -69,6 +70,9 @@ class _EntityControlParentState extends State<EntityControlParent> {
                 entity.getSupportedFeaturesLights
                     .contains("SUPPORT_BRIGHTNESS"))) {
           entityControl = EntityControlLightDimmer(entityId: widget.entityId);
+        } else if (entity.entityId.contains("cover.") &&
+            entity.currentPosition != null) {
+          entityControl = EntityControlCoverPosition(entityId: widget.entityId);
         } else if (entity.entityType == EntityType.lightSwitches ||
             entity.entityType == EntityType.mediaPlayers ||
             entity.entityId.contains("group.")) {

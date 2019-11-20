@@ -296,7 +296,7 @@ class GeneralData with ChangeNotifier {
       return;
     }
 
-//    if (newEntity.entityId.contains("climate.")) {
+//    if (newEntity.entityId.contains("cover.")) {
 //      log.d(
 //          "\nsocketSubscribeEvents fan. ${message['event']['data']['new_state']}");
 //    }
@@ -341,6 +341,7 @@ class GeneralData with ChangeNotifier {
       oldEntity.maxMireds = newEntity.maxMireds;
       oldEntity.colorTemp = newEntity.colorTemp;
 //    }
+      oldEntity.currentPosition = newEntity.currentPosition;
       notifyListeners();
     } else {
       _entities[newEntity.entityId] = newEntity;
@@ -1672,6 +1673,7 @@ class GeneralData with ChangeNotifier {
     "mdi:white-balance-iridescent",
     "mdi:white-balance-sunny",
     "mdi:window-closed",
+    "mdi:window-shutter",
   ];
 
   IconData mdiIcon(String iconString) {

@@ -38,7 +38,7 @@ class _EntityControlLightDimmerState extends State<EntityControlLightDimmer> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          ButtonSlider(
+          LightSlider(
             entityId: widget.entityId,
           ),
           SizedBox(height: 10),
@@ -59,18 +59,18 @@ class _EntityControlLightDimmerState extends State<EntityControlLightDimmer> {
   }
 }
 
-class ButtonSlider extends StatefulWidget {
+class LightSlider extends StatefulWidget {
   final String entityId;
 
-  const ButtonSlider({@required this.entityId});
+  const LightSlider({@required this.entityId});
 
   @override
   State<StatefulWidget> createState() {
-    return new ButtonSliderState();
+    return new LightSliderState();
   }
 }
 
-class ButtonSliderState extends State<ButtonSlider> {
+class LightSliderState extends State<LightSlider> {
   double buttonHeight = 255.0;
   double buttonWidth = 90.0;
   double currentPosX;
@@ -79,7 +79,7 @@ class ButtonSliderState extends State<ButtonSlider> {
   double startPosY;
   Offset buttonPos;
   Size buttonSize;
-  double buttonValue;
+  double buttonValue = 50.0;
   double buttonValueMin = 50.0;
   double buttonValueOnTapDown = 0;
   String raisedButtonLabel = "";
@@ -101,8 +101,11 @@ class ButtonSliderState extends State<ButtonSlider> {
           if (!gd.entities[widget.entityId].isStateOn) {
             buttonValue = buttonValueMin;
           } else {
-            buttonValue = buttonValueMin +
+            var currentPosition =
                 gd.entities[widget.entityId].brightness.toDouble();
+            currentPosition = gd.mapNumber(
+                currentPosition, 0, 255, 0, buttonHeight - buttonValueMin);
+            buttonValue = buttonValueMin + currentPosition;
           }
         }
         var colorForeground = ThemeInfo.colorBottomSheetReverse;
@@ -183,14 +186,17 @@ class ButtonSliderState extends State<ButtonSlider> {
                       child: Container(
                         width: buttonWidth - 8,
                         height: buttonHeight - 8,
-                        color: ThemeInfo.colorIconInActive,
+                        color: sliderColor.color.withOpacity(1),
                         alignment: Alignment.bottomCenter,
                         child: Container(
-                          width: buttonWidth,
-                          height: buttonValue,
+                          width: buttonWidth - 8,
+                          height: buttonValue - 8,
                           alignment: Alignment.topCenter,
                           decoration: BoxDecoration(
-                            color: sliderColor.color.withOpacity(1),
+//                            color: sliderColor.color.withOpacity(1),
+                            color: gd.entities[widget.entityId].isStateOn
+                                ? Colors.white
+                                : ThemeInfo.colorIconInActive,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black54,
@@ -212,7 +218,7 @@ class ButtonSliderState extends State<ButtonSlider> {
                               MaterialDesignIcons.getIconDataFromIconName(
                                   gd.entities[widget.entityId].getDefaultIcon),
                               size: 45,
-                              color: ThemeInfo.colorBottomSheetReverse,
+                              color: sliderColor.color.withOpacity(1),
                             ),
                           ),
                         ),

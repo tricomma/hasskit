@@ -293,12 +293,13 @@ class WebSocket {
             gd.getStates(decode['result']);
           }
 //          Processing cameraThumbnailsId
-          else if (gd.cameraThumbnailsId.containsKey(id)) {
-//            log.d("cameraThumbnailsId _onData $message");
+          else if (gd.cameraThumbnailsId.containsKey(id) &&
+              decode['result'] != null &&
+              decode['result']['content'] != null) {
             var content = decode['result']['content'];
             gd.camerasThumbnailUpdate(gd.cameraThumbnailsId[id], content);
           } else {
-//            log.d('providerData.socketIdServices $id == null $decode');
+//            log.w('result==null $decode');
           }
         }
         break;

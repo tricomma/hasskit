@@ -47,39 +47,41 @@ class Entity {
   int minMireds;
   int maxMireds;
   int colorTemp;
-
-  Entity({
-    this.entityId,
-    this.deviceClass,
-    this.friendlyName,
-    this.icon,
-    this.state,
-    //climate
-    this.hvacModes,
-    this.minTemp,
-    this.maxTemp,
-    this.targetTempStep,
-    this.currentTemperature,
-    this.temperature,
-    this.fanMode,
-    this.fanModes,
-    this.deviceCode,
-    this.manufacturer,
-    //fan
-    this.speedList,
-    this.oscillating,
-    this.speedLevel,
-    this.speed,
-    this.angle,
-    this.directSpeed,
-    //light
-    this.supportedFeatures,
-    this.brightness,
-    this.rgbColor,
-    this.minMireds,
-    this.maxMireds,
-    this.colorTemp,
-  });
+  //cover
+  double currentPosition;
+  Entity(
+      {this.entityId,
+      this.deviceClass,
+      this.friendlyName,
+      this.icon,
+      this.state,
+      //climate
+      this.hvacModes,
+      this.minTemp,
+      this.maxTemp,
+      this.targetTempStep,
+      this.currentTemperature,
+      this.temperature,
+      this.fanMode,
+      this.fanModes,
+      this.deviceCode,
+      this.manufacturer,
+      //fan
+      this.speedList,
+      this.oscillating,
+      this.speedLevel,
+      this.speed,
+      this.angle,
+      this.directSpeed,
+      //light
+      this.supportedFeatures,
+      this.brightness,
+      this.rgbColor,
+      this.minMireds,
+      this.maxMireds,
+      this.colorTemp,
+      //cover
+      this.currentPosition});
 
   factory Entity.fromJson(Map<String, dynamic> json) {
     try {
@@ -131,6 +133,8 @@ class Entity {
         minMireds: int.tryParse(json['attributes']['min_mireds'].toString()),
         maxMireds: int.tryParse(json['attributes']['max_mireds'].toString()),
         colorTemp: int.tryParse(json['attributes']['color_temp'].toString()),
+        currentPosition:
+            double.tryParse(json['attributes']['current_position'].toString()),
       );
     } catch (e) {
       log.e("Entity.fromJson newEntity $e");
@@ -351,12 +355,18 @@ class Entity {
 
     if (isStateOn && normalState == "mdi:lock") return "mdi:lock-open";
     if (!isStateOn && normalState == "mdi:lock-open") return "mdi:lock";
-    if (isStateOn && normalState == "mdi:window-open")
-      return "mdi:window-closed";
-    if (!isStateOn && normalState == "mdi:window-closed")
+    if (isStateOn && normalState == "mdi:window-closed")
       return "mdi:window-open";
+    if (!isStateOn && normalState == "mdi:window-open")
+      return "mdi:window-closed";
     if (isStateOn && normalState == "mdi:walk") return "mdi:run";
     if (!isStateOn && normalState == "mdi:run") return "mdi:walk";
+
+    if (isStateOn && normalState == "mdi:window-shutter")
+      return "mdi:window-shutter-open";
+    if (!isStateOn && normalState == "mdi:window-shutter-open")
+      return "mdi:window-shutter";
+
     return normalState;
   }
 
