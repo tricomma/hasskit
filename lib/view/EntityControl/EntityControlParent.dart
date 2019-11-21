@@ -11,6 +11,7 @@ import 'package:hasskit/view/EntityControl/EntityControlCoverPosition.dart';
 import 'package:hasskit/view/EntityControl/EntityControlGeneral.dart';
 import 'package:provider/provider.dart';
 
+import 'EntityControlBinarySensor.dart';
 import 'EntityControlFan.dart';
 import 'EntityControlLightDimmer.dart';
 import 'EntityControlToggle.dart';
@@ -78,6 +79,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
             entity.entityId.contains("group.") ||
             entity.entityId.contains("scene.")) {
           entityControl = EntityControlToggle(entityId: widget.entityId);
+        } else if (entity.entityId.contains("binary_sensor.")) {
+          entityControl = EntityControlBinarySensor(entityId: widget.entityId);
         } else {
           entityControl = EntityControlGeneral(entityId: widget.entityId);
         }
@@ -245,7 +248,9 @@ class _EntityControlParentState extends State<EntityControlParent> {
                               ),
                               Container(
                                 width: double.infinity,
-                                child: entityControl,
+                                child: !showIconSelection
+                                    ? entityControl
+                                    : Container(),
                               ),
                             ],
                           )

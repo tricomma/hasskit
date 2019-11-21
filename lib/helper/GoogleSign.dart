@@ -66,9 +66,9 @@ class _GoogleSignState extends State<GoogleSign> {
                   gd.googleSignInAccount != null
                       ? GoogleLoggedIn()
                       : GoogleLoggedOut(),
-                  gd.googleSignInAccount != null
-                      ? GoogleCloudAction()
-                      : Container(),
+//                  gd.googleSignInAccount != null
+//                      ? GoogleCloudAction()
+//                      : Container(),
                   Text(
                     "Keep your rooms layout and device customization synchronized accross devices. HassKit won't upload your login data online...",
                     style: Theme.of(context).textTheme.caption,
@@ -148,7 +148,7 @@ class GoogleCloudAction extends StatelessWidget {
           onTap: () {
             Flushbar flush;
             flush = Flushbar<bool>(
-              title: "Force upload data from cloud",
+              title: "Force upload data to cloud",
               message: "Use ONLY when you have sync issue",
               duration: Duration(seconds: 3),
               icon: Icon(

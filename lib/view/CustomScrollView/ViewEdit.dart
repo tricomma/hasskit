@@ -141,11 +141,23 @@ class _ViewEditState extends State<ViewEdit> {
           ),
         ),
         DeviceTypeHeaderEdit(
+          title: "Selected devices...",
+          icon: Icon(MaterialDesignIcons.getIconDataFromIconName(
+              "mdi:checkbox-marked")),
+        ),
+        _EditItems(
+          selectedItem: true,
+          roomIndex: widget.roomIndex,
+          keyword: _controllerSearch.text.trim(),
+          types: [EntityType.lightSwitches],
+        ),
+        DeviceTypeHeaderEdit(
           title: "Lights, Switches...",
           icon: Icon(
               MaterialDesignIcons.getIconDataFromIconName("mdi:toggle-switch")),
         ),
         _EditItems(
+          selectedItem: false,
           roomIndex: widget.roomIndex,
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.lightSwitches],
@@ -156,6 +168,7 @@ class _ViewEditState extends State<ViewEdit> {
               MaterialDesignIcons.getIconDataFromIconName("mdi:thermometer")),
         ),
         _EditItems(
+          selectedItem: false,
           roomIndex: widget.roomIndex,
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.climateFans],
@@ -165,6 +178,7 @@ class _ViewEditState extends State<ViewEdit> {
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:webcam")),
         ),
         _EditItems(
+          selectedItem: false,
           roomIndex: widget.roomIndex,
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.cameras],
@@ -175,6 +189,7 @@ class _ViewEditState extends State<ViewEdit> {
               Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:theater")),
         ),
         _EditItems(
+          selectedItem: false,
           roomIndex: widget.roomIndex,
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.mediaPlayers],
@@ -184,6 +199,7 @@ class _ViewEditState extends State<ViewEdit> {
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:blur")),
         ),
         _EditItems(
+          selectedItem: false,
           roomIndex: widget.roomIndex,
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.group],
@@ -193,6 +209,7 @@ class _ViewEditState extends State<ViewEdit> {
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:ballot")),
         ),
         _EditItems(
+          selectedItem: false,
           roomIndex: widget.roomIndex,
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.accessories],
@@ -203,6 +220,7 @@ class _ViewEditState extends State<ViewEdit> {
               "mdi:home-automation")),
         ),
         _EditItems(
+          selectedItem: false,
           roomIndex: widget.roomIndex,
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.scriptAutomation],
@@ -214,11 +232,15 @@ class _ViewEditState extends State<ViewEdit> {
 }
 
 class _EditItems extends StatefulWidget {
+  final bool selectedItem;
   final int roomIndex;
   final String keyword;
   final List<EntityType> types;
   const _EditItems(
-      {@required this.roomIndex, @required this.keyword, @required this.types});
+      {@required this.selectedItem,
+      this.roomIndex,
+      @required this.keyword,
+      @required this.types});
 
   @override
   __EditItemsState createState() => __EditItemsState();
@@ -227,23 +249,53 @@ class _EditItems extends StatefulWidget {
 class __EditItemsState extends State<_EditItems> {
   @override
   Widget build(BuildContext context) {
-    List<Entity> entities = gd.entities.values
-        .where((e) =>
-            widget.types.contains(e.entityType) &&
-            (widget.keyword.length < 1 ||
-                e.getOverrideName
-                    .toLowerCase()
-                    .contains(widget.keyword.toLowerCase()) ||
-                e.entityId
-                    .toLowerCase()
-                    .contains(widget.keyword.toLowerCase())))
-        .toList();
+    List<Entity> entities = [];
+
+    if (!widget.selectedItem) {
+      entities = gd.entities.values
+          .where((e) =>
+              !gd.roomList[widget.roomIndex].favorites.contains(e.entityId) &&
+              !gd.roomList[widget.roomIndex].entities.contains(e.entityId) &&
+              !gd.roomList[widget.roomIndex].row3.contains(e.entityId) &&
+              !gd.roomList[widget.roomIndex].row4.contains(e.entityId) &&
+              widget.types.contains(e.entityType) &&
+              (widget.keyword.length < 1 ||
+                  e.getOverrideName
+                      .toLowerCase()
+                      .contains(widget.keyword.toLowerCase()) ||
+                  e.entityId
+                      .toLowerCase()
+                      .contains(widget.keyword.toLowerCase())))
+          .toList();
+    } else {
+      for (String entityId in gd.roomList[widget.roomIndex].favorites) {
+        var entity = gd.entities[entityId];
+        if (entity != null && !entities.contains(entities))
+          entities.add(entity);
+      }
+      for (String entityId in gd.roomList[widget.roomIndex].entities) {
+        var entity = gd.entities[entityId];
+        if (entity != null && !entities.contains(entities))
+          entities.add(entity);
+      }
+      for (String entityId in gd.roomList[widget.roomIndex].row3) {
+        var entity = gd.entities[entityId];
+        if (entity != null && !entities.contains(entities))
+          entities.add(entity);
+      }
+      for (String entityId in gd.roomList[widget.roomIndex].row4) {
+        var entity = gd.entities[entityId];
+        if (entity != null && !entities.contains(entities))
+          entities.add(entity);
+      }
+    }
 
     if (entities.length < 1) {
       return gd.emptySliver;
     }
 
-    entities.sort((a, b) => a.getOverrideName.compareTo(b.getOverrideName));
+    if (!widget.selectedItem)
+      entities.sort((a, b) => a.getOverrideName.compareTo(b.getOverrideName));
 
     void removeItemFromGroup(String entityId) {
       if (gd.roomList[widget.roomIndex].favorites.contains(entityId))

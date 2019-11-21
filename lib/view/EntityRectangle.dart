@@ -1,3 +1,4 @@
+import 'package:duration/duration.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widgets/flutter_widgets.dart';
@@ -29,6 +30,8 @@ class EntityRectangle extends StatelessWidget {
     return Selector<GeneralData, CameraThumbnail>(
       selector: (_, generalData) => generalData.cameraThumbnails[entityId],
       builder: (context, data, child) {
+        var timeDiff =
+            DateTime.now().difference(gd.getCameraLastUpdate(entityId));
         return VisibilityDetector(
           key: Key(entityId),
           onVisibilityChanged: (VisibilityInfo info) {
@@ -97,7 +100,7 @@ class EntityRectangle extends StatelessWidget {
                               child: Container(),
                             ),
                             Text(
-                              "Last update: ${gd.timePassed(gd.getCameraLastUpdate(entityId))}",
+                              "Last update: ${printDuration(timeDiff, abbreviated: true, tersity: DurationTersity.second, delimiter: ', ', conjugation: ' and ')} ago",
                               style: Theme.of(context).textTheme.body1,
                               textScaleFactor: gd.textScaleFactor,
                             ),
