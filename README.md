@@ -22,6 +22,7 @@ An Elegant Home Assistant Control App
 </tbody>
 </table>
 <br><br>
+
 ## Please join us on
 
 <table width="100%">
