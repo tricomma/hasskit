@@ -290,11 +290,11 @@ class _SettingPageState extends State<SettingPage> {
                                   ThemeInfo.colorBottomSheet.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(8)),
                           child: Text(
-                            "HassKit is a Touch Friendly - Zero Config to help user instantly start using  Home Assistant."
-                            "\n\nHome Assistant is a one of the best platform for Home Automation with powerful features, world widest range of devices support and only require very simple/cheap hardware (Hello \$25 Raspberry Pi)."
-                            "\n\nHowever, Home Assistant is not easy to setup and require a few months to master. HassKit aim to ease the learning steps and improve the quality of life for Home Assistant users by providing a stunning look and 10 seconds setup to start using the wonderful Home Automation platform."
-                            "\n\nHassKit is free, open-source and under development. We need your help to improve the app feature in order to better serve you."
-                            "\n\Please find us on Discord and Facebook. Your contributions are welcome.",
+                            "HassKit is a Touch-Friendly - Zero Config App to help users instantly start using Home Assistant (Hass)."
+                            "\n\nHass is one of the best platforms for Home Automation, with powerful features and the world's widest range of device support. Hass only requires some simple/cheap hardware to get started."
+                            "\n\nHowever, Hass is not easy to set up and requires a few months to master. HassKit aims to ease the learning steps and improve the quality of life for Hass users by providing a stunning look and 10-second setup to start using this wonderful Home Automation platform."
+                            "\n\nHassKit is free, open-source and under development. We need your help to improve the app's features for us to better serve you."
+                            "\n\nPlease find us on Discord and Facebook. Your contributions are always welcome.",
                             style: Theme.of(context).textTheme.body1,
                             textAlign: TextAlign.justify,
                             textScaleFactor: gd.textScaleFactor,
