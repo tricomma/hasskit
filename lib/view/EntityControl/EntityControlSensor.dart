@@ -42,7 +42,7 @@ class _EntityControlSensorState extends State<EntityControlSensor> {
       displayWidget = Container(
         child: Center(
           child: Text(
-              "${gd.textToDisplay(gd.entities[widget.entityId].getOverrideName)} has no data ${gd.sensors.length}"),
+              "${gd.textToDisplay(gd.entities[widget.entityId].getOverrideName)} has no data available ${gd.sensors.length}"),
         ),
       );
     else if (gd.sensors.length < 4) {

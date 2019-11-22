@@ -13,6 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/helper/WebSocket.dart';
+import 'package:hasskit/model/BaseSetting.dart';
 import 'package:hasskit/model/Sensor.dart';
 import 'package:hasskit/model/CameraThumbnail.dart';
 import 'package:hasskit/model/Entity.dart';
@@ -838,12 +839,11 @@ class GeneralData with ChangeNotifier {
           "binary_sensor.motion_sensor_158d0002f1d1d2",
           "cover.cover_03",
           "fan.living_room_ceiling_fan",
-          "lock.lock_9",
           "light.light_01",
+          "lock.lock_9",
           "sensor.humidity_158d0002e98f27",
           "sensor.pressure_158d0002e98f27",
           "sensor.temperature_158d0002e98f27",
-          "fan.xiaomi_smart_fan",
           "light.gateway_light_7c49eb891797",
         ],
         entities: [
@@ -1470,10 +1470,24 @@ class GeneralData with ChangeNotifier {
         log.w('FOUND _baseSettingString $_baseSettingString');
         gd.itemsPerRow = jsonDecode(_baseSettingString)['itemsPerRow'];
         gd.themeIndex = jsonDecode(_baseSettingString)['themeIndex'];
+        var colorPicker = jsonDecode(_baseSettingString)['colorPicker'];
+        if (colorPicker == null || colorPicker.isEmpty) {
+          baseSetting.colorPicker = baseSettingDefaultColor;
+        } else {
+          baseSetting.colorPicker = [];
+          for (var colorString in colorPicker) {
+            String valueString =
+                colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
+            int value = int.parse(valueString, radix: 16);
+            Color colorPicker = Color(value);
+            baseSetting.colorPicker.add(colorPicker);
+          }
+        }
       } else {
         log.w('loadBaseSetting baseSettingString.length == 0');
         gd.itemsPerRow = 3;
         gd.themeIndex = 1;
+        baseSetting.colorPicker = baseSettingDefaultColor;
       }
 
       notifyListeners();
@@ -1482,9 +1496,15 @@ class GeneralData with ChangeNotifier {
 
   void baseSettingSave() {
     try {
+      List<String> colorPickerString = [];
+      for (var color in baseSetting.colorPicker) {
+        colorPickerString.add(color.toString());
+      }
+
       var jsonBaseSetting = {
         'itemsPerRow': gd.itemsPerRow,
         'themeIndex': gd.themeIndex,
+        'colorPicker': colorPickerString,
       };
       gd.saveString('baseSetting', jsonEncode(jsonBaseSetting));
       log.w('save baseSetting $jsonBaseSetting');
@@ -1986,4 +2006,16 @@ class GeneralData with ChangeNotifier {
   }
 
   List<Sensor> sensors = [];
+}
+
+class HexColor extends Color {
+  static int _getColorFromHex(String hexColor) {
+    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }

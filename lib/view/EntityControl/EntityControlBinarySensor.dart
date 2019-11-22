@@ -121,14 +121,14 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 32),
+                        SizedBox(width: 16),
                         Text(
                           '$formattedChangedTime',
                           style: Theme.of(context).textTheme.subtitle,
                           textScaleFactor: gd.textScaleFactor,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(width: 32),
+                        SizedBox(width: 16),
                         Expanded(
                           child: rec.isStateOn
                               ? Text(
