@@ -9,17 +9,17 @@ class Sensor {
   Sensor({this.entityId, this.lastChanged, this.lastUpdated, this.state});
   factory Sensor.fromJson(Map<String, dynamic> json) {
     try {
-      var lastChanged = json['last_changed'];
-      if (lastChanged == null) lastChanged = "1970-01-01 00:00:00";
-      var lastUpdated = json['last_updated'];
-      if (lastUpdated == null) lastUpdated = "1970-01-01 00:00:00";
-      var state = json['state'];
-      if (state == null) state = "0";
+//      var lastChanged = json['last_changed'];
+//      if (lastChanged == null) lastChanged = "1970-01-01 00:00:00";
+//      var lastUpdated = json['last_updated'];
+//      if (lastUpdated == null) lastUpdated = "1970-01-01 00:00:00";
+//      var state = json['state'];
+//      if (state == null) state = "0";
 
       return Sensor(
-        lastChanged: lastChanged,
-        lastUpdated: lastUpdated,
-        state: state,
+        lastChanged: json['last_changed'],
+        lastUpdated: json['last_updated'],
+        state: json['state'],
       );
     } catch (e) {
       log.e("EntityOverride.fromJson $e");

@@ -1,14 +1,14 @@
 import 'dart:convert';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/model/Sensor.dart';
+import 'package:hasskit/helper/SensorChart.dart';
 import 'package:http/http.dart' as http;
-
-/// Timeseries chart example
+import 'package:intl/intl.dart';
 import 'dart:math';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class EntityControlSensor extends StatefulWidget {
@@ -24,7 +24,9 @@ class _EntityControlSensorState extends State<EntityControlSensor> {
   String batteryLevel;
   String deviceClass;
   bool inAsyncCall = true;
-
+  double stateMin;
+  double stateMax;
+  List<FlSpot> flSpots = [];
   @override
   void initState() {
     super.initState();
@@ -33,6 +35,25 @@ class _EntityControlSensorState extends State<EntityControlSensor> {
 
   @override
   Widget build(BuildContext context) {
+    Widget displayWidget;
+    if (inAsyncCall)
+      displayWidget = Container();
+    else if (gd.sensors.length < 1)
+      displayWidget = Container(
+        child: Center(
+          child: Text(
+              "${gd.textToDisplay(gd.entities[widget.entityId].getOverrideName)} has no data ${gd.sensors.length}"),
+        ),
+      );
+    else if (gd.sensors.length < 4) {
+      displayWidget = SensorLowNumber();
+    } else {
+      displayWidget = SensorChart(
+        stateMin: stateMin,
+        stateMax: stateMax,
+        flSpots: flSpots,
+      );
+    }
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -47,13 +68,14 @@ class _EntityControlSensorState extends State<EntityControlSensor> {
         ),
         child: Container(
           height: gd.mediaQueryWidth * 5 / 8,
-          child: TimeSeriesRangeAnnotationChart.withSampleData(),
+          child: displayWidget,
         ),
       ),
     );
   }
 
   void getHistory() async {
+    var continueBreak = 0;
     var client = new http.Client();
     var url = gd.currentUrl +
         "/api/history/period?filter_entity_id=${widget.entityId}";
@@ -69,22 +91,62 @@ class _EntityControlSensorState extends State<EntityControlSensor> {
       if (response.statusCode == 200) {
 //        log.w("response.statusCode ${response.statusCode}");
         var jsonResponse = jsonDecode(response.body);
-//        log.d("jsonResponse $jsonResponse");
+        log.d("jsonResponse $jsonResponse");
         gd.sensors = [];
-        int i = 0;
         for (var rec in jsonResponse[0]) {
+          if (continueBreak > 5) {
+            break;
+          }
           var sensor = Sensor.fromJson(rec);
+
+          var lastUpdated = DateTime.tryParse(sensor.lastUpdated);
+          if (lastUpdated == null) {
+            continueBreak++;
+            continue;
+          }
+          var lastChanged = DateTime.tryParse(sensor.lastChanged);
+          if (lastChanged == null) {
+            continueBreak++;
+            continue;
+          }
+          var state = double.tryParse(sensor.state);
+          if (state == null) {
+            continueBreak++;
+            continue;
+          }
+
           gd.sensors.add(sensor);
-          i++;
+
+          if (stateMin == null) stateMin = state;
+          if (stateMax == null) stateMax = state;
+          if (state > stateMax) stateMax = state;
+          if (state < stateMin) stateMin = state;
         }
 
-        if (i > 0 && jsonResponse[0][i - 1] != null) {
-          batteryLevel = (jsonResponse[0][i - 1]["attributes"]["battery_level"])
-              .toString();
+        log.d("gd.sensors.length ${gd.sensors.length}");
+
+        if (jsonResponse[0] != null && jsonResponse[0][0] != null) {
+          batteryLevel =
+              (jsonResponse[0][0]["attributes"]["battery_level"]).toString();
           deviceClass =
-              (jsonResponse[0][i - 1]["attributes"]["device_class"]).toString();
-//          log.d(
-//              "gd.sensors.length ${gd.sensors.length} batteryLevel $batteryLevel deviceClass $deviceClass");
+              (jsonResponse[0][0]["attributes"]["device_class"]).toString();
+          log.d(
+              "gd.sensors.length ${gd.sensors.length} batteryLevel $batteryLevel deviceClass $deviceClass");
+        }
+        gd.sensors.sort((a, b) => DateTime.parse(a.lastUpdated)
+            .toLocal()
+            .compareTo(DateTime.parse(b.lastUpdated).toLocal()));
+
+        processTable();
+
+        if (stateMin != null && stateMax != null) {
+          var range = (stateMax - stateMin).abs();
+          var borderNumber;
+          range == 0 ? borderNumber = 1 : borderNumber = range * 0.1;
+          stateMin = stateMin - borderNumber;
+          stateMax = stateMax + borderNumber;
+          log.d(
+              "stateMin $stateMin stateMax $stateMax borderNumber $borderNumber");
         }
 
         setState(() {
@@ -97,100 +159,81 @@ class _EntityControlSensorState extends State<EntityControlSensor> {
         print("Request failed with status: ${response.statusCode}.");
       }
     } finally {
-//      setState(() {
-      inAsyncCall = false;
-//      });
+      setState(() {
+        inAsyncCall = false;
+      });
       client.close();
+    }
+  }
+
+  void processTable() {
+    var now = DateTime.now().toLocal().millisecondsSinceEpoch.toDouble();
+    var now24 = DateTime.now()
+        .toLocal()
+        .subtract(Duration(hours: 24))
+        .millisecondsSinceEpoch
+        .toDouble();
+    log.d("processTable");
+
+    trimData();
+
+    for (int i = 0; i < gd.sensors.length; i++) {
+      var lastChanged = DateTime.tryParse(gd.sensors[i].lastUpdated)
+          .toUtc()
+          .millisecondsSinceEpoch
+          .toDouble();
+      if (lastChanged == null) {
+        log.e("Can't parse lastChanged ${gd.sensors[i].lastUpdated}");
+        continue;
+      }
+      var state = double.tryParse(gd.sensors[i].state);
+      if (lastChanged == null) {
+        log.e("Can't parse state ${gd.sensors[i].state}");
+        continue;
+      }
+
+      var lastChangedMapped = gd.mapNumber(lastChanged, now24, now, 0, 24);
+//      var stateMapped = gd.mapNumber(state, stateMin, stateMax, 0, 12);
+//
+//      log.d("stateMapped $stateMapped lastChangedMapped $lastChangedMapped");
+
+      flSpots.add(FlSpot(lastChangedMapped, state));
+    }
+  }
+
+  void trimData() {
+    log.d("trimData before ${gd.sensors.length}");
+    List<Sensor> trimData = [];
+    var overPopulate = gd.sensors.length ~/ 96;
+    if (overPopulate > 1) {
+      for (int i = 0; i < gd.sensors.length; i++) {
+        if (i % overPopulate == 0) {
+          trimData.add(gd.sensors[i]);
+        }
+      }
+      log.d("trimData after ${trimData.length}");
+      gd.sensors = trimData;
     }
   }
 }
 
-// Copyright 2018 the Charts project authors. Please see the AUTHORS file
-// for details.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-class TimeSeriesRangeAnnotationChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
-
-  TimeSeriesRangeAnnotationChart(this.seriesList, {this.animate});
-
-  /// Creates a [TimeSeriesChart] with sample data and no transition.
-  factory TimeSeriesRangeAnnotationChart.withSampleData() {
-    return new TimeSeriesRangeAnnotationChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: true,
-    );
-  }
-
+class SensorLowNumber extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new charts.TimeSeriesChart(
-      seriesList,
-      animate: animate,
-      // Optionally pass in a [DateTimeFactory] used by the chart. The factory
-      // should create the same type of [DateTime] as the data provided. If none
-      // specified, the default creates local date time.
-      dateTimeFactory: const charts.LocalDateTimeFactory(),
+    List<Widget> widgets = [];
+    for (int i = 0; i < gd.sensors.length; i++) {
+      var lastUpdated = DateTime.parse(gd.sensors[i].lastUpdated).toUtc();
+
+      var widget = Container(
+          height: 40,
+          child: Text(DateFormat('dd-MMM kk:mm:ss').format(lastUpdated) +
+              " - " +
+              gd.sensors[i].state));
+      widgets.add(widget);
+    }
+
+    return Column(
+      children: widgets,
     );
-  }
-
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<Sensor, DateTime>> _createSampleData() {
-//    final data = [
-//      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
-//      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
-//      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
-//      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
-//    ];
-//    return [
-//      new charts.Series<TimeSeriesSales, DateTime>(
-//        id: 'Sales',
-//        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-//        domainFn: (TimeSeriesSales sales, _) => sales.time,
-//        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-//        data: data,
-//      )
-//    ];
-
-//    final data = [];
-//
-//    for (var sensor in gd.sensors) {
-//      var dateParse = DateTime.tryParse(sensor.lastChanged).toLocal();
-//      var state = double.tryParse(sensor.state);
-//
-//      if (dateParse != null && state != null) {
-//        var timeSeriesSales = TimeSeriesSales(
-//          dateParse,
-//          state,
-//        );
-////        log.d(
-////            "timeSeriesSales ${timeSeriesSales.time} ${timeSeriesSales.sales}");
-//        data.add(timeSeriesSales);
-//      }
-//    }
-
-    return [
-      new charts.Series<Sensor, DateTime>(
-        id: 'Chart',
-        colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-        domainFn: (Sensor sensor, _) =>
-            DateTime.tryParse(sensor.lastChanged).toLocal(),
-        measureFn: (Sensor sensor, _) => double.tryParse(sensor.state),
-        data: gd.sensors,
-      )
-    ];
   }
 }
