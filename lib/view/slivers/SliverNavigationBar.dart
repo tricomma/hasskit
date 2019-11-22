@@ -49,7 +49,7 @@ class SliverNavigationBar extends StatelessWidget {
         }
 
         if (tempState != null) {
-//          log.w("tempState $tempState");
+//          log.d("tempState $tempState");
 
           if (tempState > 35) {
             backgroundColor = ThemeInfo.colorTemp05.withOpacity(0.5);

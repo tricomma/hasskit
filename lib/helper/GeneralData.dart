@@ -13,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/helper/WebSocket.dart';
-import 'package:hasskit/model/BinarySensor.dart';
+import 'package:hasskit/model/Sensor.dart';
 import 'package:hasskit/model/CameraThumbnail.dart';
 import 'package:hasskit/model/Entity.dart';
 import 'package:hasskit/model/EntityOverride.dart';
@@ -1976,5 +1976,5 @@ class GeneralData with ChangeNotifier {
     }
   }
 
-  List<BinarySensor> binarySensors = [];
+  List<Sensor> sensors = [];
 }

@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'EntityControlBinarySensor.dart';
 import 'EntityControlFan.dart';
 import 'EntityControlLightDimmer.dart';
+import 'EntityControlSensor.dart';
 import 'EntityControlToggle.dart';
 
 class EntityControlParent extends StatefulWidget {
@@ -81,6 +82,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
           entityControl = EntityControlToggle(entityId: widget.entityId);
         } else if (entity.entityId.contains("binary_sensor.")) {
           entityControl = EntityControlBinarySensor(entityId: widget.entityId);
+        } else if (entity.entityId.contains("sensor.")) {
+          entityControl = EntityControlSensor(entityId: widget.entityId);
         } else {
           entityControl = EntityControlGeneral(entityId: widget.entityId);
         }
@@ -100,9 +103,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Expanded(
-                      child: Container(),
-                    ),
+                    SizedBox(height: kToolbarHeight),
                     Container(
                       height: 50,
                       child: Stack(
@@ -111,7 +112,6 @@ class _EntityControlParentState extends State<EntityControlParent> {
                           Container(
                             width: gd.mediaQueryWidth - 100,
                             decoration: BoxDecoration(
-                              color: ThemeInfo.colorBottomSheet,
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 color: ThemeInfo.colorBottomSheetReverse,
@@ -119,61 +119,9 @@ class _EntityControlParentState extends State<EntityControlParent> {
                               ),
                             ),
                             height: 40,
-                            child: !showEditName
-                                ? Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      gd.textToDisplay(entity.getOverrideName),
-                                      style: Theme.of(context).textTheme.title,
-                                      textScaleFactor: gd.textScaleFactor,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                : Container(
-                                    alignment: Alignment.center,
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                          contentPadding: EdgeInsets.zero,
-                                          hintText:
-                                              '${gd.entities[widget.entityId].getFriendlyName}'),
-                                      focusNode: _focusNode,
-                                      controller: _controller,
-                                      style: Theme.of(context).textTheme.title,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      autocorrect: false,
-                                      autofocus: true,
-                                      onEditingComplete: () {
-                                        showEditName = false;
-                                        setState(
-                                          () {
-                                            if (gd.entitiesOverride[
-                                                    widget.entityId] !=
-                                                null) {
-                                              gd
-                                                      .entitiesOverride[
-                                                          widget.entityId]
-                                                      .friendlyName =
-                                                  _controller.text.trim();
-                                            } else {
-                                              gd.entitiesOverride[
-                                                      widget.entityId] =
-                                                  EntityOverride(
-                                                      friendlyName: _controller
-                                                          .text
-                                                          .trim());
-                                            }
-                                            gd.entitiesOverrideSave(true);
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
                           ),
                           Positioned(
-                            left: 30,
+                            left: 10,
                             child: Container(
                               width: 50,
                               height: 50,
@@ -192,29 +140,35 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                 color: gd.entities[widget.entityId].isStateOn
                                     ? ThemeInfo.colorIconActive
                                     : ThemeInfo.colorIconInActive,
-                                size: 40,
+                                size: 35,
                               ),
                             ),
                           ),
                           !showEditName
                               ? Stack(
                                   children: <Widget>[
-                                    Container(
-                                      padding:
-                                          EdgeInsets.only(left: 40, right: 40),
-                                      width: double.infinity,
-                                      alignment: Alignment.center,
-                                      child: Text(
-//                                  entity.entityId,
-                                        gd.textToDisplay(
-                                            entity.getOverrideName),
-                                        style:
-                                            Theme.of(context).textTheme.title,
-                                        textScaleFactor: gd.textScaleFactor,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                      ),
+                                    Row(
+                                      children: <Widget>[
+                                        SizedBox(width: 60),
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              gd.textToDisplay(
+                                                  entity.getOverrideName),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .title,
+                                              textScaleFactor:
+                                                  gd.textScaleFactor,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 40),
+                                      ],
                                     ),
                                     Container(
                                       width: double.infinity,
@@ -240,50 +194,61 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                 )
                               : Stack(
                                   children: <Widget>[
-                                    Container(
-                                      padding:
-                                          EdgeInsets.fromLTRB(40, 0, 40, 0),
-                                      width: double.infinity,
-                                      alignment: Alignment.center,
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            contentPadding: EdgeInsets.zero,
-                                            hintText:
-                                                '${gd.entities[widget.entityId].getFriendlyName}'),
-                                        focusNode: _focusNode,
-                                        controller: _controller,
-                                        style:
-                                            Theme.of(context).textTheme.title,
-                                        maxLines: 1,
-                                        textAlign: TextAlign.center,
-                                        autocorrect: false,
-                                        autofocus: true,
-                                        onEditingComplete: () {
-                                          showEditName = false;
-                                          setState(
-                                            () {
-                                              if (gd.entitiesOverride[
-                                                      widget.entityId] !=
-                                                  null) {
-                                                gd
-                                                        .entitiesOverride[
-                                                            widget.entityId]
-                                                        .friendlyName =
-                                                    _controller.text.trim();
-                                              } else {
-                                                gd.entitiesOverride[
-                                                        widget.entityId] =
-                                                    EntityOverride(
-                                                        friendlyName:
-                                                            _controller.text
-                                                                .trim());
-                                              }
-                                              gd.entitiesOverrideSave(true);
-                                            },
-                                          );
-                                        },
-                                      ),
+                                    Row(
+                                      children: <Widget>[
+                                        SizedBox(width: 60),
+                                        Expanded(
+                                          child: Container(
+                                            width: double.infinity,
+                                            alignment: Alignment.center,
+                                            child: TextField(
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  contentPadding:
+                                                      EdgeInsets.zero,
+                                                  hintText:
+                                                      '${gd.entities[widget.entityId].getFriendlyName}'),
+                                              focusNode: _focusNode,
+                                              controller: _controller,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .title,
+                                              maxLines: 1,
+                                              textAlign: TextAlign.center,
+                                              autocorrect: false,
+                                              autofocus: true,
+                                              onEditingComplete: () {
+                                                showEditName = false;
+                                                setState(
+                                                  () {
+                                                    if (gd.entitiesOverride[
+                                                            widget.entityId] !=
+                                                        null) {
+                                                      gd
+                                                              .entitiesOverride[
+                                                                  widget.entityId]
+                                                              .friendlyName =
+                                                          _controller.text
+                                                              .trim();
+                                                    } else {
+                                                      gd.entitiesOverride[
+                                                              widget.entityId] =
+                                                          EntityOverride(
+                                                              friendlyName:
+                                                                  _controller
+                                                                      .text
+                                                                      .trim());
+                                                    }
+                                                    gd.entitiesOverrideSave(
+                                                        true);
+                                                  },
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 40),
+                                      ],
                                     ),
                                     Container(
                                       width: double.infinity,
@@ -330,7 +295,9 @@ class _EntityControlParentState extends State<EntityControlParent> {
                         ],
                       ),
                     ),
-
+                    Expanded(
+                      child: Container(),
+                    ),
                     !showEditName
                         ? Stack(
                             children: <Widget>[
@@ -352,25 +319,9 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                   setState(() {});
                                 },
                               ),
-                              Container(
-                                alignment: Alignment.topRight,
-                                width: double.infinity,
-                                child: InkWell(
-                                  onTap: () {
-                                    showEditName = false;
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    child: Icon(
-                                      Icons.cancel,
-                                      size: 40,
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
-                    SizedBox(height: 16),
+
                     Expanded(
                       child: Container(),
                     ),
@@ -412,30 +363,13 @@ class _IconSelection extends StatefulWidget {
 
 class __IconSelectionState extends State<_IconSelection> {
   @override
-//  void initState() {
-//    super.initState();
-//    gd.iconsOverride.sort((a, b) => a.compareTo(b));
-//
-//    var recval = "";
-//    for (var name in gd.iconsOverride) {
-//      recval = recval + ("\"$name\",");
-//    }
-//
-//    printWrapped(recval);
-//  }
-//
-//  void printWrapped(String text) {
-//    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-//    pattern.allMatches(text).forEach((match) => print(match.group(0)));
-//  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
           width: double.infinity,
-          height: 40,
+          height: 28,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(8), topRight: Radius.circular(8)),
@@ -453,8 +387,7 @@ class __IconSelectionState extends State<_IconSelection> {
           height: gd.mediaQueryHeight -
               kBottomNavigationBarHeight -
               kToolbarHeight -
-              kToolbarHeight -
-              40,
+              30,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8),
@@ -484,10 +417,11 @@ class __IconSelectionState extends State<_IconSelection> {
                             gd.entitiesOverride[widget.entityId] =
                                 entityOverride;
                           }
+
+                          FocusScope.of(context).requestFocus(new FocusNode());
+
                           gd.entitiesOverrideSave(true);
-                          widget.closeIconSelection();
-//                          setState(() {
-//                          });
+//                          widget.closeIconSelection();
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -517,10 +451,6 @@ class __IconSelectionState extends State<_IconSelection> {
                                       color: ThemeInfo.colorBottomSheetReverse
                                           .withOpacity(0.75),
                                     ),
-//                              Text(
-//                                gd.iconsOverride[index],
-//                                textScaleFactor: 0.5,
-//                              ),
                             ],
                           ),
                         ),
