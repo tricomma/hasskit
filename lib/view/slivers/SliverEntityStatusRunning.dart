@@ -86,7 +86,7 @@ class Status2ndRowItem extends StatelessWidget {
             ),
             Expanded(
               child: Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 child: Text(
                   "${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
                   style: ThemeInfo.textNameButtonActive,
