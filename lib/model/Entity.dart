@@ -49,39 +49,50 @@ class Entity {
   int colorTemp;
   //cover
   double currentPosition;
-  Entity(
-      {this.entityId,
-      this.deviceClass,
-      this.friendlyName,
-      this.icon,
-      this.state,
-      //climate
-      this.hvacModes,
-      this.minTemp,
-      this.maxTemp,
-      this.targetTempStep,
-      this.currentTemperature,
-      this.temperature,
-      this.fanMode,
-      this.fanModes,
-      this.deviceCode,
-      this.manufacturer,
-      //fan
-      this.speedList,
-      this.oscillating,
-      this.speedLevel,
-      this.speed,
-      this.angle,
-      this.directSpeed,
-      //light
-      this.supportedFeatures,
-      this.brightness,
-      this.rgbColor,
-      this.minMireds,
-      this.maxMireds,
-      this.colorTemp,
-      //cover
-      this.currentPosition});
+  //input_number
+  double initial;
+  double min;
+  double max;
+  double step;
+  Entity({
+    this.entityId,
+    this.deviceClass,
+    this.friendlyName,
+    this.icon,
+    this.state,
+    //climate
+    this.hvacModes,
+    this.minTemp,
+    this.maxTemp,
+    this.targetTempStep,
+    this.currentTemperature,
+    this.temperature,
+    this.fanMode,
+    this.fanModes,
+    this.deviceCode,
+    this.manufacturer,
+    //fan
+    this.speedList,
+    this.oscillating,
+    this.speedLevel,
+    this.speed,
+    this.angle,
+    this.directSpeed,
+    //light
+    this.supportedFeatures,
+    this.brightness,
+    this.rgbColor,
+    this.minMireds,
+    this.maxMireds,
+    this.colorTemp,
+    //cover
+    this.currentPosition,
+    //intput_number
+    this.initial,
+    this.min,
+    this.max,
+    this.step,
+  });
 
   factory Entity.fromJson(Map<String, dynamic> json) {
     try {
@@ -135,6 +146,10 @@ class Entity {
         colorTemp: int.tryParse(json['attributes']['color_temp'].toString()),
         currentPosition:
             double.tryParse(json['attributes']['current_position'].toString()),
+        initial: double.tryParse(json['attributes']['initial'].toString()),
+        min: double.tryParse(json['attributes']['min'].toString()),
+        max: double.tryParse(json['attributes']['max'].toString()),
+        step: double.tryParse(json['attributes']['step'].toString()),
       );
     } catch (e) {
       log.e("Entity.fromJson newEntity $e");
@@ -248,8 +263,8 @@ class Entity {
       return 'mdi:help-circle';
     }
 
-    if (iconOverrider.containsKey(deviceClass)) {
-      return '${getOverrideStateString(iconOverrider[deviceClass])}';
+    if (gd.classDefaultIcon(deviceClass) != "") {
+      return '${getOverrideStateString(gd.classDefaultIcon(deviceClass))}';
     }
 
     if (deviceName.contains('automation')) {
@@ -370,24 +385,6 @@ class Entity {
 
     return normalState;
   }
-
-  Map<String, String> iconOverrider = {
-    'automation': 'mdi:home-automation',
-    'camera': 'mdi:webcam',
-    'climate': 'mdi:thermostat',
-    'cover': 'mdi:garage',
-    'fan': 'mdi:fan',
-    'light': 'mdi:lightbulb',
-    'lock': 'mdi:lock',
-    'media_player': 'mdi:theater',
-    'person': 'mdi:account',
-    'sun': 'mdi:white-balance-sunny',
-    'script': 'mdi:script-text',
-    'switch': 'mdi:power',
-    'timer': 'mdi:timer',
-    'vacuum': 'mdi:robot-vacuum',
-    'weather': 'mdi:weather-partlycloudy',
-  };
 
   bool get isStateOn {
     var stateLower = state.toLowerCase();

@@ -31,6 +31,9 @@ class SliverNavigationBar extends StatelessWidget {
           "${generalData.roomList[roomIndex].imageIndex} "
           "${generalData.roomList[roomIndex].tempEntityId} "
           "${generalData.roomList[roomIndex].entities.length} "
+          "${generalData.eventsEntity} "
+          "${generalData.entitiesStatusShow} "
+          "${generalData.entitiesStatusRunning.length} "
           "${generalData.viewMode} ",
       builder: (context, data, child) {
         //        if (roomIndex != null &&
@@ -80,11 +83,6 @@ class SliverNavigationBar extends StatelessWidget {
                   children: <Widget>[
                     Stack(
                       children: <Widget>[
-//                        Icon(
-//                          MaterialDesignIcons.getIconDataFromIconName(
-//                              "mdi:checkbox-blank-circle-outline"),
-//                          color: iconColor,
-//                        ),
                         Icon(
                           MaterialDesignIcons.getIconDataFromIconName(
                               "mdi:thermometer"),
@@ -100,30 +98,11 @@ class SliverNavigationBar extends StatelessWidget {
                   ],
                 ),
               ),
-//              Stack(
-//                alignment: Alignment.center,
-//                children: <Widget>[
-//                  CircleAvatar(
-//                    backgroundColor: Colors.black26,
-//                    radius: 14,
-//                  ),
-//                  Icon(
-//                    MaterialDesignIcons.getIconDataFromIconName(
-//                        "mdi:thermometer"),
-//                    color: iconColor,
-//                  ),
-//                ],
-//              ),
-//              Text("$tempState", textScaleFactor: gd.textScaleFactor),
             ],
           );
         }
 
         return CupertinoSliverNavigationBar(
-//          leading: Image(
-//            image: AssetImage(
-//                'assets/images/icon_transparent_border_transparent.png'),
-//          ),
           leading: temperatureWidget,
           backgroundColor: backgroundColor,
           largeTitle: Text(
@@ -136,6 +115,35 @@ class SliverNavigationBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
+                gd.entitiesStatusRunning.length > 0
+                    ? InkWell(
+                        onTap: () {
+                          gd.entitiesStatusShow = !gd.entitiesStatusShow;
+                        },
+                        child: Stack(
+                          alignment: Alignment.topRight,
+                          children: <Widget>[
+                            Icon(Icons.notifications,
+                                color: Theme.of(context).textTheme.title.color),
+                            Container(
+                              width: 15,
+                              height: 15,
+                              padding: EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: Colors.grey,
+                                shape: BoxShape.circle,
+                              ),
+                              child: FittedBox(
+                                child: Text(
+                                  "${gd.entitiesStatusRunning.length}",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : Container(),
                 gd.roomList.length > 0
                     ? InkWell(
                         onTap: () {

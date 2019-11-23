@@ -5,6 +5,7 @@ import 'package:hasskit/model/Entity.dart';
 import 'package:hasskit/view/CustomScrollView/DeviceTypeHeader.dart';
 import 'package:hasskit/view/slivers/SliverEntities.dart';
 import 'package:hasskit/view/slivers/SliverNavigationBar.dart';
+import 'package:hasskit/view/slivers/SliverEntityStatusRunning.dart';
 
 class ViewNormal extends StatelessWidget {
   final int roomIndex;
@@ -50,6 +51,7 @@ class ViewNormal extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverNavigationBar(roomIndex: roomIndex),
+        SliverEntityStatusRunning(),
         showAddFirstButton
             ? SliverPadding(
                 padding: EdgeInsets.all(12),

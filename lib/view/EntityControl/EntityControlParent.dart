@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 import 'EntityControlBinarySensor.dart';
 import 'EntityControlFan.dart';
 import 'EntityControlLightDimmer.dart';
+import 'EntityControlInputNumber.dart';
 import 'EntityControlSensor.dart';
 import 'EntityControlToggle.dart';
 
@@ -75,6 +76,11 @@ class _EntityControlParentState extends State<EntityControlParent> {
         } else if (entity.entityId.contains("cover.") &&
             entity.currentPosition != null) {
           entityControl = EntityControlCoverPosition(entityId: widget.entityId);
+        } else if (entity.entityId.contains("input_number.") &&
+            entity.state != null &&
+            entity.min != null &&
+            entity.max != null) {
+          entityControl = EntityControlInputNumber(entityId: widget.entityId);
         } else if (entity.entityType == EntityType.lightSwitches ||
             entity.entityType == EntityType.mediaPlayers ||
             entity.entityId.contains("group.") ||

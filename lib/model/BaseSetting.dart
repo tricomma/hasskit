@@ -23,16 +23,38 @@ BaseSetting baseSetting =
 class BaseSetting {
   int itemsPerRow;
   int themeIndex;
+  bool openRequireAttention = false;
+  bool entitiesStatusShowLight = false;
+  bool entitiesStatusShowSwitch = false;
+  bool entitiesStatusShowCover = false;
+  bool entitiesStatusShowLock = false;
+  bool entitiesStatusShowFan = false;
+  bool entitiesStatusShowClimate = false;
+  bool entitiesStatusShowBinarySensor = false;
   List<Color> colorPicker = [];
   BaseSetting({
     @required this.itemsPerRow,
     @required this.themeIndex,
+    this.entitiesStatusShowLight = false,
+    this.entitiesStatusShowSwitch = false,
+    this.entitiesStatusShowCover = false,
+    this.entitiesStatusShowLock = false,
+    this.entitiesStatusShowFan = false,
+    this.entitiesStatusShowClimate = false,
+    this.entitiesStatusShowBinarySensor = false,
     @required this.colorPicker,
   });
 
   Map<String, dynamic> toJson() => {
         'itemsPerRow': itemsPerRow,
         'themeIndex': themeIndex,
+        'entitiesStatusShowLight': entitiesStatusShowLight,
+        'entitiesStatusShowSwitch': entitiesStatusShowSwitch,
+        'entitiesStatusShowCover': entitiesStatusShowCover,
+        'entitiesStatusShowLock': entitiesStatusShowLock,
+        'entitiesStatusShowFan': entitiesStatusShowFan,
+        'entitiesStatusShowClimate': entitiesStatusShowClimate,
+        'entitiesStatusShowBinarySensor': entitiesStatusShowBinarySensor,
         'colorPicker': colorPicker,
       };
 
@@ -41,6 +63,13 @@ class BaseSetting {
       return BaseSetting(
         itemsPerRow: json['itemsPerRow'] != null ? json['itemsPerRow'] : 3,
         themeIndex: json['themeIndex'] != null ? json['themeIndex'] : 1,
+        entitiesStatusShowLight: json['entitiesStatusShowLight'],
+        entitiesStatusShowSwitch: json['entitiesStatusShowSwitch'],
+        entitiesStatusShowCover: json['entitiesStatusShowCover'],
+        entitiesStatusShowLock: json['entitiesStatusShowLock'],
+        entitiesStatusShowFan: json['entitiesStatusShowFan'],
+        entitiesStatusShowClimate: json['entitiesStatusShowClimate'],
+        entitiesStatusShowBinarySensor: json['entitiesStatusShowBinarySensor'],
         colorPicker: json['themeIndex'] != null
             ? json['colorPicker']
             : baseSettingDefaultColor,

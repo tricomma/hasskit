@@ -297,15 +297,7 @@ class GeneralData with ChangeNotifier {
       log.e('socketSubscribeEvents newEntity == null');
       return;
     }
-
-//    if (newEntity.entityId.contains("cover.")) {
-//      log.d(
-//          "\nsocketSubscribeEvents fan. ${message['event']['data']['new_state']}");
-//    }
-
-//    _entities[newEntity.entityId] = newEntity;
-//    return;
-
+    eventsEntity = "${newEntity.entityId}+${newEntity.state}";
     Entity oldEntity = entities[newEntity.entityId];
 
     if (oldEntity != null) {
@@ -344,10 +336,25 @@ class GeneralData with ChangeNotifier {
       oldEntity.colorTemp = newEntity.colorTemp;
 //    }
       oldEntity.currentPosition = newEntity.currentPosition;
+
+      oldEntity.initial = newEntity.initial;
+      oldEntity.min = newEntity.min;
+      oldEntity.max = newEntity.max;
+      oldEntity.step = newEntity.step;
+
       notifyListeners();
     } else {
       _entities[newEntity.entityId] = newEntity;
       log.e('WTF newEntity ${newEntity.entityId}');
+      notifyListeners();
+    }
+  }
+
+  String _eventsEntity;
+  String get eventsEntity => _eventsEntity;
+  set eventsEntity(String val) {
+    if (val != _eventsEntity) {
+      _eventsEntity = val;
       notifyListeners();
     }
   }
@@ -1470,6 +1477,21 @@ class GeneralData with ChangeNotifier {
         log.w('FOUND _baseSettingString $_baseSettingString');
         gd.itemsPerRow = jsonDecode(_baseSettingString)['itemsPerRow'];
         gd.themeIndex = jsonDecode(_baseSettingString)['themeIndex'];
+        gd.entitiesStatusShowLight =
+            jsonDecode(_baseSettingString)['entitiesStatusShowLight'];
+        gd.entitiesStatusShowSwitch =
+            jsonDecode(_baseSettingString)['entitiesStatusShowSwitch'];
+        gd.entitiesStatusShowCover =
+            jsonDecode(_baseSettingString)['entitiesStatusShowCover'];
+        gd.entitiesStatusShowLock =
+            jsonDecode(_baseSettingString)['entitiesStatusShowLock'];
+        gd.entitiesStatusShowFan =
+            jsonDecode(_baseSettingString)['entitiesStatusShowFan'];
+        gd.entitiesStatusShowClimate =
+            jsonDecode(_baseSettingString)['entitiesStatusShowClimate'];
+        gd.entitiesStatusShowBinarySensor =
+            jsonDecode(_baseSettingString)['entitiesStatusShowBinarySensor'];
+
         var colorPicker = jsonDecode(_baseSettingString)['colorPicker'];
         if (colorPicker == null || colorPicker.isEmpty) {
           baseSetting.colorPicker = baseSettingDefaultColor;
@@ -1487,6 +1509,13 @@ class GeneralData with ChangeNotifier {
         log.w('loadBaseSetting baseSettingString.length == 0');
         gd.itemsPerRow = 3;
         gd.themeIndex = 1;
+        gd.entitiesStatusShowLight = false;
+        gd.entitiesStatusShowSwitch = false;
+        gd.entitiesStatusShowCover = false;
+        gd.entitiesStatusShowLock = false;
+        gd.entitiesStatusShowFan = false;
+        gd.entitiesStatusShowClimate = false;
+        gd.entitiesStatusShowBinarySensor = false;
         baseSetting.colorPicker = baseSettingDefaultColor;
       }
 
@@ -1504,7 +1533,13 @@ class GeneralData with ChangeNotifier {
       var jsonBaseSetting = {
         'itemsPerRow': gd.itemsPerRow,
         'themeIndex': gd.themeIndex,
-        'colorPicker': colorPickerString,
+        'entitiesStatusShowLight': gd.entitiesStatusShowLight,
+        'entitiesStatusShowSwitch': gd.entitiesStatusShowSwitch,
+        'entitiesStatusShowCover': gd.entitiesStatusShowCover,
+        'entitiesStatusShowLock': gd.entitiesStatusShowLock,
+        'entitiesStatusShowFan': gd.entitiesStatusShowFan,
+        'entitiesStatusShowClimate': gd.entitiesStatusShowClimate,
+        'entitiesStatusShowBinarySensor': gd.entitiesStatusShowBinarySensor,
       };
       gd.saveString('baseSetting', jsonEncode(jsonBaseSetting));
       log.w('save baseSetting $jsonBaseSetting');
@@ -2006,6 +2041,191 @@ class GeneralData with ChangeNotifier {
   }
 
   List<Sensor> sensors = [];
+
+  String classDefaultIcon(String deviceClass) {
+    deviceClass = deviceClass.replaceAll(".", "");
+    switch (deviceClass) {
+      case "automation":
+        return "mdi:home-automation";
+      case "binary_sensor":
+        return "mdi:run";
+      case "camera":
+        return "mdi:webcam";
+      case "climate":
+        return "mdi:thermostat";
+      case "cover":
+        return "mdi:garage-open";
+      case "fan":
+        return "mdi:fan";
+      case "light":
+        return "mdi:lightbulb-on";
+      case "lock":
+        return "mdi:lock-open";
+      case "media_player":
+        return "mdi:theater";
+      case "person":
+        return "mdi:account";
+      case "sun":
+        return "mdi:white-balance-sunny";
+      case "switch":
+        return "mdi:toggle-switch";
+      case "timer":
+        return "mdi:timer";
+      case "vacuum":
+        return "mdi:robot-vacuum";
+      case "weather":
+        return "mdi:weather-partlycloudy";
+      default:
+        return "";
+    }
+  }
+
+  List<Entity> get entitiesStatusRunning {
+    List<Entity> entities = gd.entities.values
+        .where((e) =>
+            e.isStateOn &&
+            (gd.entitiesStatusShowLight && e.entityId.contains("light.") ||
+                gd.entitiesStatusShowSwitch && e.entityId.contains("switch.") ||
+                gd.entitiesStatusShowCover && e.entityId.contains("cover.") ||
+                gd.entitiesStatusShowLock && e.entityId.contains("lock.") ||
+                gd.entitiesStatusShowFan && e.entityId.contains("fan.") ||
+                gd.entitiesStatusShowClimate &&
+                    e.entityId.contains("climate.") ||
+                gd.entitiesStatusShowBinarySensor &&
+                    e.entityId.contains("binary_sensor.")))
+        .toList();
+
+    return entities;
+  }
+
+  bool _entitiesStatusShow = false;
+
+  bool get entitiesStatusShow => _entitiesStatusShow;
+
+  set entitiesStatusShow(bool val) {
+    if (val == null) {
+      throw new ArgumentError();
+    }
+    if (_entitiesStatusShow != val) {
+      _entitiesStatusShow = val;
+      if (entitiesStatusShow) entitiesStatusShowOffTimer(60);
+      notifyListeners();
+    }
+  }
+
+  Timer _entitiesStatusShowOffTimer;
+
+  void entitiesStatusShowOffTimer(int seconds) {
+    _entitiesStatusShowOffTimer?.cancel();
+    _entitiesStatusShowOffTimer = null;
+
+    log.d("entitiesStatusShowTimer delay");
+
+    _entitiesStatusShowOffTimer =
+        Timer(Duration(seconds: seconds), entitiesStatusShowOff);
+  }
+
+  void entitiesStatusShowOff() {
+    gd.entitiesStatusShow = false;
+  }
+
+  bool _entitiesStatusShowLight = false;
+
+  bool get entitiesStatusShowLight => _entitiesStatusShowLight;
+
+  set entitiesStatusShowLight(bool val) {
+    if (val == null) {
+      throw new ArgumentError();
+    }
+    if (_entitiesStatusShowLight != val) {
+      _entitiesStatusShowLight = val;
+      notifyListeners();
+    }
+  }
+
+  bool _entitiesStatusShowSwitch = false;
+
+  bool get entitiesStatusShowSwitch => _entitiesStatusShowSwitch;
+
+  set entitiesStatusShowSwitch(bool val) {
+    if (val == null) {
+      throw new ArgumentError();
+    }
+    if (_entitiesStatusShowSwitch != val) {
+      _entitiesStatusShowSwitch = val;
+      notifyListeners();
+    }
+  }
+
+  bool _entitiesStatusShowCover = false;
+
+  bool get entitiesStatusShowCover => _entitiesStatusShowCover;
+
+  set entitiesStatusShowCover(bool val) {
+    if (val == null) {
+      throw new ArgumentError();
+    }
+    if (_entitiesStatusShowCover != val) {
+      _entitiesStatusShowCover = val;
+      notifyListeners();
+    }
+  }
+
+  bool _entitiesStatusShowLock = false;
+
+  bool get entitiesStatusShowLock => _entitiesStatusShowLock;
+
+  set entitiesStatusShowLock(bool val) {
+    if (val == null) {
+      throw new ArgumentError();
+    }
+    if (_entitiesStatusShowLock != val) {
+      _entitiesStatusShowLock = val;
+      notifyListeners();
+    }
+  }
+
+  bool _entitiesStatusShowFan = false;
+
+  bool get entitiesStatusShowFan => _entitiesStatusShowFan;
+
+  set entitiesStatusShowFan(bool val) {
+    if (val == null) {
+      throw new ArgumentError();
+    }
+    if (_entitiesStatusShowFan != val) {
+      _entitiesStatusShowFan = val;
+      notifyListeners();
+    }
+  }
+
+  bool _entitiesStatusShowClimate = false;
+
+  bool get entitiesStatusShowClimate => _entitiesStatusShowClimate;
+
+  set entitiesStatusShowClimate(bool val) {
+    if (val == null) {
+      throw new ArgumentError();
+    }
+    if (_entitiesStatusShowClimate != val) {
+      _entitiesStatusShowClimate = val;
+      notifyListeners();
+    }
+  }
+
+  bool _entitiesStatusShowBinarySensor = false;
+
+  bool get entitiesStatusShowBinarySensor => _entitiesStatusShowBinarySensor;
+
+  set entitiesStatusShowBinarySensor(bool val) {
+    if (val == null) {
+      throw new ArgumentError();
+    }
+    if (_entitiesStatusShowBinarySensor != val) {
+      _entitiesStatusShowBinarySensor = val;
+      notifyListeners();
+    }
+  }
 }
 
 class HexColor extends Color {
