@@ -87,6 +87,7 @@ class ThemeInfo {
 //  static const Color colorIconActive = Color.fromRGBO(255, 204, 51, 1);
   static const Color colorIconActive = Color(0xffFFB300);
   static const Color colorIconInActive = Color.fromRGBO(153, 153, 153, 1);
+  static const Color colorBackgroundDark = Color.fromRGBO(28, 28, 28, 1);
 //  static const Color colorIconInActive = Color(0xffFFF8E1);
 
 //  static const Color colorTemp01 = Color.fromRGBO(100, 181, 246, 1);

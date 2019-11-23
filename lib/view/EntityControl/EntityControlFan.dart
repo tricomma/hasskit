@@ -105,7 +105,9 @@ class _EntityControlFanState extends State<EntityControlFan> {
                           : ThemeInfo.colorIconInActive,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                          width: 4, color: ThemeInfo.colorBottomSheetReverse),
+                        width: 4,
+                        color: ThemeInfo.colorBottomSheetReverse,
+                      ),
                     ),
                   ),
                   Positioned(
