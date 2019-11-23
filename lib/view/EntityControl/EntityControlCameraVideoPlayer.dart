@@ -8,17 +8,18 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 
-class EntityControlVideoPlayer extends StatefulWidget {
+class EntityControlCameraVideoPlayer extends StatefulWidget {
   final String entityId;
 
-  const EntityControlVideoPlayer({@required this.entityId});
+  const EntityControlCameraVideoPlayer({@required this.entityId});
 
   @override
-  _EntityControlVideoPlayerState createState() =>
-      _EntityControlVideoPlayerState();
+  _EntityControlCameraVideoPlayerState createState() =>
+      _EntityControlCameraVideoPlayerState();
 }
 
-class _EntityControlVideoPlayerState extends State<EntityControlVideoPlayer> {
+class _EntityControlCameraVideoPlayerState
+    extends State<EntityControlCameraVideoPlayer> {
   VideoPlayerController _controller;
   bool initialized = false;
   String streamUrl = "";
@@ -70,7 +71,6 @@ class _EntityControlVideoPlayerState extends State<EntityControlVideoPlayer> {
     streamUrl = gd.cameraStreamUrl;
     _controller = VideoPlayerController.network(
 //        'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4'
-//        "http://hasskitdemo.duckdns.org:8123/api/hls/0a7b88af7fbb840192e94c8b1e2831b61dd75768af08c03b53f5c8cfc510abaa/playlist.m3u8")
         gd.cameraStreamUrl)
       ..initialize().then(
         (_) {
