@@ -51,11 +51,12 @@ class SliverEntitiesNormal extends StatelessWidget {
                         isScrollControlled: true,
                         useRootNavigator: true,
                         builder: (BuildContext context) {
-                          return Theme.of(context).platform == TargetPlatform.iOS?
-                           EntityControlCameraWebView(
-                              entityId: entities[index].entityId):
-                           EntityControlCameraVideoPlayer(
-                              entityId: entities[index].entityId);
+                          return Theme.of(context).platform ==
+                                  TargetPlatform.iOS
+                              ? EntityControlCameraWebView(
+                                  entityId: entities[index].entityId)
+                              : EntityControlCameraVideoPlayer(
+                                  entityId: entities[index].entityId);
                         },
                       );
                     },
@@ -72,10 +73,12 @@ class SliverEntitiesNormal extends StatelessWidget {
                         isScrollControlled: true,
                         useRootNavigator: true,
                         builder: (BuildContext context) {
-//                          return EntityControlCamera(
-//                              entityId: entities[index].entityId);
-                          return EntityControlCameraVideoPlayer(
-                              entityId: entities[index].entityId);
+                          return Theme.of(context).platform ==
+                                  TargetPlatform.iOS
+                              ? EntityControlCameraWebView(
+                                  entityId: entities[index].entityId)
+                              : EntityControlCameraVideoPlayer(
+                                  entityId: entities[index].entityId);
                         },
                       );
                     },

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 class SliverEntityStatusRunning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final buttonSize = 80.0;
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
           "${generalData.entitiesStatusShow} " +
@@ -23,7 +24,7 @@ class SliverEntityStatusRunning extends StatelessWidget {
                   [
                     Container(
                       margin: EdgeInsets.fromLTRB(12, 4, 12, 4),
-                      height: 50.0,
+                      height: buttonSize,
                       child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: status2ndRowButtons),
@@ -50,6 +51,7 @@ class Status2ndRowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttonSize = 80.0;
     return InkWell(
       onTap: () {
         gd.toggleStatus(gd.entities[entityId]);
@@ -60,10 +62,10 @@ class Status2ndRowItem extends StatelessWidget {
         }
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 2),
+        margin: EdgeInsets.symmetric(horizontal: 4),
         padding: EdgeInsets.all(2),
-        width: 50,
-        height: 50,
+        width: buttonSize,
+        height: buttonSize,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: ThemeInfo.colorBackgroundActive,
@@ -72,19 +74,28 @@ class Status2ndRowItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              MaterialDesignIcons.getIconDataFromIconName(
-                  gd.entities[entityId].getDefaultIcon),
-              color: ThemeInfo.colorIconActive,
-              size: 28,
+            Expanded(
+              child: FittedBox(
+                child: Icon(
+                  MaterialDesignIcons.getIconDataFromIconName(
+                      gd.entities[entityId].getDefaultIcon),
+                  color: ThemeInfo.colorIconActive,
+                  size: 100,
+                ),
+              ),
             ),
-            Text(
-              "${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
-              style: ThemeInfo.textStatusButtonActive,
-              textScaleFactor: gd.textScaleFactor * 0.5,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              maxLines: 2,
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  "${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
+                  style: ThemeInfo.textNameButtonActive,
+                  textScaleFactor: gd.textScaleFactor * 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                ),
+              ),
             ),
           ],
         ),

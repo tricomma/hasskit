@@ -1,12 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
-import 'package:hasskit/helper/ThemeInfo.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -45,35 +41,23 @@ class _EntityControlCameraWebViewState
       selector: (_, generalData) =>
           generalData.cameraStreamUrl + url + showSpin.toString(),
       builder: (context, data, child) {
-        return RotatedBox(
-          quarterTurns: 1,
-//              Theme.of(context).platform == TargetPlatform.android ? 1 : 0,
-          child: ModalProgressHUD(
-            inAsyncCall: showSpin,
-            opacity: 1,
-            progressIndicator: SpinKitThreeBounce(
-              size: 40,
-//              color: Colors.white.withOpacity(0.5),
-              color: ThemeInfo.colorIconActive,
-            ),
-            color: ThemeInfo.colorBackgroundDark,
-            child: gd.cameraStreamUrl.length < 10
-                ? Container()
-                : WebView(
-                    initialUrl: gd.cameraStreamUrl,
-                    javascriptMode: JavascriptMode.unrestricted,
-                    onWebViewCreated: (WebViewController webViewController) {
-                      _controller.complete(webViewController);
-                    },
-                    onPageFinished: (String urlVal) {
-                      showSpin = false;
-                      url = urlVal;
-                      log.d('Page finished loading: $url');
+        return gd.cameraStreamUrl.length < 10
+            ? Container()
+            : WebView(
+                initialUrl: gd.cameraStreamUrl,
+                javascriptMode: JavascriptMode.unrestricted,
+                initialMediaPlaybackPolicy:
+                    AutoMediaPlaybackPolicy.always_allow,
+                onWebViewCreated: (WebViewController webViewController) {
+                  _controller.complete(webViewController);
+                },
+                onPageFinished: (String urlVal) {
+                  showSpin = false;
+                  url = urlVal;
+                  log.d('Page finished loading: $url');
 //                        delayedHide();
-                    },
-                  ),
-          ),
-        );
+                },
+              );
       },
     );
   }
