@@ -16,15 +16,13 @@ class EntityControlAlarmPanel extends StatefulWidget {
 }
 
 class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
-
+  final int keyCodeLength = 4;
   String output = "";
   String _readableState = "";
 
   @override
   void initState() {
     super.initState();
-    Entity entity = gd.entities[widget.entityId];
-
     setState(() {});
   }
 
@@ -39,7 +37,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         "code": output
       }
     };
-    print("ARM:" + output);
+    
     var outMsgEncoded = json.encode(outMsg);
     webSocket.send(outMsgEncoded);
     HapticFeedback.mediumImpact();
@@ -56,7 +54,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         "code": output
       }
     };
-    print("DISARM:" + output);
+    
     var outMsgEncoded = json.encode(outMsg);
     webSocket.send(outMsgEncoded);
     HapticFeedback.mediumImpact();
@@ -65,11 +63,11 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
   buttonPressed(String text) {
     output += text;
 
-    if(output.length > 4) {
-      output = output.substring(1, 5);
+    if(output.length > keyCodeLength) {
+      output = output.substring(1, keyCodeLength + 1);
     }
 
-    if(output.length == 4) {
+    if(output.length == keyCodeLength) {
       var entity = gd.entities[widget.entityId];
       if(entity.state == "disarmed") {
         _arm(entity);
