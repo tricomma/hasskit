@@ -88,11 +88,15 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
     }
   }
 
-  Widget buildButton(String buttonText) {
-    return new Container(
-      padding: new EdgeInsets.all(10.0),
+  Widget alarmButton(String buttonText) {
+    return Container(
+      height: 50,
+      width: 80,
+      margin: EdgeInsets.all(8),
       child: new OutlineButton(
-        padding: new EdgeInsets.all(18.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(8.0),
+        ),
         child: new Text(buttonText,
             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
         onPressed: () => buttonPressed(buttonText),
@@ -170,33 +174,59 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
 //                        fontSize: 36.0, fontWeight: FontWeight.bold)),
 //              ),
               SizedBox(height: 20),
+//              Row(
+//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                children: <Widget>[
+//                  Column(
+//                    children: <Widget>[
+//                      alarmButton("1"),
+//                      alarmButton("4"),
+//                      alarmButton("7"),
+//                    ],
+//                  ),
+//                  Column(
+//                    children: <Widget>[
+//                      alarmButton("2"),
+//                      alarmButton("5"),
+//                      alarmButton("8"),
+//                    ],
+//                  ),
+//                  Column(
+//                    children: <Widget>[
+//                      alarmButton("3"),
+//                      alarmButton("6"),
+//                      alarmButton("9"),
+//                    ],
+//                  ),
+//                ],
+//              ),
               new Column(
                 children: <Widget>[
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      buildButton("1"),
-                      buildButton("2"),
-                      buildButton("3")
+                      alarmButton("1"),
+                      alarmButton("2"),
+                      alarmButton("3")
                     ],
                   ),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      buildButton("4"),
-                      buildButton("5"),
-                      buildButton("6")
+                      alarmButton("4"),
+                      alarmButton("5"),
+                      alarmButton("6")
                     ],
                   ),
                   new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      buildButton("7"),
-                      buildButton("8"),
-                      buildButton("9")
+                      alarmButton("7"),
+                      alarmButton("8"),
+                      alarmButton("9")
                     ],
                   )
                 ],
