@@ -2130,6 +2130,8 @@ class GeneralData with ChangeNotifier {
   String classDefaultIcon(String deviceClass) {
     deviceClass = deviceClass.replaceAll(".", "");
     switch (deviceClass) {
+      case "alarm_control_panel":
+        return "mdi:shield";
       case "automation":
         return "mdi:home-automation";
       case "binary_sensor":

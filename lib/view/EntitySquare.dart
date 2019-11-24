@@ -195,6 +195,28 @@ class EntityIcon extends StatelessWidget {
           ],
         ),
       );
+    } else if (entity.entityId.contains("alarm_control_panel")) {
+      iconWidget = FittedBox(
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Icon(
+                entity.state.contains("disarmed")
+                    ? MaterialDesignIcons.getIconDataFromIconName(
+                        "mdi:shield-check")
+                    : entity.state.contains("pending")
+                        ? MaterialDesignIcons.getIconDataFromIconName(
+                            "mdi:shield-outline")
+                        : MaterialDesignIcons.getIconDataFromIconName(
+                            "mdi:shield-lock"),
+                color: entity.state.contains("disarmed")
+                    ? Colors.green
+                    : entity.state.contains("pending")
+                        ? ThemeInfo.colorIconActive
+                        : Colors.red),
+          ],
+        ),
+      );
     } else {
       iconWidget = FittedBox(
         child: Stack(
