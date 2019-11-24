@@ -2181,6 +2181,7 @@ class GeneralData with ChangeNotifier {
         entityId.contains("fan.") ||
         entityId.contains("climate.") ||
 //        entityId.contains("group.") ||
+        entityId.contains("media_player.") ||
         entityId.contains("input_boolean.") ||
         entityId.contains("binary_sensor.")) {
       return true;

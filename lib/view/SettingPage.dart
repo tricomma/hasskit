@@ -398,12 +398,25 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   _launchFacebook() async {
-    const url = 'https://www.facebook.com/groups/709634206223205/';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+    const fbProtocolUrl = "fb://group/709634206223205";
+    const fallbackUrl = 'https://www.facebook.com/groups/709634206223205/';
+    try {
+      bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
+
+      if (!launched) {
+        await launch(fallbackUrl, forceSafariVC: false);
+      }
+    } catch (e) {
+      await launch(fallbackUrl, forceSafariVC: false);
     }
+
+//    const url = 'https://www.facebook.com/groups/709634206223205/';
+//
+//    if (await canLaunch(url)) {
+//      await launch(url);
+//    } else {
+//      throw 'Could not launch $url';
+//    }
   }
 
   Future<void> _initPackageInfo() async {

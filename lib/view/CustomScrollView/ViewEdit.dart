@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
@@ -268,26 +269,13 @@ class __EditItemsState extends State<_EditItems> {
                       .contains(widget.keyword.toLowerCase())))
           .toList();
     } else {
-      for (String entityId in gd.roomList[widget.roomIndex].favorites) {
-        var entity = gd.entities[entityId];
-        if (entity != null && !entities.contains(entities))
-          entities.add(entity);
-      }
-      for (String entityId in gd.roomList[widget.roomIndex].entities) {
-        var entity = gd.entities[entityId];
-        if (entity != null && !entities.contains(entities))
-          entities.add(entity);
-      }
-      for (String entityId in gd.roomList[widget.roomIndex].row3) {
-        var entity = gd.entities[entityId];
-        if (entity != null && !entities.contains(entities))
-          entities.add(entity);
-      }
-      for (String entityId in gd.roomList[widget.roomIndex].row4) {
-        var entity = gd.entities[entityId];
-        if (entity != null && !entities.contains(entities))
-          entities.add(entity);
-      }
+      entities = gd.entities.values
+          .where((e) =>
+              (gd.roomList[widget.roomIndex].favorites.contains(e.entityId) ||
+                  gd.roomList[widget.roomIndex].entities.contains(e.entityId) ||
+                  gd.roomList[widget.roomIndex].row3.contains(e.entityId) ||
+                  gd.roomList[widget.roomIndex].row4.contains(e.entityId)))
+          .toList();
     }
 
     if (entities.length < 1) {
@@ -297,14 +285,18 @@ class __EditItemsState extends State<_EditItems> {
     if (!widget.selectedItem)
       entities.sort((a, b) => a.getOverrideName.compareTo(b.getOverrideName));
 
-    void removeItemFromGroup(String entityId) {
-      if (gd.roomList[widget.roomIndex].favorites.contains(entityId))
+    void removeItemFromGroup(String entityId, String except) {
+      if (except != "favorites" &&
+          gd.roomList[widget.roomIndex].favorites.contains(entityId))
         gd.roomList[widget.roomIndex].favorites.remove(entityId);
-      if (gd.roomList[widget.roomIndex].entities.contains(entityId))
+      if (except != "entities" &&
+          gd.roomList[widget.roomIndex].entities.contains(entityId))
         gd.roomList[widget.roomIndex].entities.remove(entityId);
-      if (gd.roomList[widget.roomIndex].row3.contains(entityId))
+      if (except != "row3" &&
+          gd.roomList[widget.roomIndex].row3.contains(entityId))
         gd.roomList[widget.roomIndex].row3.remove(entityId);
-      if (gd.roomList[widget.roomIndex].row4.contains(entityId))
+      if (except != "row4" &&
+          gd.roomList[widget.roomIndex].row4.contains(entityId))
         gd.roomList[widget.roomIndex].row4.remove(entityId);
     }
 
@@ -316,11 +308,6 @@ class __EditItemsState extends State<_EditItems> {
             gd.delayCancelEditModeTimer(300);
           },
           child: Container(
-//          decoration: BoxDecoration(
-//            color: ThemeInfo.colorBottomSheet.withOpacity(0.5),
-//            borderRadius: BorderRadius.circular(8),
-//          ),
-//          margin: EdgeInsets.fromLTRB(4, 2, 4, 2),
             padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
             margin: EdgeInsets.zero,
             child: Row(
@@ -355,7 +342,7 @@ class __EditItemsState extends State<_EditItems> {
                                 .contains(entities[index].entityId))
                         ? 1
                         : 0.5,
-                    child: Text(
+                    child: AutoSizeText(
                       "${gd.textToDisplay(entities[index].getOverrideName)}",
                       style: Theme.of(context).textTheme.subhead,
                       overflow: TextOverflow.ellipsis,
@@ -368,29 +355,19 @@ class __EditItemsState extends State<_EditItems> {
                   onTap: () {
                     if (gd.roomList[widget.roomIndex].favorites
                         .contains(entities[index].entityId)) {
-                      removeItemFromGroup(entities[index].entityId);
+                      gd.roomList[widget.roomIndex].favorites
+                          .remove(entities[index].entityId);
                     } else {
-                      removeItemFromGroup(entities[index].entityId);
                       gd.roomList[widget.roomIndex].favorites
                           .add(entities[index].entityId);
+                      removeItemFromGroup(
+                          entities[index].entityId, "favorites");
                     }
 
                     gd.roomListSave(true);
-                    setState(() {});
                     gd.delayCancelEditModeTimer(300);
+                    setState(() {});
                   },
-//                  child: Image(
-//                    image: AssetImage("assets/images/menu-up.png"),
-//                    width: 20,
-//                    color: gd.roomList[widget.roomIndex].favorites
-//                            .contains(entities[index].entityId)
-//                        ? Theme.of(context).textTheme.title.color
-//                        : Theme.of(context)
-//                            .textTheme
-//                            .title
-//                            .color
-//                            .withOpacity(0.25),
-//                  ),
                   child: Icon(
                     Icons.looks_one,
                     size: 28,
@@ -409,28 +386,17 @@ class __EditItemsState extends State<_EditItems> {
                   onTap: () {
                     if (gd.roomList[widget.roomIndex].entities
                         .contains(entities[index].entityId)) {
-                      removeItemFromGroup(entities[index].entityId);
+                      gd.roomList[widget.roomIndex].entities
+                          .remove(entities[index].entityId);
                     } else {
-                      removeItemFromGroup(entities[index].entityId);
                       gd.roomList[widget.roomIndex].entities
                           .add(entities[index].entityId);
+                      removeItemFromGroup(entities[index].entityId, "entities");
                     }
                     gd.roomListSave(true);
-                    setState(() {});
                     gd.delayCancelEditModeTimer(300);
+                    setState(() {});
                   },
-//                  child: Image(
-//                    image: AssetImage("assets/images/menu-mid.png"),
-//                    width: 20,
-//                    color: gd.roomList[widget.roomIndex].entities
-//                            .contains(entities[index].entityId)
-//                        ? Theme.of(context).textTheme.title.color
-//                        : Theme.of(context)
-//                            .textTheme
-//                            .title
-//                            .color
-//                            .withOpacity(0.25),
-//                  ),
                   child: Icon(
                     Icons.looks_two,
                     size: 28,
@@ -449,28 +415,17 @@ class __EditItemsState extends State<_EditItems> {
                   onTap: () {
                     if (gd.roomList[widget.roomIndex].row3
                         .contains(entities[index].entityId)) {
-                      removeItemFromGroup(entities[index].entityId);
+                      gd.roomList[widget.roomIndex].row3
+                          .remove(entities[index].entityId);
                     } else {
-                      removeItemFromGroup(entities[index].entityId);
                       gd.roomList[widget.roomIndex].row3
                           .add(entities[index].entityId);
+                      removeItemFromGroup(entities[index].entityId, "row3");
                     }
                     gd.roomListSave(true);
-                    setState(() {});
                     gd.delayCancelEditModeTimer(300);
+                    setState(() {});
                   },
-//                  child: Image(
-//                    image: AssetImage("assets/images/menu-down.png"),
-//                    width: 20,
-//                    color: gd.roomList[widget.roomIndex].row3
-//                            .contains(entities[index].entityId)
-//                        ? Theme.of(context).textTheme.title.color
-//                        : Theme.of(context)
-//                            .textTheme
-//                            .title
-//                            .color
-//                            .withOpacity(0.25),
-//                  ),
                   child: Icon(
                     Icons.looks_3,
                     size: 28,
@@ -489,28 +444,17 @@ class __EditItemsState extends State<_EditItems> {
                   onTap: () {
                     if (gd.roomList[widget.roomIndex].row4
                         .contains(entities[index].entityId)) {
-                      removeItemFromGroup(entities[index].entityId);
+                      gd.roomList[widget.roomIndex].row4
+                          .remove(entities[index].entityId);
                     } else {
-                      removeItemFromGroup(entities[index].entityId);
                       gd.roomList[widget.roomIndex].row4
                           .add(entities[index].entityId);
+                      removeItemFromGroup(entities[index].entityId, "row4");
                     }
                     gd.roomListSave(true);
-                    setState(() {});
                     gd.delayCancelEditModeTimer(300);
+                    setState(() {});
                   },
-//                  child: Image(
-//                    image: AssetImage("assets/images/menu-down.png"),
-//                    width: 20,
-//                    color: gd.roomList[widget.roomIndex].row3
-//                            .contains(entities[index].entityId)
-//                        ? Theme.of(context).textTheme.title.color
-//                        : Theme.of(context)
-//                            .textTheme
-//                            .title
-//                            .color
-//                            .withOpacity(0.25),
-//                  ),
                   child: Icon(
                     Icons.looks_4,
                     size: 28,
@@ -529,20 +473,13 @@ class __EditItemsState extends State<_EditItems> {
                     if (gd.activeDevices.contains(entities[index].entityId)) {
                       gd.activeDevices.remove(entities[index].entityId);
                       gd.baseSettingSave(true);
+                      setState(() {});
                     } else if (gd
                         .activeDevicesSupportedType(entities[index].entityId)) {
                       gd.activeDevices.add(entities[index].entityId);
                       gd.baseSettingSave(true);
-                    } else {
-//                      Flushbar(
-//                        backgroundColor: ThemeInfo.colorBottomSheet,
-//                        icon: Icon(Icons.info),
-//                        messageText: Text(
-//                            "Entity of type ${entities[index].entityId.split(".").first} not yet supported"),
-//                        duration: Duration(seconds: 3),
-//                      )..show(context);
+                      setState(() {});
                     }
-                    setState(() {});
                     gd.delayCancelEditModeTimer(300);
                   },
                   child: Icon(

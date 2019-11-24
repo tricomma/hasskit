@@ -70,14 +70,15 @@ class SinglePage extends StatelessWidget {
           "${generalData.mediaQueryHeight} |" +
           "${generalData.roomList.length} |" +
           "${generalData.entities.length} |" +
+          "${generalData.activeDevices.length} |" +
           "${generalData.roomList[roomIndex].name} |" +
           "${generalData.roomList[roomIndex].tempEntityId} |" +
           "${generalData.roomList[roomIndex].imageIndex} |" +
           "${generalData.toggleStatusMap.values.toList()} |" +
-          "${generalData.roomList[roomIndex].favorites.toList()} |" +
-          "${generalData.roomList[roomIndex].entities.toList()} |" +
-          "${generalData.roomList[roomIndex].row3.toList()} |" +
-          "${generalData.roomList[roomIndex].row4.toList()} |",
+          "${generalData.roomList[roomIndex].favorites.length} |" +
+          "${generalData.roomList[roomIndex].entities.length} |" +
+          "${generalData.roomList[roomIndex].row3.length} |" +
+          "${generalData.roomList[roomIndex].row4.length} |",
       builder: (context, data, child) {
         Widget widget;
         if (gd.viewMode == ViewMode.edit) {

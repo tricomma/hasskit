@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +11,6 @@ import 'package:hasskit/view/PageViewBuilder.dart';
 import 'package:hasskit/view/SettingPage.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
-
 import 'helper/GeneralData.dart';
 import 'helper/GoogleSign.dart';
 import 'helper/Logger.dart';
@@ -142,6 +140,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     log.w("mainInitState START await loginDataInstance.loadLoginData");
     log.w("mainInitState...");
     log.w("mainInitState gd.loginDataListString");
+    await Future.delayed(const Duration(milliseconds: 500));
     gd.loginDataListString = await gd.getString('loginDataList');
     await gd.getSettings("mainInitState");
   }
