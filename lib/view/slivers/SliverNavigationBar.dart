@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
+import 'package:hasskit/view/EntityControl/EntityControlParent.dart';
 import 'package:provider/provider.dart';
 
 import '../CustomPopupMenu.dart';
@@ -71,35 +72,51 @@ class SliverNavigationBar extends StatelessWidget {
 //            backgroundColor = ThemeInfo.colorTemp01.withOpacity(0.5);
             iconColor = ThemeInfo.colorTemp01;
           }
-          temperatureWidget = Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 0, 12, 2),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(80),
-                  color: iconColor.withOpacity(0.25),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Stack(
-                      children: <Widget>[
-                        Icon(
-                          MaterialDesignIcons.getIconDataFromIconName(
-                              "mdi:thermometer"),
-                          size: 24,
-                          color: iconColor,
-                        ),
-                      ],
-                      alignment: Alignment.center,
-                    ),
+          temperatureWidget = InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                elevation: 1,
+                backgroundColor: ThemeInfo.colorBottomSheet,
+                isScrollControlled: true,
+                useRootNavigator: true,
+                builder: (BuildContext context) {
+                  return EntityControlParent(
+                      entityId: gd.entities[gd.roomList[roomIndex].tempEntityId]
+                          .entityId);
+                },
+              );
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(3, 0, 12, 2),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(80),
+                    color: iconColor.withOpacity(0.25),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Stack(
+                        children: <Widget>[
+                          Icon(
+                            MaterialDesignIcons.getIconDataFromIconName(
+                                "mdi:thermometer"),
+                            size: 24,
+                            color: iconColor,
+                          ),
+                        ],
+                        alignment: Alignment.center,
+                      ),
 //                    SizedBox(width: 2),
-                    Text("${tempState.toStringAsFixed(1)}°",
-                        textScaleFactor: gd.textScaleFactor),
-                  ],
+                      Text("${tempState.toStringAsFixed(1)}°",
+                          textScaleFactor: gd.textScaleFactor),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }
 
