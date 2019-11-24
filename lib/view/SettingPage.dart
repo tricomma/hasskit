@@ -104,18 +104,10 @@ class _SettingPageState extends State<SettingPage> {
 //      builder: (context, gd, child) {
     return Selector<GeneralData, String>(
       selector: (_, generalData) => ("${generalData.useSSL} | "
-          "${generalData.entitiesStatusShowLight} | "
-          "${generalData.entitiesStatusShowSwitch} | "
-          "${generalData.entitiesStatusShowCover} | "
-          "${generalData.entitiesStatusShowLock} | "
-          "${generalData.entitiesStatusShowFan} | "
-          "${generalData.entitiesStatusShowClimate} | "
-          "${generalData.entitiesStatusShowBinarySensor} | "
           "${generalData.currentTheme} | "
-          "${generalData.loginDataList.length} | "
           "${generalData.connectionStatus} | "
           "${generalData.itemsPerRow} | "
-          "${generalData.useSSL} | "),
+          "${generalData.loginDataList.length} | "),
       builder: (_, string, __) {
         return Container(
           decoration: BoxDecoration(
@@ -216,26 +208,24 @@ class _SettingPageState extends State<SettingPage> {
                                                         _controller.text));
                                         gd.webViewLoading = true;
                                         showModalBottomSheet(
-                                            context: context,
-                                            elevation: 1,
-                                            backgroundColor:
-                                                ThemeInfo.colorBottomSheet,
-                                            isScrollControlled: true,
-                                            useRootNavigator: true,
-                                            builder: (context) =>
-                                                HomeAssistantLogin(
-                                                  selectedUrl: gd
-                                                          .loginDataCurrent
-                                                          .getUrl +
-                                                      '/auth/authorize?client_id=' +
-                                                      gd.loginDataCurrent
-                                                          .getUrl +
-                                                      "/hasskit"
-                                                          '&redirect_uri=' +
-                                                      gd.loginDataCurrent
-                                                          .getUrl +
-                                                      "/hasskit",
-                                                ));
+                                          context: context,
+                                          elevation: 1,
+                                          backgroundColor:
+                                              ThemeInfo.colorBottomSheet,
+                                          isScrollControlled: true,
+                                          useRootNavigator: true,
+                                          builder: (context) =>
+                                              HomeAssistantLogin(
+                                            selectedUrl: gd
+                                                    .loginDataCurrent.getUrl +
+                                                '/auth/authorize?client_id=' +
+                                                gd.loginDataCurrent.getUrl +
+                                                "/hasskit"
+                                                    '&redirect_uri=' +
+                                                gd.loginDataCurrent.getUrl +
+                                                "/hasskit",
+                                          ),
+                                        );
                                       }
                                     : null,
                                 child: Text("Connect"),
@@ -277,13 +267,6 @@ class _SettingPageState extends State<SettingPage> {
                 title: "Layout",
               ),
               _LayoutSelector(),
-              DeviceTypeHeaderEditNormal(
-                icon: Icon(
-                  MaterialDesignIcons.getIconDataFromIconName("mdi:bell"),
-                ),
-                title: "Show Device Badge",
-              ),
-              _ActiveDeviceSelector(),
               DeviceTypeHeaderEditNormal(
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
@@ -447,7 +430,7 @@ class _ThemeSelector extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       gd.themeIndex = 1;
-                      gd.baseSettingSave();
+                      gd.baseSettingSave(true);
                     },
                     child: Card(
                       elevation: 1,
@@ -481,7 +464,7 @@ class _ThemeSelector extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       gd.themeIndex = 0;
-                      gd.baseSettingSave();
+                      gd.baseSettingSave(true);
                     },
                     child: Card(
                       elevation: 1,
@@ -536,7 +519,7 @@ class _LayoutSelector extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       gd.itemsPerRow = 3;
-                      gd.baseSettingSave();
+                      gd.baseSettingSave(true);
                     },
                     child: Card(
                       elevation: 1,
@@ -574,7 +557,7 @@ class _LayoutSelector extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       gd.itemsPerRow = 4;
-                      gd.baseSettingSave();
+                      gd.baseSettingSave(true);
                     },
                     child: Card(
                       elevation: 1,
@@ -607,144 +590,6 @@ class _LayoutSelector extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActiveDeviceSelector extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          Container(
-            padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(MaterialDesignIcons.getIconDataFromIconName(
-                        gd.classDefaultIcon("light."))),
-                    SizedBox(width: 8),
-                    Text("Light Turned On"),
-                    Spacer(),
-                    Switch.adaptive(
-                      activeColor: ThemeInfo.colorIconActive,
-                      value: gd.entitiesStatusShowLight,
-                      onChanged: (val) {
-                        gd.entitiesStatusShowLight = val;
-                        gd.baseSettingSave();
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(MaterialDesignIcons.getIconDataFromIconName(
-                        gd.classDefaultIcon("switch."))),
-                    SizedBox(width: 8),
-                    Text("Switch Turned On"),
-                    Spacer(),
-                    Switch.adaptive(
-                      activeColor: ThemeInfo.colorIconActive,
-                      value: gd.entitiesStatusShowSwitch,
-                      onChanged: (val) {
-                        gd.entitiesStatusShowSwitch = val;
-                        gd.baseSettingSave();
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(MaterialDesignIcons.getIconDataFromIconName(
-                        gd.classDefaultIcon("cover."))),
-                    SizedBox(width: 8),
-                    Text("Cover Opened"),
-                    Spacer(),
-                    Switch.adaptive(
-                      activeColor: ThemeInfo.colorIconActive,
-                      value: gd.entitiesStatusShowCover,
-                      onChanged: (val) {
-                        gd.entitiesStatusShowCover = val;
-                        gd.baseSettingSave();
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(MaterialDesignIcons.getIconDataFromIconName(
-                        gd.classDefaultIcon("lock."))),
-                    SizedBox(width: 8),
-                    Text("Lock Opened"),
-                    Spacer(),
-                    Switch.adaptive(
-                      activeColor: ThemeInfo.colorIconActive,
-                      value: gd.entitiesStatusShowLock,
-                      onChanged: (val) {
-                        gd.entitiesStatusShowLock = val;
-                        gd.baseSettingSave();
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(MaterialDesignIcons.getIconDataFromIconName(
-                        gd.classDefaultIcon("fan."))),
-                    SizedBox(width: 8),
-                    Text("Fan Turned On"),
-                    Spacer(),
-                    Switch.adaptive(
-                      activeColor: ThemeInfo.colorIconActive,
-                      value: gd.entitiesStatusShowFan,
-                      onChanged: (val) {
-                        gd.entitiesStatusShowFan = val;
-                        gd.baseSettingSave();
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(MaterialDesignIcons.getIconDataFromIconName(
-                        gd.classDefaultIcon("climate."))),
-                    SizedBox(width: 8),
-                    Text("Air Conditioner Turned On"),
-                    Spacer(),
-                    Switch.adaptive(
-                      activeColor: ThemeInfo.colorIconActive,
-                      value: gd.entitiesStatusShowClimate,
-                      onChanged: (val) {
-                        gd.entitiesStatusShowClimate = val;
-                        gd.baseSettingSave();
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(MaterialDesignIcons.getIconDataFromIconName(
-                        gd.classDefaultIcon("binary_sensor."))),
-                    SizedBox(width: 8),
-                    Text("Sensor On"),
-                    Spacer(),
-                    Switch.adaptive(
-                      activeColor: ThemeInfo.colorIconActive,
-                      value: gd.entitiesStatusShowBinarySensor,
-                      onChanged: (val) {
-                        gd.entitiesStatusShowBinarySensor = val;
-                        gd.baseSettingSave();
-                      },
-                    ),
-                  ],
                 ),
               ],
             ),

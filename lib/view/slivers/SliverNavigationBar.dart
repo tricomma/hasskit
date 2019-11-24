@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
@@ -32,8 +33,8 @@ class SliverNavigationBar extends StatelessWidget {
           "${generalData.roomList[roomIndex].tempEntityId} "
           "${generalData.roomList[roomIndex].entities.length} "
           "${generalData.eventsEntity} "
-          "${generalData.entitiesStatusShow} "
-          "${generalData.entitiesStatusRunning.length} "
+          "${generalData.activeDevicesShow} "
+          "${generalData.activeDevicesOn.length} "
           "${generalData.viewMode} ",
       builder: (context, data, child) {
         //        if (roomIndex != null &&
@@ -115,10 +116,10 @@ class SliverNavigationBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                gd.entitiesStatusRunning.length > 0
+                gd.activeDevicesOn.length > 0
                     ? InkWell(
                         onTap: () {
-                          gd.entitiesStatusShow = !gd.entitiesStatusShow;
+                          gd.activeDevicesShow = !gd.activeDevicesShow;
                         },
                         child: Stack(
                           alignment: Alignment.topRight,
@@ -130,13 +131,14 @@ class SliverNavigationBar extends StatelessWidget {
                               height: 15,
                               padding: EdgeInsets.all(2),
                               decoration: BoxDecoration(
-                                color: Colors.grey,
+                                color: ThemeInfo.colorIconActive,
                                 shape: BoxShape.circle,
                               ),
                               child: FittedBox(
-                                child: Text(
-                                  "${gd.entitiesStatusRunning.length}",
+                                child: AutoSizeText(
+                                  "${gd.activeDevicesOn.length}",
                                   style: TextStyle(color: Colors.white),
+                                  maxLines: 1,
                                 ),
                               ),
                             )

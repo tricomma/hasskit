@@ -132,7 +132,7 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
                 },
               );
               sendColor();
-              gd.baseSettingSave();
+              gd.baseSettingSave(true);
               Navigator.of(context).pop();
             },
           ),

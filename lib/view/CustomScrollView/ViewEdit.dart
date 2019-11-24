@@ -524,6 +524,48 @@ class __EditItemsState extends State<_EditItems> {
                             .withOpacity(0.25),
                   ),
                 ),
+                InkWell(
+                  onTap: () {
+                    if (gd.activeDevices.contains(entities[index].entityId)) {
+                      gd.activeDevices.remove(entities[index].entityId);
+                      gd.baseSettingSave(true);
+                    } else if (gd
+                        .activeDevicesSupportedType(entities[index].entityId)) {
+                      gd.activeDevices.add(entities[index].entityId);
+                      gd.baseSettingSave(true);
+                    } else {
+//                      Flushbar(
+//                        backgroundColor: ThemeInfo.colorBottomSheet,
+//                        icon: Icon(Icons.info),
+//                        messageText: Text(
+//                            "Entity of type ${entities[index].entityId.split(".").first} not yet supported"),
+//                        duration: Duration(seconds: 3),
+//                      )..show(context);
+                    }
+                    setState(() {});
+                    gd.delayCancelEditModeTimer(300);
+                  },
+                  child: Icon(
+                    gd.activeDevices.contains(entities[index].entityId)
+                        ? Icons.notifications
+                        : Icons.notifications_off,
+                    size: 28,
+                    color: gd.activeDevices.contains(entities[index].entityId)
+                        ? Theme.of(context).textTheme.title.color
+                        : (gd.activeDevicesSupportedType(
+                                entities[index].entityId))
+                            ? Theme.of(context)
+                                .textTheme
+                                .title
+                                .color
+                                .withOpacity(0.25)
+                            : Theme.of(context)
+                                .textTheme
+                                .title
+                                .color
+                                .withOpacity(0.0),
+                  ),
+                ),
                 SizedBox(
                   width: 4,
                   height: 48,

@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/view/PageViewBuilder.dart';
 import 'package:hasskit/view/SettingPage.dart';
@@ -134,13 +136,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     mainInitState();
   }
 
-  _afterLayout(_) async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    showLoading = false;
-    log.w("showLoading $showLoading");
-    setState(() {});
-  }
-
   mainInitState() async {
     log.w("mainInitState showLoading $showLoading");
     log.w("mainInitState...");
@@ -149,20 +144,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     log.w("mainInitState gd.loginDataListString");
     gd.loginDataListString = await gd.getString('loginDataList');
     await gd.getSettings("mainInitState");
-//    if (gd.firebaseCurrentUser != null) {
-//      log.w("mainInitState...");
-//      log.w("mainInitState gd.baseSettingString");
-//      gd.baseSettingString = await gd.getString('baseSetting');
-//      log.w("mainInitState...");
-//      log.w("mainInitState gd.entitiesOverrideString");
-//      gd.entitiesOverrideString = await gd.getString('entitiesOverride');
-//      log.w("mainInitState...");
-//      log.w("mainInitState gd.roomListString");
-//      var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
-//      url = url.replaceAll("/", "-");
-//      url = url.replaceAll(":", "-");
-//      gd.roomListString = await gd.getString('roomList $url');
-//    }
   }
 
   timer200Callback() {}
@@ -202,25 +183,15 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
 
   timer60Callback() {}
 
+  _afterLayout(_) async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    showLoading = false;
+    log.w("showLoading $showLoading");
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-//    if (showLoading) {
-//      return Container(
-//        color: Theme.of(context).backgroundColor,
-//        child: Scaffold(
-//          body: Column(
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            children: <Widget>[
-//              SpinKitThreeBounce(
-//                size: 80,
-//                color: ThemeInfo.colorIconActive,
-//              ),
-//              Text("Loading...")
-//            ],
-//          ),
-//        ),
-//      );
-//    } else {
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
           "${generalData.viewMode} | " +
@@ -232,6 +203,12 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
         return Scaffold(
           body: ModalProgressHUD(
             inAsyncCall: showLoading || gd.mediaQueryHeight == 0,
+            opacity: 1,
+            progressIndicator: SpinKitThreeBounce(
+              size: 40,
+              color: ThemeInfo.colorIconActive,
+            ),
+            color: ThemeInfo.colorBackgroundDark,
             child: CupertinoTabScaffold(
               tabBar: CupertinoTabBar(
                 onTap: (int) {
@@ -315,6 +292,5 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
         );
       },
     );
-//    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
@@ -45,24 +46,30 @@ class _EntityControlCameraVideoPlayerState
             streamUrl != gd.cameraStreamUrl) {
           initVideo();
         }
-        return RotatedBox(
-          quarterTurns: 1,
-          child: ModalProgressHUD(
-            inAsyncCall: !_controller.value.initialized,
-            opacity: 1,
-            progressIndicator: SpinKitThreeBounce(
-              size: 40,
-//              color: Colors.white.withOpacity(0.5),
-              color: ThemeInfo.colorIconActive,
+
+        try {
+          return RotatedBox(
+            quarterTurns: 1,
+            child: ModalProgressHUD(
+              inAsyncCall: !_controller.value.initialized,
+              opacity: 1,
+              progressIndicator: SpinKitThreeBounce(
+                size: 40,
+                color: ThemeInfo.colorIconActive,
+              ),
+              color: ThemeInfo.colorBackgroundDark,
+              child: Center(
+                  child: AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
+              )),
             ),
-            color: ThemeInfo.colorBackgroundDark,
-            child: Center(
-                child: AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller),
-            )),
-          ),
-        );
+          );
+        } catch (e) {
+          return Container(
+            child: Center(child: AutoSizeText("Error: $e")),
+          );
+        }
       },
     );
   }

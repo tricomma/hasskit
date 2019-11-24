@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
@@ -7,18 +8,18 @@ import 'package:provider/provider.dart';
 class SliverEntityStatusRunning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final buttonSize = 80.0;
+    final buttonSize = (gd.mediaQueryWidth - (12 * 2) - (10 * 5)) / 6;
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
-          "${generalData.entitiesStatusShow} " +
-          "${generalData.entitiesStatusRunning.length} ",
+          "${generalData.activeDevicesShow} " +
+          "${generalData.activeDevicesOn.length} ",
       builder: (context, data, child) {
         List<Widget> status2ndRowButtons = [];
 
-        for (var entity in gd.entitiesStatusRunning) {
+        for (var entity in gd.activeDevicesOn) {
           status2ndRowButtons.add(Status2ndRowItem(entityId: entity.entityId));
         }
-        return gd.entitiesStatusShow && gd.entitiesStatusRunning.length > 0
+        return gd.activeDevicesShow && gd.activeDevicesOn.length > 0
             ? SliverList(
                 delegate: SliverChildListDelegate(
                   [
@@ -51,14 +52,14 @@ class Status2ndRowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonSize = 80.0;
+    final buttonSize = (gd.mediaQueryWidth - (12 * 2) - (10 * 5)) / 6;
     return InkWell(
       onTap: () {
         gd.toggleStatus(gd.entities[entityId]);
-        if (gd.entitiesStatusRunning.length <= 0) {
-          gd.entitiesStatusShowOffTimer(0);
+        if (gd.activeDevicesOn.length <= 0) {
+          gd.activeDevicesOffTimer(0);
         } else {
-          gd.entitiesStatusShowOffTimer(60);
+          gd.activeDevicesOffTimer(60);
         }
       },
       child: Container(
@@ -86,11 +87,11 @@ class Status2ndRowItem extends StatelessWidget {
             ),
             Expanded(
               child: Align(
-                alignment: Alignment.center,
-                child: Text(
+                alignment: Alignment.bottomCenter,
+                child: AutoSizeText(
                   "${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
                   style: ThemeInfo.textNameButtonActive,
-                  textScaleFactor: gd.textScaleFactor * 1,
+                  textScaleFactor: gd.textScaleFactor * 0.75,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   maxLines: 2,

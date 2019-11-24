@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
@@ -50,59 +53,65 @@ class EntitySquareDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8 * 3 / gd.itemsPerRow),
-      decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(16 * 3 / gd.itemsPerRow)),
-        color: gd.entities[entityId].isStateOn
-            ? ThemeInfo.colorBackgroundActive
-            : ThemeInfo.colorEntityBackground,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            flex: 2,
-            child: Row(
-              children: <Widget>[
-                EntityIcon(
-                  entityId: entityId,
-                ),
-                Expanded(
-                  child: EntityIconStatus(entityId: entityId),
-                ),
-              ],
-            ),
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(16 * 3 / gd.itemsPerRow)),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+          padding: EdgeInsets.all(8 * 3 / gd.itemsPerRow),
+          decoration: BoxDecoration(
+            borderRadius:
+                BorderRadius.all(Radius.circular(16 * 3 / gd.itemsPerRow)),
+            color: gd.entities[entityId].isStateOn
+                ? ThemeInfo.colorBackgroundActive
+                : ThemeInfo.colorEntityBackground,
           ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
-                  style: gd.entities[entityId].isStateOn
-                      ? ThemeInfo.textNameButtonActive
-                      : ThemeInfo.textNameButtonInActive,
-                  maxLines: 2,
-                  textScaleFactor: gd.textScaleFactor * 3 / gd.itemsPerRow,
-                  overflow: TextOverflow.ellipsis,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Row(
+                  children: <Widget>[
+                    EntityIcon(
+                      entityId: entityId,
+                    ),
+                    Expanded(
+                      child: EntityIconStatus(entityId: entityId),
+                    ),
+                  ],
                 ),
-                Text(
-                  "${gd.textToDisplay(gd.entities[entityId].getStateDisplay)}",
-                  style: gd.entities[entityId].isStateOn
-                      ? ThemeInfo.textStatusButtonActive
-                      : ThemeInfo.textStatusButtonInActive,
-                  maxLines: 2,
-                  textScaleFactor: gd.textScaleFactor * 3 / gd.itemsPerRow,
-                  overflow: TextOverflow.ellipsis,
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    AutoSizeText(
+                      "${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
+                      style: gd.entities[entityId].isStateOn
+                          ? ThemeInfo.textNameButtonActive
+                          : ThemeInfo.textNameButtonInActive,
+                      maxLines: 2,
+                      textScaleFactor: gd.textScaleFactor * 3 / gd.itemsPerRow,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    AutoSizeText(
+                      "${gd.textToDisplay(gd.entities[entityId].getStateDisplay)}",
+                      style: gd.entities[entityId].isStateOn
+                          ? ThemeInfo.textStatusButtonActive
+                          : ThemeInfo.textStatusButtonInActive,
+                      maxLines: 2,
+                      textScaleFactor: gd.textScaleFactor * 3 / gd.itemsPerRow,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
