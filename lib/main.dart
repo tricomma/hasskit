@@ -257,6 +257,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                       builder: (context) {
                         return CupertinoPageScaffold(
                           child: SinglePage(roomIndex: 0),
+//                          child: AnimationTemp(),
                         );
                       },
                     );

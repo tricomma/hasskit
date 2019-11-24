@@ -118,6 +118,7 @@ class SliverEntitiesNormal extends StatelessWidget {
                         );
                       } else {
                         gd.toggleStatus(entities[index]);
+                        gd.clickedStatus[entities[index].entityId] = true;
                       }
                     },
                     onLongPressCallback: () {

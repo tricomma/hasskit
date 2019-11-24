@@ -43,28 +43,40 @@ class EntitySquare extends StatelessWidget {
   }
 }
 
-class EntitySquareDisplay extends StatelessWidget {
-  const EntitySquareDisplay({
-    Key key,
-    @required this.entityId,
-  }) : super(key: key);
+class EntitySquareDisplay extends StatefulWidget {
+  const EntitySquareDisplay({@required this.entityId});
 
   final String entityId;
 
+  @override
+  _EntitySquareDisplayState createState() => _EntitySquareDisplayState();
+}
+
+class _EntitySquareDisplayState extends State<EntitySquareDisplay> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(16 * 3 / gd.itemsPerRow)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: Container(
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 150),
+          onEnd: () {
+            setState(() {
+              gd.clickedStatus[widget.entityId] = false;
+            });
+          },
+          margin:
+              gd.getClickedStatus(widget.entityId) ? EdgeInsets.all(4) : null,
           padding: EdgeInsets.all(8 * 3 / gd.itemsPerRow),
           decoration: BoxDecoration(
             borderRadius:
                 BorderRadius.all(Radius.circular(16 * 3 / gd.itemsPerRow)),
-            color: gd.entities[entityId].isStateOn
-                ? ThemeInfo.colorBackgroundActive
-                : ThemeInfo.colorEntityBackground,
+            color: gd.getClickedStatus(widget.entityId)
+                ? Colors.white.withOpacity(0.8)
+                : gd.entities[widget.entityId].isStateOn
+                    ? ThemeInfo.colorBackgroundActive
+                    : ThemeInfo.colorEntityBackground,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,10 +86,10 @@ class EntitySquareDisplay extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     EntityIcon(
-                      entityId: entityId,
+                      entityId: widget.entityId,
                     ),
                     Expanded(
-                      child: EntityIconStatus(entityId: entityId),
+                      child: EntityIconStatus(entityId: widget.entityId),
                     ),
                   ],
                 ),
@@ -89,8 +101,8 @@ class EntitySquareDisplay extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     AutoSizeText(
-                      "${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
-                      style: gd.entities[entityId].isStateOn
+                      "${gd.textToDisplay(gd.entities[widget.entityId].getOverrideName)}",
+                      style: gd.entities[widget.entityId].isStateOn
                           ? ThemeInfo.textNameButtonActive
                           : ThemeInfo.textNameButtonInActive,
                       maxLines: 2,
@@ -98,8 +110,8 @@ class EntitySquareDisplay extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     AutoSizeText(
-                      "${gd.textToDisplay(gd.entities[entityId].getStateDisplay)}",
-                      style: gd.entities[entityId].isStateOn
+                      "${gd.textToDisplay(gd.entities[widget.entityId].getStateDisplay)}",
+                      style: gd.entities[widget.entityId].isStateOn
                           ? ThemeInfo.textStatusButtonActive
                           : ThemeInfo.textStatusButtonInActive,
                       maxLines: 2,

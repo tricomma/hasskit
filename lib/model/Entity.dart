@@ -54,6 +54,8 @@ class Entity {
   double min;
   double max;
   double step;
+  //animation
+  DateTime clickedTime;
   Entity({
     this.entityId,
     this.deviceClass,
@@ -187,6 +189,7 @@ class Entity {
     } else if (domain == "scene") {
       service = 'turn_on';
     }
+
     var outMsg = {
       "id": gd.socketId,
       "type": "call_service",

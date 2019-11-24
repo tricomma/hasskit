@@ -1235,6 +1235,12 @@ class GeneralData with ChangeNotifier {
     notifyListeners();
   }
 
+  Map<String, bool> clickedStatus = {};
+  bool getClickedStatus(String entityId) {
+    if (clickedStatus[entityId] != null) return clickedStatus[entityId];
+    return false;
+  }
+
   void setState(Entity entity, String state, String message) {
     toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
 //    log.d("toggleStatusMap ${toggleStatusMap.values.toList()}");
