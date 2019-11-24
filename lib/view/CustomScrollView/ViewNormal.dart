@@ -49,6 +49,7 @@ class ViewNormal extends StatelessWidget {
     }
 
     return CustomScrollView(
+      controller: gd.viewNormalController,
       slivers: [
         SliverNavigationBar(roomIndex: roomIndex),
         SliverEntityStatusRunning(),

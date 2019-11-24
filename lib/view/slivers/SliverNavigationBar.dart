@@ -17,7 +17,7 @@ class SliverNavigationBar extends StatelessWidget {
 //    log.w("Widget build SliverNavigationBar");
 
     Widget temperatureWidget = Container();
-    Color backgroundColor;
+//    Color backgroundColor;
     Color iconColor;
 
     IconData topIcon;
@@ -56,19 +56,19 @@ class SliverNavigationBar extends StatelessWidget {
 //          log.d("tempState $tempState");
 
           if (tempState > 35) {
-            backgroundColor = ThemeInfo.colorTemp05.withOpacity(0.5);
+//            backgroundColor = ThemeInfo.colorTemp05.withOpacity(0.5);
             iconColor = ThemeInfo.colorTemp05;
           } else if (tempState > 30) {
-            backgroundColor = ThemeInfo.colorTemp04.withOpacity(0.5);
+//            backgroundColor = ThemeInfo.colorTemp04.withOpacity(0.5);
             iconColor = ThemeInfo.colorTemp04;
           } else if (tempState > 20) {
-            backgroundColor = ThemeInfo.colorTemp03.withOpacity(0.5);
+//            backgroundColor = ThemeInfo.colorTemp03.withOpacity(0.5);
             iconColor = ThemeInfo.colorTemp03;
           } else if (tempState > 15) {
-            backgroundColor = ThemeInfo.colorTemp02.withOpacity(0.5);
+//            backgroundColor = ThemeInfo.colorTemp02.withOpacity(0.5);
             iconColor = ThemeInfo.colorTemp02;
           } else {
-            backgroundColor = ThemeInfo.colorTemp01.withOpacity(0.5);
+//            backgroundColor = ThemeInfo.colorTemp01.withOpacity(0.5);
             iconColor = ThemeInfo.colorTemp01;
           }
           temperatureWidget = Row(
@@ -78,7 +78,7 @@ class SliverNavigationBar extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(3, 0, 12, 2),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(80),
-                  color: ThemeInfo.colorBottomSheet.withOpacity(0.5),
+                  color: iconColor.withOpacity(0.25),
                 ),
                 child: Row(
                   children: <Widget>[
@@ -120,6 +120,10 @@ class SliverNavigationBar extends StatelessWidget {
                     ? InkWell(
                         onTap: () {
                           gd.activeDevicesShow = !gd.activeDevicesShow;
+                          if (gd.activeDevicesShow)
+                            gd.viewNormalController.animateTo(0,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.easeIn);
                         },
                         child: Stack(
                           alignment: Alignment.topRight,

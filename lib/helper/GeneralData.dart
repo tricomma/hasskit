@@ -2218,6 +2218,8 @@ class GeneralData with ChangeNotifier {
   void activeDevicesShowOff() {
     gd.activeDevicesShow = false;
   }
+
+  ScrollController viewNormalController = ScrollController();
 }
 
 class HexColor extends Color {
