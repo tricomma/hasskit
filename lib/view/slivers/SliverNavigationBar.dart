@@ -105,7 +105,7 @@ class SliverNavigationBar extends StatelessWidget {
 
         return CupertinoSliverNavigationBar(
           leading: temperatureWidget,
-          backgroundColor: backgroundColor,
+//          backgroundColor: backgroundColor,
           largeTitle: Text(
             gd.getRoomName(roomIndex),
             textScaleFactor: gd.textScaleFactor,
