@@ -55,9 +55,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
   }
 
   buttonPressed(String text) {
-    if (text == "Clear") {
-      output = "";
-    } else {
+    if (text != "") {
       output += text;
     }
 
@@ -212,7 +210,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      alarmButton("Clear"),
+                      alarmButton(""),
                       alarmButton("0"),
                       alarmButton(""),
                     ],
