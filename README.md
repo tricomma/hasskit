@@ -52,6 +52,9 @@ https://www.facebook.com/groups/709634206223205
 
 ## How can I install the App?
 
+Download on the Release section (Android only, usually the most updated version)
+https://github.com/tuanha2000vn/hasskit/releases
+
 Download on the Apple App Store
 https://apps.apple.com/us/app/hasskit/id1485362169
 
