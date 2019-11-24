@@ -10,6 +10,7 @@ import 'package:hasskit/model/EntityOverride.dart';
 import 'package:hasskit/view/EntityControl/EntityControlClimate.dart';
 import 'package:hasskit/view/EntityControl/EntityControlCoverPosition.dart';
 import 'package:hasskit/view/EntityControl/EntityControlGeneral.dart';
+import 'package:hasskit/view/EntityControl/EntityControlAlarmPanel.dart';
 import 'package:provider/provider.dart';
 
 import 'EntityControlBinarySensor.dart';
@@ -90,6 +91,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
           entityControl = EntityControlBinarySensor(entityId: widget.entityId);
         } else if (entity.entityId.contains("sensor.")) {
           entityControl = EntityControlSensor(entityId: widget.entityId);
+        } else if(entity.entityId.contains("alarm_control_panel.")) {
+          entityControl = EntityControlAlarmPanel(entityId: widget.entityId);
         } else {
           entityControl = EntityControlGeneral(entityId: widget.entityId);
         }
