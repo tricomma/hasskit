@@ -52,11 +52,14 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
 
     var outMsgEncoded = json.encode(outMsg);
     webSocket.send(outMsgEncoded);
-    HapticFeedback.mediumImpact();
   }
 
   buttonPressed(String text) {
-    output += text;
+    if (text == "Clear") {
+      output = "";
+    } else {
+      output += text;
+    }
 
     if (output.length > keyCodeLength) {
       output = output.substring(1, keyCodeLength + 1);
@@ -70,6 +73,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         _disarm(entity);
       }
     }
+    HapticFeedback.mediumImpact();
   }
 
   String _getStateText(entity) {
@@ -131,8 +135,8 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                 alignment: Alignment.bottomCenter,
                 children: <Widget>[
                   Container(
-                    width: 150,
-                    height: 150,
+                    width: 100,
+                    height: 100,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
@@ -143,7 +147,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                     alignment: Alignment.center,
                     child: Icon(
                       MaterialDesignIcons.getIconDataFromIconName(alarmIcon),
-                      size: 80,
+                      size: 50,
                       color: alarmColor,
                     ),
                   ),
@@ -159,7 +163,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                       child: new Text(
                         _readableState.toUpperCase(),
                         style: new TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
+                            fontSize: 10, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -174,32 +178,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
 //                        fontSize: 36.0, fontWeight: FontWeight.bold)),
 //              ),
               SizedBox(height: 20),
-//              Row(
-//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                children: <Widget>[
-//                  Column(
-//                    children: <Widget>[
-//                      alarmButton("1"),
-//                      alarmButton("4"),
-//                      alarmButton("7"),
-//                    ],
-//                  ),
-//                  Column(
-//                    children: <Widget>[
-//                      alarmButton("2"),
-//                      alarmButton("5"),
-//                      alarmButton("8"),
-//                    ],
-//                  ),
-//                  Column(
-//                    children: <Widget>[
-//                      alarmButton("3"),
-//                      alarmButton("6"),
-//                      alarmButton("9"),
-//                    ],
-//                  ),
-//                ],
-//              ),
+
               new Column(
                 children: <Widget>[
                   new Row(
@@ -227,6 +206,15 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                       alarmButton("7"),
                       alarmButton("8"),
                       alarmButton("9")
+                    ],
+                  ),
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      alarmButton("Clear"),
+                      alarmButton("0"),
+                      alarmButton(""),
                     ],
                   )
                 ],
