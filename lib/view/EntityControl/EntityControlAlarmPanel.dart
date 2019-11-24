@@ -52,7 +52,6 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
 
     var outMsgEncoded = json.encode(outMsg);
     webSocket.send(outMsgEncoded);
-    HapticFeedback.mediumImpact();
   }
 
   buttonPressed(String text) {
@@ -74,6 +73,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         _disarm(entity);
       }
     }
+    HapticFeedback.mediumImpact();
   }
 
   String _getStateText(entity) {
