@@ -20,7 +20,6 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-  final title = 'Setting';
   final _controller = TextEditingController();
   bool showConnect = false;
   bool showCancel = false;
@@ -131,7 +130,13 @@ class _SettingPageState extends State<SettingPage> {
 //                  image: AssetImage(
 //                      'assets/images/icon_transparent_border_transparent.png'),
 //                ),
-                largeTitle: Text(title),
+                backgroundColor: ThemeInfo.colorBottomSheet.withOpacity(0.5),
+                largeTitle: Text(
+                  "Setting",
+                  style: TextStyle(color: ThemeInfo.colorBottomSheetReverse),
+                  textScaleFactor: gd.textScaleFactor,
+                  overflow: TextOverflow.ellipsis,
+                ),
 //            trailing: IconButton(
 //              icon: Icon(Icons.palette),
 //              onPressed: () {

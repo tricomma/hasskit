@@ -210,6 +210,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
             color: ThemeInfo.colorBackgroundDark,
             child: CupertinoTabScaffold(
               tabBar: CupertinoTabBar(
+                backgroundColor: ThemeInfo.colorBottomSheet.withOpacity(0.5),
                 onTap: (int) {
                   log.d("CupertinoTabBar onTap $int");
                   gd.viewMode = ViewMode.normal;
@@ -224,6 +225,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                       maxLines: 1,
                       textScaleFactor: gd.textScaleFactor,
                       overflow: TextOverflow.ellipsis,
+                      style:
+                          TextStyle(color: ThemeInfo.colorBottomSheetReverse),
                     ),
                   ),
                   BottomNavigationBarItem(
@@ -235,6 +238,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                       maxLines: 1,
                       textScaleFactor: gd.textScaleFactor,
                       overflow: TextOverflow.ellipsis,
+                      style:
+                          TextStyle(color: ThemeInfo.colorBottomSheetReverse),
                     ),
 //                title: TestWidget(),
                   ),
@@ -246,6 +251,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                       maxLines: 1,
                       textScaleFactor: gd.textScaleFactor,
                       overflow: TextOverflow.ellipsis,
+                      style:
+                          TextStyle(color: ThemeInfo.colorBottomSheetReverse),
                     ),
                   ),
                 ],

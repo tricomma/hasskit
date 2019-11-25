@@ -173,8 +173,12 @@ class CoverSliderState extends State<CoverSlider> {
                       alignment: Alignment.center,
                       child: Text(
                         gd
-                            .mapNumber(buttonValue, lowerPartHeight,
-                                buttonHeight - upperPartHeight - 8, 0, 100)
+                            .mapNumber(
+                                buttonValue,
+                                lowerPartHeight,
+                                buttonHeight - upperPartHeight - 8,
+                                gd.entities[widget.entityId].min,
+                                gd.entities[widget.entityId].max)
                             .toInt()
                             .toString(),
                         style: TextStyle(

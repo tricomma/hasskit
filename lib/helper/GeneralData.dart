@@ -843,7 +843,7 @@ class GeneralData with ChangeNotifier {
           "climate.air_conditioner_1",
           "cover.cover_06",
           "binary_sensor.motion_sensor_158d000358b1a2",
-          "binary_sensor.motion_sensor_158d0002f1d1d2",
+          "alarm_control_panel.home_alarm",
           "cover.cover_03",
           "fan.living_room_ceiling_fan",
           "light.light_01",
@@ -1215,10 +1215,10 @@ class GeneralData with ChangeNotifier {
 //    }
   }
 
-  Map<String, String> toggleStatusMap = {};
+//  Map<String, String> toggleStatusMap = {};
 
   void toggleStatus(Entity entity) {
-    toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
+//    toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
 //    log.d("toggleStatusMap ${toggleStatusMap.values.toList()}");
     if (entity.entityType != EntityType.lightSwitches &&
         entity.entityType != EntityType.scriptAutomation &&
@@ -1242,7 +1242,7 @@ class GeneralData with ChangeNotifier {
   }
 
   void setState(Entity entity, String state, String message) {
-    toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
+//    toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
 //    log.d("toggleStatusMap ${toggleStatusMap.values.toList()}");
     entity.state = state;
     delayGetStatesTimer(5);

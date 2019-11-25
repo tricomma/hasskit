@@ -60,23 +60,22 @@ class _EntitySquareDisplayState extends State<EntitySquareDisplay> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 150),
+          duration: Duration(milliseconds: 100),
           onEnd: () {
             setState(() {
-              gd.clickedStatus[widget.entityId] = false;
+              gd.clickedStatus.remove(widget.entityId);
             });
           },
-          margin:
-              gd.getClickedStatus(widget.entityId) ? EdgeInsets.all(4) : null,
+          margin: gd.getClickedStatus(widget.entityId)
+              ? EdgeInsets.fromLTRB(3, 3, 3, 3)
+              : EdgeInsets.zero,
           padding: EdgeInsets.all(8 * 3 / gd.itemsPerRow),
           decoration: BoxDecoration(
             borderRadius:
                 BorderRadius.all(Radius.circular(16 * 3 / gd.itemsPerRow)),
-            color: gd.getClickedStatus(widget.entityId)
-                ? Colors.white.withOpacity(0.8)
-                : gd.entities[widget.entityId].isStateOn
-                    ? ThemeInfo.colorBackgroundActive
-                    : ThemeInfo.colorEntityBackground,
+            color: gd.entities[widget.entityId].isStateOn
+                ? ThemeInfo.colorBackgroundActive
+                : ThemeInfo.colorEntityBackground,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
