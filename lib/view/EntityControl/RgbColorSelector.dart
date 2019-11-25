@@ -93,6 +93,7 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
     showDialog(
       context: context,
       child: AlertDialog(
+        contentPadding: EdgeInsets.all(8),
         title: const Text('Pick a color!'),
         backgroundColor: ThemeInfo.colorBottomSheet,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),

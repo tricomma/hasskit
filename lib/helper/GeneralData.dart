@@ -860,7 +860,6 @@ class GeneralData with ChangeNotifier {
         row3: [
           "switch.socket_sonoff_s20",
           "switch.tuya_neo_coolcam_10a",
-          "light.gateway_light_7c49eb891797",
         ],
         row4: [
           "climate.air_conditioner_2",
@@ -1242,8 +1241,6 @@ class GeneralData with ChangeNotifier {
   }
 
   void setState(Entity entity, String state, String message) {
-//    toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
-//    log.d("toggleStatusMap ${toggleStatusMap.values.toList()}");
     entity.state = state;
     delayGetStatesTimer(5);
     webSocket.send(message);
