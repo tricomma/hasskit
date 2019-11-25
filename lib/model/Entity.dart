@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
+import 'package:hasskit/helper/WebSocket.dart';
 
 enum EntityType {
   lightSwitches,
@@ -54,8 +55,17 @@ class Entity {
   double min;
   double max;
   double step;
-  //animation
-  DateTime clickedTime;
+  //media_player
+  double volumeLevel;
+  bool isVolumeMuted;
+  String mediaContentType;
+  String mediaTitle;
+  String source;
+  List<String> sourceList;
+  String soundMode;
+  List<String> soundModeList;
+  String soundModeRaw;
+
   Entity({
     this.entityId,
     this.deviceClass,
@@ -94,6 +104,16 @@ class Entity {
     this.min,
     this.max,
     this.step,
+//    media_player
+    this.volumeLevel,
+    this.isVolumeMuted,
+    this.mediaContentType,
+    this.mediaTitle,
+    this.source,
+    this.sourceList,
+    this.soundMode,
+    this.soundModeList,
+    this.soundModeRaw,
   });
 
   factory Entity.fromJson(Map<String, dynamic> json) {
@@ -137,8 +157,7 @@ class Entity {
         speed: json['attributes']['speed'].toString(),
         angle: json['attributes']['angle'],
         directSpeed: json['attributes']['direct_speed'],
-        supportedFeatures:
-            int.tryParse(json['attributes']['supported_features'].toString()),
+        supportedFeatures: json['attributes']['supported_features'],
         brightness: int.tryParse(json['attributes']['brightness'].toString()),
         rgbColor: json['attributes']['rgb_color'] != null
             ? List<int>.from(json['attributes']['rgb_color'])
@@ -148,10 +167,26 @@ class Entity {
         colorTemp: int.tryParse(json['attributes']['color_temp'].toString()),
         currentPosition:
             double.tryParse(json['attributes']['current_position'].toString()),
+        //input_number
         initial: double.tryParse(json['attributes']['initial'].toString()),
         min: double.tryParse(json['attributes']['min'].toString()),
         max: double.tryParse(json['attributes']['max'].toString()),
         step: double.tryParse(json['attributes']['step'].toString()),
+        //media_player
+        volumeLevel:
+            double.tryParse(json['attributes']['volume_level'].toString()),
+        isVolumeMuted: json['attributes']['is_volume_muted'],
+        mediaContentType: json['attributes']['media_content_type'].toString(),
+        mediaTitle: json['attributes']['media_title'].toString(),
+        source: json['attributes']['source'].toString(),
+        sourceList: json['attributes']['source_list'] != null
+            ? List<String>.from(json['attributes']['source_list'])
+            : [],
+        soundMode: json['attributes']['sound_mode'].toString(),
+        soundModeList: json['attributes']['sound_mode_list'] != null
+            ? List<String>.from(json['attributes']['sound_mode_list'])
+            : [],
+        soundModeRaw: json['attributes']['sound_mode_raw'].toString(),
       );
     } catch (e) {
       log.e("Entity.fromJson newEntity $e");
@@ -198,8 +233,8 @@ class Entity {
       "service_data": {"entity_id": entityId}
     };
 
-    var outMsgEncoded = json.encode(outMsg);
-    webSocket.send(outMsgEncoded);
+    var message = json.encode(outMsg);
+    webSocket.send(message);
   }
 
   EntityType get entityType {
@@ -454,6 +489,52 @@ class Entity {
       var x = binaryText.substring(i - 1, i);
       if (x == "1") {
         recVal = recVal + supportedFeaturesLightList[index] + " | ";
+      }
+      index++;
+    }
+//    print("recVal $recVal");
+    return recVal;
+  }
+
+  // https://github.com/home-assistant/home-assistant/blob/dev/homeassistant/components/media_player/const.py
+  // [media_player.denon_avr_x3000] [state: on] 69004 SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_VOLUME_STEP | SUPPORT_SELECT_SOURCE | SUPPORT_SELECT_SOUND_MODE |
+
+  //[media_player.apple_tv] [state: unknown] 21427 SUPPORT_PAUSE | SUPPORT_SEEK | SUPPORT_PREVIOUS_TRACK | SUPPORT_NEXT_TRACK | SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_PLAY_MEDIA | SUPPORT_STOP | SUPPORT_PLAY |
+
+  //[media_player.living_room_tv] [state: unavailable] 21389 SUPPORT_PAUSE | SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_PLAY_MEDIA | SUPPORT_STOP | SUPPORT_PLAY |
+
+  //Available services: turn_on, turn_off, toggle, volume_up, volume_down, volume_set, volume_mute, media_play_pause, media_play, media_pause, media_stop, media_next_track, media_previous_track, clear_playlist, shuffle_set
+
+  List<String> supportedFeaturesMediaPlayerList = [
+    "SUPPORT_PAUSE",
+    "SUPPORT_SEEK",
+    "SUPPORT_VOLUME_SET",
+    "SUPPORT_VOLUME_MUTE",
+    "SUPPORT_PREVIOUS_TRACK",
+    "SUPPORT_NEXT_TRACK",
+    "",
+    "SUPPORT_TURN_ON",
+    "SUPPORT_TURN_OFF",
+    "SUPPORT_PLAY_MEDIA",
+    "SUPPORT_VOLUME_STEP",
+    "SUPPORT_SELECT_SOURCE",
+    "SUPPORT_STOP",
+    "SUPPORT_CLEAR_PLAYLIST",
+    "SUPPORT_PLAY",
+    "SUPPORT_SHUFFLE_SET",
+    "SUPPORT_SELECT_SOUND_MODE",
+  ];
+  String get getSupportedFeaturesMediaPlayer {
+    if (supportedFeatures == null) {
+      return "";
+    }
+    var recVal = "";
+    var binaryText = supportedFeatures.toRadixString(2);
+    int index = 0;
+    for (int i = binaryText.length; i > 0; i--) {
+      var x = binaryText.substring(i - 1, i);
+      if (x == "1") {
+        recVal = recVal + supportedFeaturesMediaPlayerList[index] + " | ";
       }
       index++;
     }

@@ -97,21 +97,21 @@ class SliverNavigationBar extends StatelessWidget {
                     color: iconColor.withOpacity(0.25),
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          Icon(
-                            MaterialDesignIcons.getIconDataFromIconName(
-                                "mdi:thermometer"),
-                            size: 24,
-                            color: iconColor,
-                          ),
-                        ],
-                        alignment: Alignment.center,
+                      Icon(
+                        MaterialDesignIcons.getIconDataFromIconName(
+                            "mdi:thermometer"),
+                        size: 24,
+                        color: iconColor,
                       ),
 //                    SizedBox(width: 2),
-                      Text("${tempState.toStringAsFixed(1)}°",
-                          textScaleFactor: gd.textScaleFactor),
+                      AutoSizeText(
+                        "${tempState.toStringAsFixed(1)}°",
+                        textScaleFactor: gd.textScaleFactor,
+                        style:
+                            TextStyle(color: ThemeInfo.colorBottomSheetReverse),
+                      ),
                     ],
                   ),
                 ),
@@ -122,9 +122,10 @@ class SliverNavigationBar extends StatelessWidget {
 
         return CupertinoSliverNavigationBar(
           leading: temperatureWidget,
-//          backgroundColor: backgroundColor,
+          backgroundColor: ThemeInfo.colorBottomSheet.withOpacity(0.5),
           largeTitle: Text(
             gd.getRoomName(roomIndex),
+            style: TextStyle(color: ThemeInfo.colorBottomSheetReverse),
             textScaleFactor: gd.textScaleFactor,
             overflow: TextOverflow.ellipsis,
           ),

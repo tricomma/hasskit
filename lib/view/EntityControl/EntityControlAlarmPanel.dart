@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
+
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
-import 'package:hasskit/helper/WebSocket.dart';
 import 'package:provider/provider.dart';
 
 class EntityControlAlarmPanel extends StatefulWidget {
@@ -37,8 +36,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
     };
 
     var outMsgEncoded = json.encode(outMsg);
-    webSocket.send(outMsgEncoded);
-    HapticFeedback.mediumImpact();
+    gd.sendSocketMessage(outMsgEncoded);
   }
 
   _disarm(entity) {
@@ -51,7 +49,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
     };
 
     var outMsgEncoded = json.encode(outMsg);
-    webSocket.send(outMsgEncoded);
+    gd.sendSocketMessage(outMsgEncoded);
   }
 
   buttonPressed(String text) {
@@ -71,7 +69,6 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         _disarm(entity);
       }
     }
-    HapticFeedback.mediumImpact();
   }
 
   String _getStateText(entity) {

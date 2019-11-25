@@ -171,6 +171,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
         log.w("response.statusCode ${response.statusCode}");
         var jsonResponse = jsonDecode(response.body);
         gd.sensors = [];
+
         int i = 0;
         for (var rec in jsonResponse[0]) {
           var binarySensor = Sensor.fromJson(rec);
@@ -179,6 +180,8 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
         }
 
         if (i > 0 && jsonResponse[0][i - 1] != null) {
+//          log.d(
+//              "Total record: ${i} lenght: ${jsonResponse[0].toString().length}");
           batteryLevel = (jsonResponse[0][i - 1]["attributes"]["battery_level"])
               .toString();
           deviceClass =
@@ -195,6 +198,9 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
         });
         print("Request failed with status: ${response.statusCode}.");
       }
+    } catch (e) {
+      inAsyncCall = false;
+      log.e("getHistory $e");
     } finally {
 //      setState(() {
       inAsyncCall = false;
@@ -205,7 +211,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
 }
 
 String stateString(String deviceClass, bool isStateOn) {
-  log.d("stateString deviceClass $deviceClass");
+//  log.d("stateString deviceClass $deviceClass");
   if (deviceClass.contains("garage_door") ||
       deviceClass.contains("door") ||
       deviceClass.contains("lock") ||

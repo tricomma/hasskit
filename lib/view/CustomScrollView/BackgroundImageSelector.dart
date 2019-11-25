@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
@@ -39,7 +40,7 @@ class _BackgroundImageSelectorState extends State<BackgroundImageSelector> {
 //            ),
           SizedBox(width: 32),
           Expanded(
-            child: Text(
+            child: AutoSizeText(
               imageDisplay,
               style: Theme.of(context).textTheme.subhead,
               overflow: TextOverflow.ellipsis,

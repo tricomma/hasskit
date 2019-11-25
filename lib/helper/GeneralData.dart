@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
 import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
@@ -14,12 +15,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/model/BaseSetting.dart';
-import 'package:hasskit/model/Sensor.dart';
 import 'package:hasskit/model/CameraThumbnail.dart';
 import 'package:hasskit/model/Entity.dart';
 import 'package:hasskit/model/EntityOverride.dart';
 import 'package:hasskit/model/LoginData.dart';
 import 'package:hasskit/model/Room.dart';
+import 'package:hasskit/model/Sensor.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
@@ -213,7 +214,7 @@ class GeneralData with ChangeNotifier {
     return UnmodifiableMapView(_entities);
   }
 
-  void getStates(List<dynamic> message) {
+  void socketGetStates(List<dynamic> message) {
     log.d('getStates');
     _entities.clear();
     _entities = {};
@@ -221,23 +222,20 @@ class GeneralData with ChangeNotifier {
     for (dynamic mess in message) {
       Entity entity = Entity.fromJson(mess);
       if (entity == null || entity.entityId == null) {
-        log.e('getStates entity.entityId');
+        log.e('socketGetStates entity.entityId');
         continue;
       }
-//      if (entity.entityId.contains("group")) {
-//        log.d("${entity.entityId} group");
-//      }
+
       _entities[entity.entityId] = entity;
     }
 
-//    log.d('_entities.length ${entities.length}');
-    log.d('_entities.length ${_entities.length}');
+    log.d('socketGetStates total entities ${_entities.length}');
     notifyListeners();
   }
 
   List<String> lovelaceEntities = [];
 
-  void getLovelaceConfig(dynamic message) {
+  void socketLovelaceConfig(dynamic message) {
     log.d('getLovelaceConfig');
 
     List<dynamic> viewsParse = message['result']['views'];
@@ -280,13 +278,6 @@ class GeneralData with ChangeNotifier {
       }
     }
 
-//    log.d('lovelaceEntities.length ${lovelaceEntities.length} ');
-
-//    int i = 1;
-//    for (var entity in lovelaceEntities) {
-//      log.d('$i. lovelaceEntities $entity');
-//      i++;
-//    }
     notifyListeners();
   }
 
@@ -297,15 +288,24 @@ class GeneralData with ChangeNotifier {
       log.e('socketSubscribeEvents newEntity == null');
       return;
     }
+
+    if (newEntity.entityId.contains("media_player")) {
+      log.e(
+          "\n\socketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity.state}] ${newEntity.supportedFeatures} ${newEntity.getSupportedFeaturesMediaPlayer}");
+      log.d(message.toString());
+    }
+
     eventsEntity = "${newEntity.entityId}+${newEntity.state}";
+
     Entity oldEntity = entities[newEntity.entityId];
 
+//all
     if (oldEntity != null) {
       oldEntity.state = newEntity.state;
       oldEntity.icon = newEntity.icon;
       oldEntity.friendlyName = newEntity.friendlyName;
 
-//      if (newEntity.entityId.contains('climate.')) {
+//climate
       oldEntity.hvacModes = newEntity.hvacModes;
       oldEntity.minTemp = newEntity.minTemp;
       oldEntity.maxTemp = newEntity.maxTemp;
@@ -316,31 +316,38 @@ class GeneralData with ChangeNotifier {
       oldEntity.fanModes = newEntity.fanModes;
       oldEntity.deviceCode = newEntity.deviceCode;
       oldEntity.manufacturer = newEntity.manufacturer;
-//      }
 
-//      if (newEntity.entityId.contains('fan.')) {
+//fan
       oldEntity.speedList = newEntity.speedList;
       oldEntity.oscillating = newEntity.oscillating;
       oldEntity.speedLevel = newEntity.speedLevel;
       oldEntity.speed = newEntity.speed;
       oldEntity.angle = newEntity.angle;
       oldEntity.directSpeed = newEntity.directSpeed;
-//      }
 
-//      if (newEntity.entityId.contains('light.')) {
+//lights
       oldEntity.supportedFeatures = newEntity.supportedFeatures;
       oldEntity.brightness = newEntity.brightness;
       oldEntity.rgbColor = newEntity.rgbColor;
       oldEntity.minMireds = newEntity.minMireds;
       oldEntity.maxMireds = newEntity.maxMireds;
       oldEntity.colorTemp = newEntity.colorTemp;
-//    }
       oldEntity.currentPosition = newEntity.currentPosition;
-
+//input_number
       oldEntity.initial = newEntity.initial;
       oldEntity.min = newEntity.min;
       oldEntity.max = newEntity.max;
       oldEntity.step = newEntity.step;
+//media_player
+      oldEntity.volumeLevel = newEntity.volumeLevel;
+      oldEntity.isVolumeMuted = newEntity.isVolumeMuted;
+      oldEntity.mediaContentType = newEntity.mediaContentType;
+      oldEntity.mediaTitle = newEntity.mediaTitle;
+      oldEntity.source = newEntity.source;
+      oldEntity.sourceList = newEntity.sourceList;
+      oldEntity.soundMode = newEntity.soundMode;
+      oldEntity.soundModeList = newEntity.soundModeList;
+      oldEntity.soundModeRaw = newEntity.soundModeRaw;
 
       notifyListeners();
     } else {
@@ -843,7 +850,7 @@ class GeneralData with ChangeNotifier {
           "climate.air_conditioner_1",
           "cover.cover_06",
           "binary_sensor.motion_sensor_158d000358b1a2",
-          "binary_sensor.motion_sensor_158d0002f1d1d2",
+          "alarm_control_panel.home_alarm",
           "cover.cover_03",
           "fan.living_room_ceiling_fan",
           "light.light_01",
@@ -860,7 +867,6 @@ class GeneralData with ChangeNotifier {
         row3: [
           "switch.socket_sonoff_s20",
           "switch.tuya_neo_coolcam_10a",
-          "light.gateway_light_7c49eb891797",
         ],
         row4: [
           "climate.air_conditioner_2",
@@ -981,23 +987,23 @@ class GeneralData with ChangeNotifier {
   }
 
   List<String> backgroundImage = [
-    'assets/background_images/Dark Blue.jpg',
-    'assets/background_images/Dark Green.jpg',
-    'assets/background_images/Light Blue.jpg',
-    'assets/background_images/Light Green.jpg',
+    'assets/background_images/Dark_Blue.jpg',
+    'assets/background_images/Dark_Green.jpg',
+    'assets/background_images/Light_Blue.jpg',
+    'assets/background_images/Light_Green.jpg',
     'assets/background_images/Orange.jpg',
     'assets/background_images/Red.jpg',
-    'assets/background_images/Blue Gradient.jpg',
-    'assets/background_images/Green Gradient.jpg',
-    'assets/background_images/Yellow Gradient.jpg',
-    'assets/background_images/White Gradient.jpg',
-    'assets/background_images/Black Gradient.jpg',
-    'assets/background_images/Light Pink.jpg',
-    'assets/background_images/Abstract 1.jpg',
-    'assets/background_images/Abstract 2.jpg',
-    'assets/background_images/Abstract 3.jpg',
-    'assets/background_images/Abstract 4.jpg',
-    'assets/background_images/Abstract 5.jpg',
+    'assets/background_images/Blue_Gradient.jpg',
+    'assets/background_images/Green_Gradient.jpg',
+    'assets/background_images/Yellow_Gradient.jpg',
+    'assets/background_images/White_Gradient.jpg',
+    'assets/background_images/Black_Gradient.jpg',
+    'assets/background_images/Light_Pink.jpg',
+    'assets/background_images/Abstract_1.jpg',
+    'assets/background_images/Abstract_2.jpg',
+    'assets/background_images/Abstract_3.jpg',
+    'assets/background_images/Abstract_4.jpg',
+    'assets/background_images/Abstract_5.jpg',
   ];
 
   setRoomBackgroundImage(Room room, int backgroundImageIndex) {
@@ -1089,29 +1095,30 @@ class GeneralData with ChangeNotifier {
     notifyListeners();
   }
 
+  Timer _roomListSaveTimer;
+
   void roomListSave(bool saveFirebase) {
+    _roomListSaveTimer?.cancel();
+    _roomListSaveTimer = null;
+    _roomListSaveTimer = Timer(Duration(seconds: 5), () {
+      roomListSaveActually(saveFirebase);
+    });
+  }
+
+  void roomListSaveActually(bool saveFirebase) {
+    log.d("roomListSaveActually $saveFirebase");
+    _roomListSaveTimer?.cancel();
+    _roomListSaveTimer = null;
     try {
       var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
       url = url.replaceAll("/", "-");
       url = url.replaceAll(":", "-");
       gd.saveString('roomList $url', jsonEncode(roomList));
-      if (saveFirebase) roomListSaveFirebaseTimer(5);
+      if (saveFirebase) roomListSaveFirebase();
       log.w('roomListSave $url roomList.length ${roomList.length}');
     } catch (e) {
       log.w("roomListSave $e");
     }
-  }
-
-  Timer _roomListSaveFirebase;
-
-  void roomListSaveFirebaseTimer(int seconds) {
-    _roomListSaveFirebase?.cancel();
-    _roomListSaveFirebase = null;
-
-    log.d("roomListSaveFirebase delay");
-
-    _roomListSaveFirebase =
-        Timer(Duration(seconds: seconds), roomListSaveFirebase);
   }
 
   void roomListSaveFirebase() async {
@@ -1215,10 +1222,10 @@ class GeneralData with ChangeNotifier {
 //    }
   }
 
-  Map<String, String> toggleStatusMap = {};
+//  Map<String, String> toggleStatusMap = {};
 
   void toggleStatus(Entity entity) {
-    toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
+//    toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
 //    log.d("toggleStatusMap ${toggleStatusMap.values.toList()}");
     if (entity.entityType != EntityType.lightSwitches &&
         entity.entityType != EntityType.scriptAutomation &&
@@ -1242,8 +1249,6 @@ class GeneralData with ChangeNotifier {
   }
 
   void setState(Entity entity, String state, String message) {
-    toggleStatusMap[entity.entityId] = random.nextInt(10).toString();
-//    log.d("toggleStatusMap ${toggleStatusMap.values.toList()}");
     entity.state = state;
     delayGetStatesTimer(5);
     webSocket.send(message);
@@ -1268,6 +1273,23 @@ class GeneralData with ChangeNotifier {
     notifyListeners();
   }
 
+  void sendSocketMessage(message) {
+//    log.d("sendSocketMessage $outMsg");
+    webSocket.send(message);
+    HapticFeedback.mediumImpact();
+    gd.delayGetStatesTimer(5);
+  }
+
+  Timer _sendSocketMessageDelay;
+
+  void sendSocketMessageDelay(outMsg, int delay) {
+    _sendSocketMessageDelay?.cancel();
+    _sendSocketMessageDelay = null;
+    _sendSocketMessageDelay = Timer(Duration(seconds: delay), () {
+      sendSocketMessage(outMsg);
+    });
+  }
+
   Timer _delayGetStates;
 
   void delayGetStatesTimer(int seconds) {
@@ -1279,7 +1301,8 @@ class GeneralData with ChangeNotifier {
 
   void delayGetStates() {
     var outMsg = {'id': gd.socketId, 'type': 'get_states'};
-    webSocket.send(json.encode(outMsg));
+    var message = jsonEncode(outMsg);
+    webSocket.send(message);
     gd.connectionStatus = 'Sending get_states';
     log.w('delayGetStates!');
   }
@@ -1527,7 +1550,19 @@ class GeneralData with ChangeNotifier {
     }
   }
 
+  Timer _baseSettingSaveTimer;
+
   void baseSettingSave(bool saveFirebase) {
+    _baseSettingSaveTimer?.cancel();
+    _baseSettingSaveTimer = null;
+    _baseSettingSaveTimer = Timer(Duration(seconds: 5), () {
+      baseSettingSaveActually(saveFirebase);
+    });
+  }
+
+  void baseSettingSaveActually(bool saveFirebase) {
+    log.d("baseSettingSaveActually $saveFirebase");
+
     try {
       List<String> colorPickerString = [];
       for (var color in baseSetting.colorPicker) {
@@ -1548,7 +1583,7 @@ class GeneralData with ChangeNotifier {
       gd.saveString('baseSetting $url', jsonEncode(jsonBaseSetting));
       log.w('save baseSetting $jsonBaseSetting');
 
-      if (saveFirebase) baseSettingSaveFirebaseTimer(5);
+      if (saveFirebase) baseSettingSaveFirebase();
     } catch (e) {
       log.w("baseSettingSave $e");
     }
@@ -1579,16 +1614,6 @@ class GeneralData with ChangeNotifier {
       "fan.super_fan",
     ],
   );
-
-  Timer _baseSettingSaveFirebase;
-
-  void baseSettingSaveFirebaseTimer(int seconds) {
-    _baseSettingSaveFirebase?.cancel();
-    _baseSettingSaveFirebase = null;
-
-    _baseSettingSaveFirebase =
-        Timer(Duration(seconds: seconds), baseSettingSaveFirebase);
-  }
 
   void baseSettingSaveFirebase() {
     if (gd.firebaseUser != null) {
@@ -1657,7 +1682,19 @@ class GeneralData with ChangeNotifier {
     }
   }
 
+  Timer _entitiesOverrideSaveTimer;
+
   void entitiesOverrideSave(bool saveFirebase) {
+    _entitiesOverrideSaveTimer?.cancel();
+    _entitiesOverrideSaveTimer = null;
+    _entitiesOverrideSaveTimer = Timer(Duration(seconds: 5), () {
+      entitiesOverrideSaveActually(saveFirebase);
+    });
+  }
+
+  void entitiesOverrideSaveActually(bool saveFirebase) {
+    log.d("entitiesOverrideSaveActually $saveFirebase");
+
     try {
       Map<String, EntityOverride> entitiesOverrideClean = {};
 
@@ -1675,21 +1712,11 @@ class GeneralData with ChangeNotifier {
       entitiesOverride = entitiesOverrideClean;
       gd.saveString('entitiesOverride', jsonEncode(entitiesOverride));
       log.w('save entitiesOverride.length ${entitiesOverride.length}');
-      if (saveFirebase) entitiesOverrideSaveFirebaseTimer(5);
+      if (saveFirebase) entitiesOverrideSaveFirebase();
     } catch (e) {
       log.w("entitiesOverrideSave $e");
     }
     notifyListeners();
-  }
-
-  Timer _entitiesOverrideSaveFirebase;
-
-  void entitiesOverrideSaveFirebaseTimer(int seconds) {
-    _entitiesOverrideSaveFirebase?.cancel();
-    _entitiesOverrideSaveFirebase = null;
-
-    _entitiesOverrideSaveFirebase =
-        Timer(Duration(seconds: seconds), entitiesOverrideSaveFirebase);
   }
 
   void entitiesOverrideSaveFirebase() {
@@ -2117,7 +2144,8 @@ class GeneralData with ChangeNotifier {
           "entity_id": entityId,
         };
 
-        webSocket.send(jsonEncode(outMsg));
+        var message = jsonEncode(outMsg);
+        webSocket.send(message);
         log.d("requestCameraStream ${jsonEncode(outMsg)}");
       }
     } catch (e) {
@@ -2144,6 +2172,8 @@ class GeneralData with ChangeNotifier {
         return "mdi:garage-open";
       case "fan":
         return "mdi:fan";
+      case "input_number":
+        return "mdi:pan-vertical";
       case "light":
         return "mdi:lightbulb-on";
       case "lock":
