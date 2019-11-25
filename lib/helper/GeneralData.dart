@@ -2144,6 +2144,8 @@ class GeneralData with ChangeNotifier {
         return "mdi:garage-open";
       case "fan":
         return "mdi:fan";
+      case "input_number":
+        return "mdi:pan-vertical";
       case "light":
         return "mdi:lightbulb-on";
       case "lock":
