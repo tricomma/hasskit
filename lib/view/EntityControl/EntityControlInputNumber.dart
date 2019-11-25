@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
-import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/model/Entity.dart';
 import 'package:provider/provider.dart';
 
@@ -240,8 +238,7 @@ class CoverSliderState extends State<CoverSlider> {
         };
 
         var outMsgEncoded = json.encode(outMsg);
-        webSocket.send(outMsgEncoded);
-        HapticFeedback.mediumImpact();
+        gd.sendSocketMessage(outMsgEncoded);
       },
     );
   }

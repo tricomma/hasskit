@@ -7,16 +7,16 @@ import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/model/Entity.dart';
 import 'package:hasskit/model/EntityOverride.dart';
+import 'package:hasskit/view/EntityControl/EntityControlAlarmPanel.dart';
 import 'package:hasskit/view/EntityControl/EntityControlClimate.dart';
 import 'package:hasskit/view/EntityControl/EntityControlCoverPosition.dart';
 import 'package:hasskit/view/EntityControl/EntityControlGeneral.dart';
-import 'package:hasskit/view/EntityControl/EntityControlAlarmPanel.dart';
 import 'package:provider/provider.dart';
 
 import 'EntityControlBinarySensor.dart';
 import 'EntityControlFan.dart';
-import 'EntityControlLightDimmer.dart';
 import 'EntityControlInputNumber.dart';
+import 'EntityControlLightDimmer.dart';
 import 'EntityControlSensor.dart';
 import 'EntityControlToggle.dart';
 
@@ -82,6 +82,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
             entity.min != null &&
             entity.max != null) {
           entityControl = EntityControlInputNumber(entityId: widget.entityId);
+        } else if (entity.entityType == EntityType.mediaPlayers) {
+          entityControl = EntityControlToggle(entityId: widget.entityId);
         } else if (entity.entityType == EntityType.lightSwitches ||
             entity.entityType == EntityType.mediaPlayers ||
             entity.entityId.contains("group.") ||
@@ -91,7 +93,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
           entityControl = EntityControlBinarySensor(entityId: widget.entityId);
         } else if (entity.entityId.contains("sensor.")) {
           entityControl = EntityControlSensor(entityId: widget.entityId);
-        } else if(entity.entityId.contains("alarm_control_panel.")) {
+        } else if (entity.entityId.contains("alarm_control_panel.")) {
           entityControl = EntityControlAlarmPanel(entityId: widget.entityId);
         } else {
           entityControl = EntityControlGeneral(entityId: widget.entityId);

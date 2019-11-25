@@ -1,13 +1,10 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
-import 'package:hasskit/helper/WebSocket.dart';
 import 'package:provider/provider.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
@@ -18,21 +15,6 @@ class EntityControlClimate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Timer _delayOutMsg;
-    String delayOutMsg;
-
-    void delayClimate() {
-      webSocket.send(delayOutMsg);
-      gd.delayGetStatesTimer(5);
-    }
-
-    void delayClimateTimer(int seconds) {
-      _delayOutMsg?.cancel();
-      _delayOutMsg = null;
-
-      _delayOutMsg = Timer(Duration(seconds: seconds), delayClimate);
-    }
-
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
           "${generalData.entities[entityId].state}" +
@@ -110,10 +92,7 @@ class EntityControlClimate extends StatelessWidget {
               }
             };
             var outMsgEncoded = json.encode(outMsg);
-//        print('outMsgEncoded $outMsgEncoded');
-            webSocket.send(outMsgEncoded);
-            HapticFeedback.mediumImpact();
-            gd.delayGetStatesTimer(5);
+            gd.sendSocketMessage(outMsgEncoded);
           },
         );
 
@@ -221,9 +200,8 @@ class EntityControlClimate extends StatelessWidget {
                             "hvac_mode": "${entity.hvacModes[hvacModeIndex]}"
                           }
                         };
-                        delayOutMsg = json.encode(outMsg);
-                        delayClimateTimer(1);
-                        HapticFeedback.mediumImpact();
+                        var delayOutMsg = json.encode(outMsg);
+                        gd.sendSocketMessageDelay(delayOutMsg, 1);
                       },
                     ),
                   ),
@@ -270,9 +248,8 @@ class EntityControlClimate extends StatelessWidget {
                             "fan_mode": "${entity.fanModes[fanModeIndex]}"
                           }
                         };
-                        delayOutMsg = json.encode(outMsg);
-                        delayClimateTimer(1);
-                        HapticFeedback.mediumImpact();
+                        var delayOutMsg = json.encode(outMsg);
+                        gd.sendSocketMessageDelay(delayOutMsg, 1);
                       },
                     ),
                   ),

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:math';
 import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flushbar/flushbar.dart';
@@ -14,12 +15,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/model/BaseSetting.dart';
-import 'package:hasskit/model/Sensor.dart';
 import 'package:hasskit/model/CameraThumbnail.dart';
 import 'package:hasskit/model/Entity.dart';
 import 'package:hasskit/model/EntityOverride.dart';
 import 'package:hasskit/model/LoginData.dart';
 import 'package:hasskit/model/Room.dart';
+import 'package:hasskit/model/Sensor.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart';
@@ -213,7 +214,7 @@ class GeneralData with ChangeNotifier {
     return UnmodifiableMapView(_entities);
   }
 
-  void getStates(List<dynamic> message) {
+  void socketGetStates(List<dynamic> message) {
     log.d('getStates');
     _entities.clear();
     _entities = {};
@@ -221,26 +222,20 @@ class GeneralData with ChangeNotifier {
     for (dynamic mess in message) {
       Entity entity = Entity.fromJson(mess);
       if (entity == null || entity.entityId == null) {
-        log.e('getStates entity.entityId');
+        log.e('socketGetStates entity.entityId');
         continue;
       }
-
-//      if (entity.entityId.contains("media_player")) {
-//        log.e(
-//            "media_player [${entity.entityId}] [state: ${entity.state}] ${entity.supportedFeatures} ${entity.getSupportedFeaturesMediaPlayer}");
-//      }
 
       _entities[entity.entityId] = entity;
     }
 
-//    log.d('_entities.length ${entities.length}');
-    log.d('_entities.length ${_entities.length}');
+    log.d('socketGetStates total entities ${_entities.length}');
     notifyListeners();
   }
 
   List<String> lovelaceEntities = [];
 
-  void getLovelaceConfig(dynamic message) {
+  void socketLovelaceConfig(dynamic message) {
     log.d('getLovelaceConfig');
 
     List<dynamic> viewsParse = message['result']['views'];
@@ -283,13 +278,6 @@ class GeneralData with ChangeNotifier {
       }
     }
 
-//    log.d('lovelaceEntities.length ${lovelaceEntities.length} ');
-
-//    int i = 1;
-//    for (var entity in lovelaceEntities) {
-//      log.d('$i. lovelaceEntities $entity');
-//      i++;
-//    }
     notifyListeners();
   }
 
@@ -300,6 +288,15 @@ class GeneralData with ChangeNotifier {
       log.e('socketSubscribeEvents newEntity == null');
       return;
     }
+
+    if (newEntity.entityId.contains("media_player")) {
+      log.e(
+          "\n\socketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity
+              .state}] ${newEntity.supportedFeatures} ${newEntity
+              .getSupportedFeaturesMediaPlayer}");
+      log.d(message.toString());
+    }
+
     eventsEntity = "${newEntity.entityId}+${newEntity.state}";
 
     Entity oldEntity = entities[newEntity.entityId];
@@ -1243,7 +1240,7 @@ class GeneralData with ChangeNotifier {
     log.w("toggleStatus ${entity.entityId}");
     delayGetStatesTimer(5);
     entity.toggleState();
-//    HapticFeedback.mediumImpact();
+    HapticFeedback.mediumImpact();
     notifyListeners();
   }
 
@@ -1278,6 +1275,23 @@ class GeneralData with ChangeNotifier {
     notifyListeners();
   }
 
+  void sendSocketMessage(message) {
+//    log.d("sendSocketMessage $outMsg");
+    webSocket.send(message);
+    HapticFeedback.mediumImpact();
+    gd.delayGetStatesTimer(5);
+  }
+
+  Timer _sendSocketMessageDelay;
+
+  void sendSocketMessageDelay(outMsg, int delay) {
+    _sendSocketMessageDelay?.cancel();
+    _sendSocketMessageDelay = null;
+    _sendSocketMessageDelay = Timer(Duration(seconds: delay), () {
+      sendSocketMessage(outMsg);
+    });
+  }
+
   Timer _delayGetStates;
 
   void delayGetStatesTimer(int seconds) {
@@ -1289,7 +1303,8 @@ class GeneralData with ChangeNotifier {
 
   void delayGetStates() {
     var outMsg = {'id': gd.socketId, 'type': 'get_states'};
-    webSocket.send(json.encode(outMsg));
+    var message = jsonEncode(outMsg);
+    webSocket.send(message);
     gd.connectionStatus = 'Sending get_states';
     log.w('delayGetStates!');
   }
@@ -2131,7 +2146,8 @@ class GeneralData with ChangeNotifier {
           "entity_id": entityId,
         };
 
-        webSocket.send(jsonEncode(outMsg));
+        var message = jsonEncode(outMsg);
+        webSocket.send(message);
         log.d("requestCameraStream ${jsonEncode(outMsg)}");
       }
     } catch (e) {

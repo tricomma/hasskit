@@ -1,9 +1,10 @@
 import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
+import 'package:hasskit/helper/WebSocket.dart';
 
 enum EntityType {
   lightSwitches,
@@ -232,8 +233,8 @@ class Entity {
       "service_data": {"entity_id": entityId}
     };
 
-    var outMsgEncoded = json.encode(outMsg);
-    webSocket.send(outMsgEncoded);
+    var message = json.encode(outMsg);
+    webSocket.send(message);
   }
 
   EntityType get entityType {
@@ -495,7 +496,15 @@ class Entity {
     return recVal;
   }
 
-  //https://github.com/home-assistant/home-assistant/blob/dev/homeassistant/components/media_player/const.py
+  // https://github.com/home-assistant/home-assistant/blob/dev/homeassistant/components/media_player/const.py
+  // [media_player.denon_avr_x3000] [state: on] 69004 SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_VOLUME_STEP | SUPPORT_SELECT_SOURCE | SUPPORT_SELECT_SOUND_MODE |
+
+  //[media_player.apple_tv] [state: unknown] 21427 SUPPORT_PAUSE | SUPPORT_SEEK | SUPPORT_PREVIOUS_TRACK | SUPPORT_NEXT_TRACK | SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_PLAY_MEDIA | SUPPORT_STOP | SUPPORT_PLAY |
+
+  //[media_player.living_room_tv] [state: unavailable] 21389 SUPPORT_PAUSE | SUPPORT_VOLUME_SET | SUPPORT_VOLUME_MUTE | SUPPORT_TURN_ON | SUPPORT_TURN_OFF | SUPPORT_PLAY_MEDIA | SUPPORT_STOP | SUPPORT_PLAY |
+
+  //Available services: turn_on, turn_off, toggle, volume_up, volume_down, volume_set, volume_mute, media_play_pause, media_play, media_pause, media_stop, media_next_track, media_previous_track, clear_playlist, shuffle_set
+
   List<String> supportedFeaturesMediaPlayerList = [
     "SUPPORT_PAUSE",
     "SUPPORT_SEEK",

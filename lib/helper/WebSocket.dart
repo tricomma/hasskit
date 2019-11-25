@@ -276,7 +276,7 @@ class WebSocket {
           //Processing lovelace/config
           else if (id == gd.loveLaceConfigId) {
             log.d('Processing Lovelace Config');
-            gd.getLovelaceConfig(decode);
+            gd.socketLovelaceConfig(decode);
             outMsg = {
               "id": gd.socketId,
               "type": "subscribe_events",
@@ -290,7 +290,7 @@ class WebSocket {
             send(json.encode(outMsg));
           } else if (id == gd.getStatesId) {
             log.d('Processing Get States');
-            gd.getStates(decode['result']);
+            gd.socketGetStates(decode['result']);
           }
 //          Processing cameraThumbnailsId
           else if (gd.cameraThumbnailsId.containsKey(id) &&

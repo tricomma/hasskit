@@ -1,12 +1,11 @@
 import 'dart:convert';
+
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
-import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/model/BaseSetting.dart';
 
 class RgbColorSelector extends StatefulWidget {
@@ -154,9 +153,8 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
       },
     };
 
-    var outMsgEncoded = json.encode(outMsg);
-    webSocket.send(outMsgEncoded);
-    HapticFeedback.mediumImpact();
+    var message = jsonEncode(outMsg);
+    gd.sendSocketMessage(message);
 
     log.d(
         "sendColor ${[pickerColor.red, pickerColor.green, pickerColor.blue]}");
