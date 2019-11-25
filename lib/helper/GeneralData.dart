@@ -291,9 +291,7 @@ class GeneralData with ChangeNotifier {
 
     if (newEntity.entityId.contains("media_player")) {
       log.e(
-          "\n\socketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity
-              .state}] ${newEntity.supportedFeatures} ${newEntity
-              .getSupportedFeaturesMediaPlayer}");
+          "\n\socketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity.state}] ${newEntity.supportedFeatures} ${newEntity.getSupportedFeaturesMediaPlayer}");
       log.d(message.toString());
     }
 
