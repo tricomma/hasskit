@@ -224,9 +224,12 @@ class GeneralData with ChangeNotifier {
         log.e('getStates entity.entityId');
         continue;
       }
-//      if (entity.entityId.contains("group")) {
-//        log.d("${entity.entityId} group");
+
+//      if (entity.entityId.contains("media_player")) {
+//        log.e(
+//            "media_player [${entity.entityId}] [state: ${entity.state}] ${entity.supportedFeatures} ${entity.getSupportedFeaturesMediaPlayer}");
 //      }
+
       _entities[entity.entityId] = entity;
     }
 
@@ -298,14 +301,16 @@ class GeneralData with ChangeNotifier {
       return;
     }
     eventsEntity = "${newEntity.entityId}+${newEntity.state}";
+
     Entity oldEntity = entities[newEntity.entityId];
 
+//all
     if (oldEntity != null) {
       oldEntity.state = newEntity.state;
       oldEntity.icon = newEntity.icon;
       oldEntity.friendlyName = newEntity.friendlyName;
 
-//      if (newEntity.entityId.contains('climate.')) {
+//climate
       oldEntity.hvacModes = newEntity.hvacModes;
       oldEntity.minTemp = newEntity.minTemp;
       oldEntity.maxTemp = newEntity.maxTemp;
@@ -316,31 +321,38 @@ class GeneralData with ChangeNotifier {
       oldEntity.fanModes = newEntity.fanModes;
       oldEntity.deviceCode = newEntity.deviceCode;
       oldEntity.manufacturer = newEntity.manufacturer;
-//      }
 
-//      if (newEntity.entityId.contains('fan.')) {
+//fan
       oldEntity.speedList = newEntity.speedList;
       oldEntity.oscillating = newEntity.oscillating;
       oldEntity.speedLevel = newEntity.speedLevel;
       oldEntity.speed = newEntity.speed;
       oldEntity.angle = newEntity.angle;
       oldEntity.directSpeed = newEntity.directSpeed;
-//      }
 
-//      if (newEntity.entityId.contains('light.')) {
+//lights
       oldEntity.supportedFeatures = newEntity.supportedFeatures;
       oldEntity.brightness = newEntity.brightness;
       oldEntity.rgbColor = newEntity.rgbColor;
       oldEntity.minMireds = newEntity.minMireds;
       oldEntity.maxMireds = newEntity.maxMireds;
       oldEntity.colorTemp = newEntity.colorTemp;
-//    }
       oldEntity.currentPosition = newEntity.currentPosition;
-
+//input_number
       oldEntity.initial = newEntity.initial;
       oldEntity.min = newEntity.min;
       oldEntity.max = newEntity.max;
       oldEntity.step = newEntity.step;
+//media_player
+      oldEntity.volumeLevel = newEntity.volumeLevel;
+      oldEntity.isVolumeMuted = newEntity.isVolumeMuted;
+      oldEntity.mediaContentType = newEntity.mediaContentType;
+      oldEntity.mediaTitle = newEntity.mediaTitle;
+      oldEntity.source = newEntity.source;
+      oldEntity.sourceList = newEntity.sourceList;
+      oldEntity.soundMode = newEntity.soundMode;
+      oldEntity.soundModeList = newEntity.soundModeList;
+      oldEntity.soundModeRaw = newEntity.soundModeRaw;
 
       notifyListeners();
     } else {
@@ -980,23 +992,23 @@ class GeneralData with ChangeNotifier {
   }
 
   List<String> backgroundImage = [
-    'assets/background_images/Dark Blue.jpg',
-    'assets/background_images/Dark Green.jpg',
-    'assets/background_images/Light Blue.jpg',
-    'assets/background_images/Light Green.jpg',
+    'assets/background_images/Dark_Blue.jpg',
+    'assets/background_images/Dark_Green.jpg',
+    'assets/background_images/Light_Blue.jpg',
+    'assets/background_images/Light_Green.jpg',
     'assets/background_images/Orange.jpg',
     'assets/background_images/Red.jpg',
-    'assets/background_images/Blue Gradient.jpg',
-    'assets/background_images/Green Gradient.jpg',
-    'assets/background_images/Yellow Gradient.jpg',
-    'assets/background_images/White Gradient.jpg',
-    'assets/background_images/Black Gradient.jpg',
-    'assets/background_images/Light Pink.jpg',
-    'assets/background_images/Abstract 1.jpg',
-    'assets/background_images/Abstract 2.jpg',
-    'assets/background_images/Abstract 3.jpg',
-    'assets/background_images/Abstract 4.jpg',
-    'assets/background_images/Abstract 5.jpg',
+    'assets/background_images/Blue_Gradient.jpg',
+    'assets/background_images/Green_Gradient.jpg',
+    'assets/background_images/Yellow_Gradient.jpg',
+    'assets/background_images/White_Gradient.jpg',
+    'assets/background_images/Black_Gradient.jpg',
+    'assets/background_images/Light_Pink.jpg',
+    'assets/background_images/Abstract_1.jpg',
+    'assets/background_images/Abstract_2.jpg',
+    'assets/background_images/Abstract_3.jpg',
+    'assets/background_images/Abstract_4.jpg',
+    'assets/background_images/Abstract_5.jpg',
   ];
 
   setRoomBackgroundImage(Room room, int backgroundImageIndex) {
@@ -1088,29 +1100,30 @@ class GeneralData with ChangeNotifier {
     notifyListeners();
   }
 
+  Timer _roomListSaveTimer;
+
   void roomListSave(bool saveFirebase) {
+    _roomListSaveTimer?.cancel();
+    _roomListSaveTimer = null;
+    _roomListSaveTimer = Timer(Duration(seconds: 5), () {
+      roomListSaveActually(saveFirebase);
+    });
+  }
+
+  void roomListSaveActually(bool saveFirebase) {
+    log.d("roomListSaveActually $saveFirebase");
+    _roomListSaveTimer?.cancel();
+    _roomListSaveTimer = null;
     try {
       var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
       url = url.replaceAll("/", "-");
       url = url.replaceAll(":", "-");
       gd.saveString('roomList $url', jsonEncode(roomList));
-      if (saveFirebase) roomListSaveFirebaseTimer(5);
+      if (saveFirebase) roomListSaveFirebase();
       log.w('roomListSave $url roomList.length ${roomList.length}');
     } catch (e) {
       log.w("roomListSave $e");
     }
-  }
-
-  Timer _roomListSaveFirebase;
-
-  void roomListSaveFirebaseTimer(int seconds) {
-    _roomListSaveFirebase?.cancel();
-    _roomListSaveFirebase = null;
-
-    log.d("roomListSaveFirebase delay");
-
-    _roomListSaveFirebase =
-        Timer(Duration(seconds: seconds), roomListSaveFirebase);
   }
 
   void roomListSaveFirebase() async {
@@ -1230,7 +1243,7 @@ class GeneralData with ChangeNotifier {
     log.w("toggleStatus ${entity.entityId}");
     delayGetStatesTimer(5);
     entity.toggleState();
-    HapticFeedback.mediumImpact();
+//    HapticFeedback.mediumImpact();
     notifyListeners();
   }
 
@@ -1524,7 +1537,19 @@ class GeneralData with ChangeNotifier {
     }
   }
 
+  Timer _baseSettingSaveTimer;
+
   void baseSettingSave(bool saveFirebase) {
+    _baseSettingSaveTimer?.cancel();
+    _baseSettingSaveTimer = null;
+    _baseSettingSaveTimer = Timer(Duration(seconds: 5), () {
+      baseSettingSaveActually(saveFirebase);
+    });
+  }
+
+  void baseSettingSaveActually(bool saveFirebase) {
+    log.d("baseSettingSaveActually $saveFirebase");
+
     try {
       List<String> colorPickerString = [];
       for (var color in baseSetting.colorPicker) {
@@ -1545,7 +1570,7 @@ class GeneralData with ChangeNotifier {
       gd.saveString('baseSetting $url', jsonEncode(jsonBaseSetting));
       log.w('save baseSetting $jsonBaseSetting');
 
-      if (saveFirebase) baseSettingSaveFirebaseTimer(5);
+      if (saveFirebase) baseSettingSaveFirebase();
     } catch (e) {
       log.w("baseSettingSave $e");
     }
@@ -1576,16 +1601,6 @@ class GeneralData with ChangeNotifier {
       "fan.super_fan",
     ],
   );
-
-  Timer _baseSettingSaveFirebase;
-
-  void baseSettingSaveFirebaseTimer(int seconds) {
-    _baseSettingSaveFirebase?.cancel();
-    _baseSettingSaveFirebase = null;
-
-    _baseSettingSaveFirebase =
-        Timer(Duration(seconds: seconds), baseSettingSaveFirebase);
-  }
 
   void baseSettingSaveFirebase() {
     if (gd.firebaseUser != null) {
@@ -1654,7 +1669,19 @@ class GeneralData with ChangeNotifier {
     }
   }
 
+  Timer _entitiesOverrideSaveTimer;
+
   void entitiesOverrideSave(bool saveFirebase) {
+    _entitiesOverrideSaveTimer?.cancel();
+    _entitiesOverrideSaveTimer = null;
+    _entitiesOverrideSaveTimer = Timer(Duration(seconds: 5), () {
+      entitiesOverrideSaveActually(saveFirebase);
+    });
+  }
+
+  void entitiesOverrideSaveActually(bool saveFirebase) {
+    log.d("entitiesOverrideSaveActually $saveFirebase");
+
     try {
       Map<String, EntityOverride> entitiesOverrideClean = {};
 
@@ -1672,21 +1699,11 @@ class GeneralData with ChangeNotifier {
       entitiesOverride = entitiesOverrideClean;
       gd.saveString('entitiesOverride', jsonEncode(entitiesOverride));
       log.w('save entitiesOverride.length ${entitiesOverride.length}');
-      if (saveFirebase) entitiesOverrideSaveFirebaseTimer(5);
+      if (saveFirebase) entitiesOverrideSaveFirebase();
     } catch (e) {
       log.w("entitiesOverrideSave $e");
     }
     notifyListeners();
-  }
-
-  Timer _entitiesOverrideSaveFirebase;
-
-  void entitiesOverrideSaveFirebaseTimer(int seconds) {
-    _entitiesOverrideSaveFirebase?.cancel();
-    _entitiesOverrideSaveFirebase = null;
-
-    _entitiesOverrideSaveFirebase =
-        Timer(Duration(seconds: seconds), entitiesOverrideSaveFirebase);
   }
 
   void entitiesOverrideSaveFirebase() {
