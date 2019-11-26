@@ -285,13 +285,14 @@ class GeneralData with ChangeNotifier {
 //    print('socketSubscribeEvents $message');
     Entity newEntity = Entity.fromJson(message['event']['data']['new_state']);
     if (newEntity == null || newEntity.entityId == null) {
-      log.e('socketSubscribeEvents newEntity == null');
+      log.w('socketSubscribeEvents newEntity == null');
       return;
     }
 
     if (newEntity.entityId.contains("media_player")) {
       log.e(
           "\n\nsocketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity.state}] [volumeLevel: ${newEntity.volumeLevel}] [isVolumeMuted: ${newEntity.isVolumeMuted}] ${newEntity.supportedFeatures} ${newEntity.getSupportedFeaturesMediaPlayer}");
+      log.w("socketSubscribeEvents message $message");
     }
 
     eventsEntities = "${newEntity.entityId}+${newEntity.state}";
