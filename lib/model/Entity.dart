@@ -60,11 +60,13 @@ class Entity {
   bool isVolumeMuted;
   String mediaContentType;
   String mediaTitle;
+  String mediaArtist;
   String source;
   List<String> sourceList;
   String soundMode;
   List<String> soundModeList;
   String soundModeRaw;
+  String entityPicture;
 
   Entity({
     this.entityId,
@@ -109,11 +111,13 @@ class Entity {
     this.isVolumeMuted = false,
     this.mediaContentType = "",
     this.mediaTitle = "",
+    this.mediaArtist = "",
     this.source = "",
     this.sourceList,
     this.soundMode = "",
     this.soundModeList,
     this.soundModeRaw = "",
+    this.entityPicture = "",
   });
 
   factory Entity.fromJson(Map<String, dynamic> json) {
@@ -255,6 +259,9 @@ class Entity {
         mediaTitle: json['attributes']['media_title'].toString() != null
             ? json['attributes']['media_title'].toString()
             : "",
+        mediaArtist: json['attributes']['media_artist'].toString() != null
+            ? json['attributes']['media_artist'].toString()
+            : "",
         source: json['attributes']['source'].toString() != null
             ? json['attributes']['source'].toString()
             : "",
@@ -269,6 +276,9 @@ class Entity {
             : [],
         soundModeRaw: json['attributes']['sound_mode_raw'].toString() != null
             ? json['attributes']['sound_mode_raw'].toString()
+            : "",
+        entityPicture: json['attributes']['entity_picture'].toString() != null
+            ? json['attributes']['entity_picture'].toString()
             : "",
       );
     } catch (e) {
