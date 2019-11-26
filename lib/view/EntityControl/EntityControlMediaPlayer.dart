@@ -543,7 +543,7 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
         value: media_position,
         min: 0.0,
         max: media_duration,
-        divisions: media_duration.floor(),
+        divisions: media_duration.floor() > 0 ? media_duration.floor() : 1,
         label: getSeekPosition(media_position),
         onChangeStart: (val) {
           isChanging = DateTime.now().add(Duration(days: 1));
