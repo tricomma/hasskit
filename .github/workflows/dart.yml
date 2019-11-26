@@ -1,4 +1,4 @@
-name: Flitter CI
+name: Flutter CI
 
 on: [push]
 
