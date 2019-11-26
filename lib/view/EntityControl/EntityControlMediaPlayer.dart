@@ -502,8 +502,30 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
 
       seconds = totalSeconds - ((hours * 60 * 60) + (minutes * 60));
     }
+    else {
+      seconds = totalSeconds;
+    }
 
-    return "${hours}.${minutes}.${seconds}";
+    String secondsShow = "";
+    if(seconds > 9) secondsShow = seconds.toString();
+    else secondsShow = "0" + seconds.toString();
+
+    String minuteShow = "";
+    if(minutes > 9) minuteShow = minutes.toString();
+    else minuteShow = "0" + minutes.toString();
+
+    if(hours > 0) {
+      String hourShow = "";
+
+      if(hours > 9) hourShow = hours.toString();
+      else hourShow = "0" + hours.toString();
+
+      return "${hourShow}.${minuteShow}.${secondsShow}";
+    }
+    else {
+      return "${minuteShow}.${secondsShow}";
+    }
+
   }
 
   @override
