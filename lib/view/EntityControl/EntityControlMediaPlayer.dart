@@ -123,6 +123,10 @@ class EntityControlMediaPlayer extends StatelessWidget {
                       ),
                     )
                   : Container(),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 4),
+                child: Text(entity.mediaTitle),
+              ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -131,10 +135,20 @@ class EntityControlMediaPlayer extends StatelessWidget {
                   Expanded(child: MediaPlayerSoundMode(entityId: entityId)),
                 ],
               ),
+              // Row(
+              //   mainAxisSize: MainAxisSize.max,
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: <Widget>[
+              //     Text(entity.mediaPosition.toString()),
+              //     Text("/"),
+              //     Text(entity.mediaDuration.toString())
+              //   ],
+              // ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  MpSeekSlider(entityId: entityId),
                   MediaPlayerButton(
                     entityId: entityId,
                     buttonData: ButtonData(
@@ -153,6 +167,12 @@ class EntityControlMediaPlayer extends StatelessWidget {
                       ),
                     ),
                   ),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   MpVolumeSlider(entityId: entityId),
                   MediaPlayerButton(
                     entityId: entityId,
@@ -433,6 +453,101 @@ class MediaPlayerButton extends StatelessWidget {
           if (jsonCombined.toString().contains("turn_off"))
             entity.state = "turning off...";
         },
+      ),
+    );
+  }
+}
+
+class MpSeekSlider extends StatefulWidget {
+  final String entityId;
+
+  const MpSeekSlider({@required this.entityId});
+
+  @override
+  _MpSeekSliderState createState() => _MpSeekSliderState();
+}
+
+
+class _MpSeekSliderState extends State<MpSeekSlider> {
+  double media_position;
+  double media_duration;
+  Entity entity;
+  double media_positionLast;
+  bool supportSeekSet;
+  DateTime isChanging;
+
+  @override
+  void initState() {
+    super.initState();
+    entity = gd.entities[widget.entityId];
+    media_position = entity.mediaPosition;
+    media_duration = entity.mediaDuration;    
+    isChanging = DateTime.now();
+  }
+
+  String getSeekPosition(double pos) {
+    int hours = 0;
+    int minutes = 0;
+    int seconds = 0;
+    int totalSeconds = (pos).floor();
+
+    if(totalSeconds > 59) {
+      minutes = (totalSeconds / 60).floor();
+
+      if(minutes > 59) {
+        hours = (minutes / 60).floor();
+
+        minutes = minutes - (hours * 60);
+      }
+
+      seconds = totalSeconds - ((hours * 60 * 60) + (minutes * 60));
+    }
+
+    return "${hours}.${minutes}.${seconds}";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    entity = gd.entities[widget.entityId];
+    supportSeekSet =
+        entity.getSupportedFeaturesMediaPlayer.contains("SUPPORT_SEEK");
+    if (!entity.isStateOn || !supportSeekSet) return Container();
+
+    if (isChanging.isBefore(DateTime.now())) {
+      media_position = entity.mediaPosition;
+    }
+    return Expanded(
+      child: Slider(
+        value: media_position,
+        min: 0.0,
+        max: media_duration,
+        divisions: media_duration.floor(),
+        label: getSeekPosition(media_position),
+        onChangeStart: (val) {
+          isChanging = DateTime.now().add(Duration(days: 1));
+        },
+        onChangeEnd: (val) {
+          if (val == media_positionLast) return;
+          var outMsg = {
+            "id": gd.socketId,
+            "type": "call_service",
+            "domain": "media_player",
+            "service": "media_seek",
+            "service_data": {"entity_id": widget.entityId, "seek_position": val}
+          };
+          entity.mediaPosition = val;
+          media_positionLast = val;
+          gd.sendSocketMessage(jsonEncode(outMsg));
+          isChanging = DateTime.now().add(Duration(seconds: 1));
+        },
+        onChanged: !entity.isStateOn
+            ? null
+            : (val) {
+                setState(() {
+                  media_position = val;
+                  isChanging = DateTime.now().add(Duration(days: 1));
+                });
+              },
       ),
     );
   }
