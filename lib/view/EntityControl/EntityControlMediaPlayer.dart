@@ -31,6 +31,8 @@ class EntityControlMediaPlayer extends StatelessWidget {
           "${generalData.entities[entityId].soundMode} "
           "${generalData.entities[entityId].soundModeList.length} "
           "${generalData.entities[entityId].soundModeRaw} "
+          "${generalData.entities[entityId].mediaPosition} "
+          "${generalData.entities[entityId].mediaDuration} "
           "",
       builder: (_, generalData, __) {
         Entity entity = gd.entities[entityId];
