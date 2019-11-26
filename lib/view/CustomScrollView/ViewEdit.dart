@@ -274,7 +274,14 @@ class __EditItemsState extends State<_EditItems> {
               (gd.roomList[widget.roomIndex].favorites.contains(e.entityId) ||
                   gd.roomList[widget.roomIndex].entities.contains(e.entityId) ||
                   gd.roomList[widget.roomIndex].row3.contains(e.entityId) ||
-                  gd.roomList[widget.roomIndex].row4.contains(e.entityId)))
+                  gd.roomList[widget.roomIndex].row4.contains(e.entityId)) &&
+              (widget.keyword.length < 1 ||
+                  e.getOverrideName
+                      .toLowerCase()
+                      .contains(widget.keyword.toLowerCase()) ||
+                  e.entityId
+                      .toLowerCase()
+                      .contains(widget.keyword.toLowerCase())))
           .toList();
     }
 
