@@ -123,10 +123,7 @@ class EntityControlMediaPlayer extends StatelessWidget {
                       ),
                     )
                   : Container(),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Text(entity.mediaTitle),
-              ),
+
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -149,6 +146,12 @@ class EntityControlMediaPlayer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   MpSeekSlider(entityId: entityId),
+                ],
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
                   MediaPlayerButton(
                     entityId: entityId,
                     buttonData: ButtonData(
@@ -167,12 +170,6 @@ class EntityControlMediaPlayer extends StatelessWidget {
                       ),
                     ),
                   ),
-                ],
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
                   MpVolumeSlider(entityId: entityId),
                   MediaPlayerButton(
                     entityId: entityId,
@@ -467,12 +464,11 @@ class MpSeekSlider extends StatefulWidget {
   _MpSeekSliderState createState() => _MpSeekSliderState();
 }
 
-
 class _MpSeekSliderState extends State<MpSeekSlider> {
-  double media_position;
-  double media_duration;
+  double mediaPosition;
+  double mediaDuration;
   Entity entity;
-  double media_positionLast;
+  double mediaPositionLast;
   bool supportSeekSet;
   DateTime isChanging;
 
@@ -480,8 +476,8 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
   void initState() {
     super.initState();
     entity = gd.entities[widget.entityId];
-    media_position = entity.mediaPosition;
-    media_duration = entity.mediaDuration;    
+    mediaPosition = entity.mediaPosition;
+    mediaDuration = entity.mediaDuration;
     isChanging = DateTime.now();
   }
 
@@ -491,10 +487,10 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
     int seconds = 0;
     int totalSeconds = (pos).floor();
 
-    if(totalSeconds > 59) {
+    if (totalSeconds > 59) {
       minutes = (totalSeconds / 60).floor();
 
-      if(minutes > 59) {
+      if (minutes > 59) {
         hours = (minutes / 60).floor();
 
         minutes = minutes - (hours * 60);
@@ -525,7 +521,6 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
     else {
       return "${minuteShow}.${secondsShow}";
     }
-
   }
 
   @override
@@ -536,20 +531,20 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
     if (!entity.isStateOn || !supportSeekSet) return Container();
 
     if (isChanging.isBefore(DateTime.now())) {
-      media_position = entity.mediaPosition;
+      mediaPosition = entity.mediaPosition;
     }
     return Expanded(
       child: Slider(
-        value: media_position,
+        value: mediaPosition,
         min: 0.0,
-        max: media_duration,
-        divisions: media_duration.floor() > 0 ? media_duration.floor() : 1,
-        label: getSeekPosition(media_position),
+        max: mediaDuration,
+        divisions: mediaDuration.floor() > 0 ? mediaDuration.floor() : 1,
+        label: getSeekPosition(mediaPosition),
         onChangeStart: (val) {
           isChanging = DateTime.now().add(Duration(days: 1));
         },
         onChangeEnd: (val) {
-          if (val == media_positionLast) return;
+          if (val == mediaPositionLast) return;
           var outMsg = {
             "id": gd.socketId,
             "type": "call_service",
@@ -558,7 +553,7 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
             "service_data": {"entity_id": widget.entityId, "seek_position": val}
           };
           entity.mediaPosition = val;
-          media_positionLast = val;
+          mediaPositionLast = val;
           gd.sendSocketMessage(jsonEncode(outMsg));
           isChanging = DateTime.now().add(Duration(seconds: 1));
         },
@@ -566,7 +561,7 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
             ? null
             : (val) {
                 setState(() {
-                  media_position = val;
+                  mediaPosition = val;
                   isChanging = DateTime.now().add(Duration(days: 1));
                 });
               },
@@ -614,7 +609,7 @@ class _MpVolumeSliderState extends State<MpVolumeSlider> {
         value: volume,
         min: 0.0,
         max: 1.0,
-        divisions: 50,
+        divisions: 20,
         label: "${(volume * 100).toInt()}",
         onChangeStart: (val) {
           isChanging = DateTime.now().add(Duration(days: 1));
@@ -659,7 +654,7 @@ class MediaPlayerSource extends StatelessWidget {
     log.d("entity.sourceList ${entity.sourceList}");
     log.d("entity.source ${entity.source}");
     var index = entity.sourceList.indexOf(entity.source);
-    log.d("index ${index}");
+    log.d("index $index");
 
     var sourceModeController = FixedExtentScrollController(initialItem: index);
 
@@ -673,6 +668,7 @@ class MediaPlayerSource extends StatelessWidget {
         child: (AutoSizeText(
           source,
           style: Theme.of(context).textTheme.body1,
+          maxLines: 1,
         )),
       );
       sourceList.add(container);
@@ -765,7 +761,7 @@ class MediaPlayerSoundMode extends StatelessWidget {
     log.d("entity.soundModeList ${entity.soundModeList}");
     log.d("entity.soundMode ${entity.soundMode}");
     var index = entity.soundModeList.indexOf(entity.soundMode);
-    log.d("index ${index}");
+    log.d("index $index");
 
     var soundModeController = FixedExtentScrollController(initialItem: index);
 
