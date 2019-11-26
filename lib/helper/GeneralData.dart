@@ -1113,7 +1113,7 @@ class GeneralData with ChangeNotifier {
   void roomListSave(bool saveFirebase) {
     _roomListSaveTimer?.cancel();
     _roomListSaveTimer = null;
-    _roomListSaveTimer = Timer(Duration(seconds: 5), () {
+    _roomListSaveTimer = Timer(Duration(seconds: 15), () {
       roomListSaveActually(saveFirebase);
     });
   }
@@ -1569,7 +1569,7 @@ class GeneralData with ChangeNotifier {
   void baseSettingSave(bool saveFirebase) {
     _baseSettingSaveTimer?.cancel();
     _baseSettingSaveTimer = null;
-    _baseSettingSaveTimer = Timer(Duration(seconds: 5), () {
+    _baseSettingSaveTimer = Timer(Duration(seconds: 15), () {
       baseSettingSaveActually(saveFirebase);
     });
   }
@@ -1701,7 +1701,7 @@ class GeneralData with ChangeNotifier {
   void entitiesOverrideSave(bool saveFirebase) {
     _entitiesOverrideSaveTimer?.cancel();
     _entitiesOverrideSaveTimer = null;
-    _entitiesOverrideSaveTimer = Timer(Duration(seconds: 5), () {
+    _entitiesOverrideSaveTimer = Timer(Duration(seconds: 15), () {
       entitiesOverrideSaveActually(saveFirebase);
     });
   }
