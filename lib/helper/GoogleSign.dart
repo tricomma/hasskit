@@ -66,9 +66,9 @@ class _GoogleSignState extends State<GoogleSign> {
                   gd.googleSignInAccount != null
                       ? GoogleLoggedIn()
                       : GoogleLoggedOut(),
-//                  gd.googleSignInAccount != null
-//                      ? GoogleCloudAction()
-//                      : Container(),
+                  gd.googleSignInAccount != null
+                      ? GoogleCloudAction()
+                      : Container(),
                   Text(
                     "Keep your rooms layout and device customization synchronized accross devices. HassKit won't upload your login data online...",
                     style: Theme.of(context).textTheme.caption,
@@ -122,6 +122,7 @@ class GoogleCloudAction extends StatelessWidget {
               title: "Force download data from cloud",
               message: "Use ONLY when you have sync issue",
               duration: Duration(seconds: 3),
+              shouldIconPulse: true,
               icon: Icon(
                 Icons.warning,
                 color: ThemeInfo.colorIconActive,
@@ -151,6 +152,7 @@ class GoogleCloudAction extends StatelessWidget {
               title: "Force upload data to cloud",
               message: "Use ONLY when you have sync issue",
               duration: Duration(seconds: 3),
+              shouldIconPulse: true,
               icon: Icon(
                 Icons.warning,
                 color: ThemeInfo.colorIconActive,
@@ -180,6 +182,7 @@ class GoogleCloudAction extends StatelessWidget {
               title: "Force reset data on cloud",
               message: "Use ONLY when you have sync issue",
               duration: Duration(seconds: 3),
+              shouldIconPulse: true,
               icon: Icon(
                 Icons.warning,
                 color: ThemeInfo.colorIconActive,

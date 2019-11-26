@@ -253,14 +253,16 @@ class Entity {
                     null
                 ? double.tryParse(json['attributes']['volume_level'].toString())
                 : 0,
-        mediaDuration:
-            double.tryParse(json["attributes"]["media_duration"].toString()) != null 
-              ? double.tryParse(json["attributes"]["media_duration"].toString())
-              : 0,
-        mediaPosition: 
-            double.tryParse(json["attributes"]["media_position"].toString()) != null 
-              ? double.tryParse(json["attributes"]["media_position"].toString())
-              : 0,
+        mediaDuration: double.tryParse(
+                    json["attributes"]["media_duration"].toString()) !=
+                null
+            ? double.tryParse(json["attributes"]["media_duration"].toString())
+            : 0,
+        mediaPosition: double.tryParse(
+                    json["attributes"]["media_position"].toString()) !=
+                null
+            ? double.tryParse(json["attributes"]["media_position"].toString())
+            : 0,
         isVolumeMuted: json['attributes']['is_volume_muted'] != null
             ? json['attributes']['is_volume_muted']
             : false,
@@ -542,7 +544,8 @@ class Entity {
 
     if ((entityId.split('.')[0] == 'climate' ||
             entityId.split('.')[0] == 'media_player') &&
-        state.toLowerCase() != 'off') {
+        state.toLowerCase() != 'off' &&
+        state.toLowerCase() != 'unavailable') {
       return true;
     }
     return false;
