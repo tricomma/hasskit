@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
@@ -23,6 +24,8 @@ class EntityControlMediaPlayer extends StatelessWidget {
           "${generalData.entities[entityId].isVolumeMuted} "
           "${generalData.entities[entityId].mediaContentType} "
           "${generalData.entities[entityId].mediaTitle} "
+          "${generalData.entities[entityId].mediaArtist} "
+          "${generalData.entities[entityId].entityPicture} "
           "${generalData.entities[entityId].source} "
           "${generalData.entities[entityId].sourceList.length} "
           "${generalData.entities[entityId].soundMode} "
@@ -31,40 +34,93 @@ class EntityControlMediaPlayer extends StatelessWidget {
           "",
       builder: (_, generalData, __) {
         Entity entity = gd.entities[entityId];
-        return Container(
+        return SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              !entity.isStateOn
-                  ? Column(
-                      children: <Widget>[
-                        Container(
-                          child: MediaPlayerButton(
-                            entityId: entityId,
-                            buttonData: ButtonData(
-                              showWhen: entity != null &&
-                                  !entity.isStateOn &&
-                                  entity.getSupportedFeaturesMediaPlayer
-                                      .contains("SUPPORT_TURN_ON"),
-                              disableOnPowerOff: false,
-                              icon: "mdi:power",
-                              iconColor: ThemeInfo.colorIconInActive,
-                              iconSize: 200,
-                              json: jsonEncode(
-                                {
-                                  "service": "turn_on",
-                                  "service_data": {
-                                    "entity_id": entityId,
-                                  }
+              MediaPlayerButton(
+                entityId: entityId,
+                buttonData: ButtonData(
+                  showWhen: entity != null &&
+                      !entity.isStateOn &&
+                      entity.getSupportedFeaturesMediaPlayer
+                          .contains("SUPPORT_TURN_ON"),
+                  disableOnPowerOff: false,
+                  icon: "mdi:power",
+                  iconColor: ThemeInfo.colorIconInActive,
+                  iconSize: 200,
+                  json: jsonEncode(
+                    {
+                      "service": "turn_on",
+                      "service_data": {
+                        "entity_id": entityId,
+                      }
+                    },
+                  ),
+                ),
+              ),
+
+//              entity.entityPicture != ""
+//                  ? Expanded(
+//                      child: Column(
+//                        children: <Widget>[
+//                          Container(
+//                            child: Image.network('${entity.entityPicture}'),
+//                          ),
+//                          AutoSizeText(
+//                            entity.mediaTitle,
+//                            maxLines: 1,
+//                          )
+//                        ],
+//                      ),
+//                    )
+//                  : Container(),
+              entity.entityPicture != "" &&
+                      entity.entityPicture != "null" &&
+                      entity.mediaTitle != "null" &&
+                      entity.mediaArtist != "null"
+                  ? Container(
+                      height: gd.mediaQueryHeight / 2,
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                '${entity.entityPicture}',
+                                loadingBuilder: (BuildContext context,
+                                    Widget child,
+                                    ImageChunkEvent loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(
+                                    child: SpinKitThreeBounce(
+                                      size: 40,
+                                      color: Colors.grey.withOpacity(0.5),
+                                    ),
+//                                    child: CircularProgressIndicator(
+//                                      value: loadingProgress
+//                                                  .expectedTotalBytes !=
+//                                              null
+//                                          ? loadingProgress
+//                                                  .cumulativeBytesLoaded /
+//                                              loadingProgress.expectedTotalBytes
+//                                          : null,
+//                                    ),
+                                  );
                                 },
                               ),
                             ),
                           ),
-                        ),
-                        AutoSizeText(
-                          "Turn On",
-                          style: Theme.of(context).textTheme.display1,
-                        )
-                      ],
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            child: AutoSizeText(
+                              "${gd.textToDisplay(entity.mediaTitle)} - ${gd.textToDisplay(entity.mediaArtist)}",
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                          )
+                        ],
+                      ),
                     )
                   : Container(),
               Container(
@@ -212,7 +268,9 @@ class EntityControlMediaPlayer extends StatelessWidget {
                             showWhen: entity != null &&
                                 entity.isStateOn &&
                                 entity.getSupportedFeaturesMediaPlayer
-                                    .contains("SUPPORT_STOP"),
+                                    .contains("SUPPORT_STOP") &&
+                                !entity.getSupportedFeaturesMediaPlayer
+                                    .contains("SUPPORT_PAUSE"),
                             icon: "mdi:stop-circle",
                             json: jsonEncode(
                               {
@@ -230,6 +288,7 @@ class EntityControlMediaPlayer extends StatelessWidget {
                           buttonData: ButtonData(
                             showWhen: entity != null &&
                                 entity.isStateOn &&
+                                entity.state == "playing" &&
                                 entity.getSupportedFeaturesMediaPlayer
                                     .contains("SUPPORT_PAUSE"),
                             icon: "mdi:pause-circle",
@@ -249,6 +308,7 @@ class EntityControlMediaPlayer extends StatelessWidget {
                           buttonData: ButtonData(
                             showWhen: entity != null &&
                                 entity.isStateOn &&
+                                entity.state != "playing" &&
                                 (entity.getSupportedFeaturesMediaPlayer
                                         .contains("SUPPORT_PLAY_MEDIA") ||
                                     entity.getSupportedFeaturesMediaPlayer
@@ -572,7 +632,7 @@ class MediaPlayerSource extends StatelessWidget {
   Widget build(BuildContext context) {
     Entity entity = gd.entities[entityId];
 
-    if (entity == null || entity.sourceList.length <= 0) return Container();
+    if (entity == null || entity.sourceList.length <= 1) return Container();
 
     log.d("entity.sourceList ${entity.sourceList}");
     log.d("entity.source ${entity.source}");
@@ -678,7 +738,7 @@ class MediaPlayerSoundMode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Entity entity = gd.entities[entityId];
-    if (entity == null || entity.soundModeList.length <= 0) return Container();
+    if (entity == null || entity.soundModeList.length <= 1) return Container();
 
     log.d("entity.soundModeList ${entity.soundModeList}");
     log.d("entity.soundMode ${entity.soundMode}");
