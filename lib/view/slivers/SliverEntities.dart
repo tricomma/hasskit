@@ -92,6 +92,10 @@ class SliverEntitiesNormal extends StatelessWidget {
 
                       if (entities[index].entityType == EntityType.group ||
                           entities[index].entityType ==
+                              EntityType.mediaPlayers ||
+                          entities[index].entityType ==
+                              EntityType.climateFans ||
+                          entities[index].entityType ==
                               EntityType.accessories ||
                           entities[index].entityType == EntityType.cameras ||
                           !entities[index].isStateOn &&

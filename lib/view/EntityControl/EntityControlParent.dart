@@ -11,8 +11,8 @@ import 'package:hasskit/view/EntityControl/EntityControlAlarmPanel.dart';
 import 'package:hasskit/view/EntityControl/EntityControlClimate.dart';
 import 'package:hasskit/view/EntityControl/EntityControlCoverPosition.dart';
 import 'package:hasskit/view/EntityControl/EntityControlGeneral.dart';
+import 'package:hasskit/view/EntityControl/EntityControlMediaPlayer.dart';
 import 'package:provider/provider.dart';
-
 import 'EntityControlBinarySensor.dart';
 import 'EntityControlFan.dart';
 import 'EntityControlInputNumber.dart';
@@ -83,7 +83,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
             entity.max != null) {
           entityControl = EntityControlInputNumber(entityId: widget.entityId);
         } else if (entity.entityType == EntityType.mediaPlayers) {
-          entityControl = EntityControlToggle(entityId: widget.entityId);
+          entityControl = EntityControlMediaPlayer(entityId: widget.entityId);
         } else if (entity.entityType == EntityType.lightSwitches ||
             entity.entityType == EntityType.mediaPlayers ||
             entity.entityId.contains("group.") ||
@@ -334,6 +334,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                           ),
 
                     Expanded(
+                      flex: 3,
                       child: Container(),
                     ),
 //                  SizedBox(height: 40),
@@ -341,8 +342,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
                 ),
               ),
               Positioned(
-                bottom: 40,
-                right: 40,
+                top: 25,
+                right: 10,
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
