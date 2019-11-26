@@ -291,12 +291,11 @@ class GeneralData with ChangeNotifier {
 
     if (newEntity.entityId.contains("media_player")) {
       log.e(
-          "\n\socketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity.state}] ${newEntity.supportedFeatures} ${newEntity.getSupportedFeaturesMediaPlayer}");
-      log.d(message.toString());
+          "\n\nsocketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity.state}] [volumeLevel: ${newEntity.volumeLevel}] [isVolumeMuted: ${newEntity.isVolumeMuted}] ${newEntity.supportedFeatures} ${newEntity.getSupportedFeaturesMediaPlayer}");
     }
 
-    eventsEntity = "${newEntity.entityId}+${newEntity.state}";
-
+    eventsEntities = "${newEntity.entityId}+${newEntity.state}";
+    eventEntityUpdate(newEntity.entityId);
     Entity oldEntity = entities[newEntity.entityId];
 
 //all
@@ -357,13 +356,26 @@ class GeneralData with ChangeNotifier {
     }
   }
 
-  String _eventsEntity;
-  String get eventsEntity => _eventsEntity;
-  set eventsEntity(String val) {
-    if (val != _eventsEntity) {
-      _eventsEntity = val;
+  String _eventsEntities;
+  String get eventsEntities => _eventsEntities;
+  set eventsEntities(String val) {
+    if (val != _eventsEntities) {
+      _eventsEntities = val;
       notifyListeners();
     }
+  }
+
+  Map<String, String> _eventEntity = {};
+  String eventEntity(String val) {
+    if (_eventEntity[val] == null) {
+      return "";
+    }
+    return _eventEntity[val];
+  }
+
+  void eventEntityUpdate(String val) {
+    _eventEntity[val] = val + random.nextInt(100).toString();
+    notifyListeners();
   }
 
   bool isEntityNameValid(String entityId) {
@@ -1236,6 +1248,7 @@ class GeneralData with ChangeNotifier {
     }
 
     log.w("toggleStatus ${entity.entityId}");
+    eventEntity(entity.entityId);
     delayGetStatesTimer(5);
     entity.toggleState();
     HapticFeedback.mediumImpact();

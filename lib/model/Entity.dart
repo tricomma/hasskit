@@ -105,15 +105,15 @@ class Entity {
     this.max,
     this.step,
 //    media_player
-    this.volumeLevel,
-    this.isVolumeMuted,
-    this.mediaContentType,
-    this.mediaTitle,
-    this.source,
+    this.volumeLevel = 0,
+    this.isVolumeMuted = false,
+    this.mediaContentType = "",
+    this.mediaTitle = "",
+    this.source = "",
     this.sourceList,
-    this.soundMode,
+    this.soundMode = "",
     this.soundModeList,
-    this.soundModeRaw,
+    this.soundModeRaw = "",
   });
 
   factory Entity.fromJson(Map<String, dynamic> json) {
@@ -122,71 +122,154 @@ class Entity {
         return null;
       }
       return Entity(
-        entityId: json['entity_id'],
-        deviceClass: json['attributes']['device_class'],
-        icon: json['attributes']['icon'],
-        friendlyName: json['attributes']['friendly_name'] != null
-            ? json['attributes']['friendly_name']
-            : json['entity_id'],
-        state: json['state'],
+        entityId: json['entity_id'].toString(),
+        deviceClass: json['attributes']['device_class'].toString() != null
+            ? json['attributes']['device_class'].toString()
+            : "",
+        icon: json['attributes']['icon'].toString() != null
+            ? json['attributes']['icon'].toString()
+            : "",
+        friendlyName: json['attributes']['friendly_name'].toString() != null
+            ? json['attributes']['friendly_name'].toString()
+            : json['entity_id'].toString(),
+        state: json['state'].toString(),
         //climate
         hvacModes: json['attributes']['hvac_modes'] != null
             ? List<String>.from(json['attributes']['hvac_modes'])
             : [],
-        minTemp: double.tryParse(json['attributes']['min_temp'].toString()),
-        maxTemp: double.tryParse(json['attributes']['max_temp'].toString()),
-        targetTempStep:
-            double.tryParse(json['attributes']['target_temp_step'].toString()),
+        minTemp:
+            double.tryParse(json['attributes']['min_temp'].toString()) != null
+                ? double.tryParse(json['attributes']['min_temp'].toString())
+                : 0,
+        maxTemp:
+            double.tryParse(json['attributes']['max_temp'].toString()) != null
+                ? double.tryParse(json['attributes']['max_temp'].toString())
+                : 0,
+        targetTempStep: double.tryParse(
+                    json['attributes']['target_temp_step'].toString()) !=
+                null
+            ? double.tryParse(json['attributes']['target_temp_step'].toString())
+            : 1,
         temperature:
-            double.tryParse(json['attributes']['temperature'].toString()),
+            double.tryParse(json['attributes']['temperature'].toString()) !=
+                    null
+                ? double.tryParse(json['attributes']['temperature'].toString())
+                : 0,
 
         currentTemperature: double.tryParse(
-            json['attributes']['current_temperature'].toString()),
-        fanMode: json['attributes']['fan_mode'],
+                    json['attributes']['current_temperature'].toString()) !=
+                null
+            ? double.tryParse(
+                json['attributes']['current_temperature'].toString())
+            : 0,
+        fanMode: json['attributes']['fan_mode'].toString() != null
+            ? json['attributes']['fan_mode'].toString()
+            : "",
         fanModes: json['attributes']['fan_modes'] != null
             ? List<String>.from(json['attributes']['fan_modes'])
             : [],
-        deviceCode: json['attributes']['device_code'],
-        manufacturer: json['attributes']['manufacturer'],
+        deviceCode:
+            int.tryParse(json['attributes']['device_code'].toString()) != null
+                ? int.tryParse(json['attributes']['device_code'].toString())
+                : 0,
+        manufacturer: json['attributes']['manufacturer'].toString() != null
+            ? json['attributes']['manufacturer'].toString()
+            : "",
         //fan
         speedList: json['attributes']['speed_list'] != null
             ? List<String>.from(json['attributes']['speed_list'])
             : [],
-        oscillating: json['attributes']['oscillating'],
-        speedLevel: json['attributes']['speed_level'],
-        speed: json['attributes']['speed'].toString(),
-        angle: json['attributes']['angle'],
-        directSpeed: json['attributes']['direct_speed'],
-        supportedFeatures: json['attributes']['supported_features'],
-        brightness: int.tryParse(json['attributes']['brightness'].toString()),
+        oscillating: json['attributes']['oscillating'] != null
+            ? json['attributes']['oscillating']
+            : false,
+        speedLevel: json['attributes']['speed_level'].toString() != null
+            ? json['attributes']['speed_level'].toString()
+            : "0",
+        speed: json['attributes']['speed'].toString() != null
+            ? json['attributes']['speed'].toString()
+            : "0",
+        angle: int.tryParse(json['attributes']['angle'].toString()) != null
+            ? int.tryParse(json['attributes']['angle'].toString())
+            : 0,
+        directSpeed:
+            int.tryParse(json['attributes']['direct_speed'].toString()) != null
+                ? int.tryParse(json['attributes']['direct_speed'].toString())
+                : 0,
+        //supported_features
+        supportedFeatures: int.tryParse(
+                    json['attributes']['supported_features'].toString()) !=
+                null
+            ? int.tryParse(json['attributes']['supported_features'].toString())
+            : 0,
+        brightness:
+            int.tryParse(json['attributes']['brightness'].toString()) != null
+                ? int.tryParse(json['attributes']['brightness'].toString())
+                : 0,
         rgbColor: json['attributes']['rgb_color'] != null
             ? List<int>.from(json['attributes']['rgb_color'])
             : [],
-        minMireds: int.tryParse(json['attributes']['min_mireds'].toString()),
-        maxMireds: int.tryParse(json['attributes']['max_mireds'].toString()),
-        colorTemp: int.tryParse(json['attributes']['color_temp'].toString()),
-        currentPosition:
-            double.tryParse(json['attributes']['current_position'].toString()),
+        minMireds:
+            int.tryParse(json['attributes']['min_mireds'].toString()) != null
+                ? int.tryParse(json['attributes']['min_mireds'].toString())
+                : 0,
+        maxMireds:
+            int.tryParse(json['attributes']['max_mireds'].toString()) != null
+                ? int.tryParse(json['attributes']['max_mireds'].toString())
+                : 0,
+        colorTemp:
+            int.tryParse(json['attributes']['color_temp'].toString()) != null
+                ? int.tryParse(json['attributes']['color_temp'].toString())
+                : 0,
+        currentPosition: double.tryParse(
+                    json['attributes']['current_position'].toString()) !=
+                null
+            ? double.tryParse(json['attributes']['current_position'].toString())
+            : null,
         //input_number
-        initial: double.tryParse(json['attributes']['initial'].toString()),
-        min: double.tryParse(json['attributes']['min'].toString()),
-        max: double.tryParse(json['attributes']['max'].toString()),
-        step: double.tryParse(json['attributes']['step'].toString()),
+        initial:
+            double.tryParse(json['attributes']['initial'].toString()) != null
+                ? double.tryParse(json['attributes']['initial'].toString())
+                : 0,
+        min: double.tryParse(json['attributes']['min'].toString()) != null
+            ? double.tryParse(json['attributes']['min'].toString())
+            : 0,
+        max: double.tryParse(json['attributes']['max'].toString()) != null
+            ? double.tryParse(json['attributes']['max'].toString())
+            : 0,
+        step: double.tryParse(json['attributes']['step'].toString()) != null
+            ? double.tryParse(json['attributes']['step'].toString())
+            : 0,
         //media_player
         volumeLevel:
-            double.tryParse(json['attributes']['volume_level'].toString()),
-        isVolumeMuted: json['attributes']['is_volume_muted'],
-        mediaContentType: json['attributes']['media_content_type'].toString(),
-        mediaTitle: json['attributes']['media_title'].toString(),
-        source: json['attributes']['source'].toString(),
+            double.tryParse(json['attributes']['volume_level'].toString()) !=
+                    null
+                ? double.tryParse(json['attributes']['volume_level'].toString())
+                : 0,
+        isVolumeMuted: json['attributes']['is_volume_muted'] != null
+            ? json['attributes']['is_volume_muted']
+            : false,
+        mediaContentType:
+            json['attributes']['media_content_type'].toString() != null
+                ? json['attributes']['media_content_type'].toString()
+                : "",
+        mediaTitle: json['attributes']['media_title'].toString() != null
+            ? json['attributes']['media_title'].toString()
+            : "",
+        source: json['attributes']['source'].toString() != null
+            ? json['attributes']['source'].toString()
+            : "",
         sourceList: json['attributes']['source_list'] != null
             ? List<String>.from(json['attributes']['source_list'])
             : [],
-        soundMode: json['attributes']['sound_mode'].toString(),
+        soundMode: json['attributes']['sound_mode'].toString() != null
+            ? json['attributes']['sound_mode'].toString()
+            : "",
         soundModeList: json['attributes']['sound_mode_list'] != null
             ? List<String>.from(json['attributes']['sound_mode_list'])
             : [],
-        soundModeRaw: json['attributes']['sound_mode_raw'].toString(),
+        soundModeRaw: json['attributes']['sound_mode_raw'].toString() != null
+            ? json['attributes']['sound_mode_raw'].toString()
+            : "",
       );
     } catch (e) {
       log.e("Entity.fromJson newEntity $e");
@@ -287,11 +370,11 @@ class Entity {
     if (gd.entitiesOverride[entityId] != null &&
         gd.entitiesOverride[entityId].icon != null &&
         gd.entitiesOverride[entityId].icon.length > 0) {
-      return getOverrideStateString(gd.entitiesOverride[entityId].icon);
+      return twoStateIcons(gd.entitiesOverride[entityId].icon);
     }
 
-    if (!["", null].contains(icon)) {
-      return getOverrideStateString(icon);
+    if (!["", null, "null"].contains(icon)) {
+      return twoStateIcons(icon);
     }
 
     var deviceClass = entityId.split('.')[0];
@@ -302,7 +385,7 @@ class Entity {
     }
 
     if (gd.classDefaultIcon(deviceClass) != "") {
-      return '${getOverrideStateString(gd.classDefaultIcon(deviceClass))}';
+      return '${twoStateIcons(gd.classDefaultIcon(deviceClass))}';
     }
 
     if (deviceName.contains('automation')) {
@@ -383,45 +466,43 @@ class Entity {
     return 'mdi:help-circle';
   }
 
-  String getOverrideStateString(String normalState) {
-    if (isStateOn && normalState == "mdi:bell") return "mdi:bell-ring";
-    if (!isStateOn && normalState == "mdi:bell-ring") return "mdi:bell";
+  String twoStateIcons(String anyState) {
+    if (isStateOn && anyState == "mdi:bell") return "mdi:bell-ring";
+    if (!isStateOn && anyState == "mdi:bell-ring") return "mdi:bell";
 
-    if (isStateOn && normalState == "mdi:blinds") return "mdi:blinds-open";
-    if (!isStateOn && normalState == "mdi:blinds-open") return "mdi:blinds";
+    if (isStateOn && anyState == "mdi:blinds") return "mdi:blinds-open";
+    if (!isStateOn && anyState == "mdi:blinds-open") return "mdi:blinds";
 
-    if (isStateOn && normalState == "mdi:door-closed") return "mdi:door-open";
-    if (!isStateOn && normalState == "mdi:door-open") return "mdi:door-closed";
+    if (isStateOn && anyState == "mdi:door-closed") return "mdi:door-open";
+    if (!isStateOn && anyState == "mdi:door-open") return "mdi:door-closed";
 
-    if (isStateOn && normalState == "mdi:fan-off") return "mdi:fan";
-    if (!isStateOn && normalState == "mdi:fan") return "mdi:fan-off";
+    if (isStateOn && anyState == "mdi:fan-off") return "mdi:fan";
+    if (!isStateOn && anyState == "mdi:fan") return "mdi:fan-off";
 
-    if (isStateOn && normalState == "mdi:garage") return "mdi:garage-open";
-    if (!isStateOn && normalState == "mdi:garage-open") return "mdi:garage";
+    if (isStateOn && anyState == "mdi:garage") return "mdi:garage-open";
+    if (!isStateOn && anyState == "mdi:garage-open") return "mdi:garage";
 
-    if (isStateOn && normalState == "mdi:lightbulb") return "mdi:lightbulb-on";
-    if (!isStateOn && normalState == "mdi:lightbulb-on") return "mdi:lightbulb";
+    if (isStateOn && anyState == "mdi:lightbulb") return "mdi:lightbulb-on";
+    if (!isStateOn && anyState == "mdi:lightbulb-on") return "mdi:lightbulb";
 
-    if (isStateOn && normalState == "mdi:lightbulb-outline")
+    if (isStateOn && anyState == "mdi:lightbulb-outline")
       return "mdi:lightbulb-on-outline";
-    if (!isStateOn && normalState == "mdi:lightbulb-on-outline")
+    if (!isStateOn && anyState == "mdi:lightbulb-on-outline")
       return "mdi:lightbulb-outline";
 
-    if (isStateOn && normalState == "mdi:lock") return "mdi:lock-open";
-    if (!isStateOn && normalState == "mdi:lock-open") return "mdi:lock";
-    if (isStateOn && normalState == "mdi:window-closed")
-      return "mdi:window-open";
-    if (!isStateOn && normalState == "mdi:window-open")
-      return "mdi:window-closed";
-    if (isStateOn && normalState == "mdi:walk") return "mdi:run";
-    if (!isStateOn && normalState == "mdi:run") return "mdi:walk";
+    if (isStateOn && anyState == "mdi:lock") return "mdi:lock-open";
+    if (!isStateOn && anyState == "mdi:lock-open") return "mdi:lock";
+    if (isStateOn && anyState == "mdi:window-closed") return "mdi:window-open";
+    if (!isStateOn && anyState == "mdi:window-open") return "mdi:window-closed";
+    if (isStateOn && anyState == "mdi:walk") return "mdi:run";
+    if (!isStateOn && anyState == "mdi:run") return "mdi:walk";
 
-    if (isStateOn && normalState == "mdi:window-shutter")
+    if (isStateOn && anyState == "mdi:window-shutter")
       return "mdi:window-shutter-open";
-    if (!isStateOn && normalState == "mdi:window-shutter-open")
+    if (!isStateOn && anyState == "mdi:window-shutter-open")
       return "mdi:window-shutter";
 
-    return normalState;
+    return anyState;
   }
 
   bool get isStateOn {
@@ -437,7 +518,9 @@ class Entity {
       return true;
     }
 
-    if (entityId.split('.')[0] == 'climate' && state.toLowerCase() != 'off') {
+    if ((entityId.split('.')[0] == 'climate' ||
+            entityId.split('.')[0] == 'media_player') &&
+        state.toLowerCase() != 'off') {
       return true;
     }
     return false;

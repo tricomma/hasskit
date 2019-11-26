@@ -33,7 +33,7 @@ class SliverNavigationBar extends StatelessWidget {
           "${generalData.roomList[roomIndex].imageIndex} "
           "${generalData.roomList[roomIndex].tempEntityId} "
           "${generalData.roomList[roomIndex].entities.length} "
-          "${generalData.eventsEntity} "
+          "${generalData.eventsEntities} "
           "${generalData.activeDevicesShow} "
           "${generalData.activeDevicesOn.length} "
           "${generalData.viewMode} ",

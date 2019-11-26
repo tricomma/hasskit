@@ -25,6 +25,7 @@ class EntitySquare extends StatelessWidget {
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
           "${generalData.connectionStatus} " +
+          "${generalData.eventEntity(entityId)} " +
           "${generalData.entities[entityId].getStateDisplay} " +
           "${generalData.entities[entityId].getOverrideName} " +
           "${generalData.entities[entityId].getOverrideIcon} ",
