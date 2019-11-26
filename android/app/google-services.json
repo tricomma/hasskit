@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "",
+        "mobilesdk_app_id": "1:329909384282:android:00a9c821b577c42a301463",
         "android_client_info": {
-          "package_name": ""
+          "package_name": "com.thhkstudio.hasskit"
         }
       },
       "oauth_client": [
