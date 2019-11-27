@@ -88,9 +88,9 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
     }
   }
 
-  Widget alarmIconButton(String icon, String arm_type) {
+  Widget alarmSelectionButton(String text, String arm_type) {
     Color getColor() {
-      return _armType == arm_type ? ThemeInfo.colorIconActive : ThemeInfo.colorIconInActive;
+      return _armType == arm_type ? ThemeInfo.colorIconActive : Colors.redAccent;
     }
 
     return Container(
@@ -101,13 +101,15 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(8.0),
         ),
-        child: Icon(
-          MaterialDesignIcons.getIconDataFromIconName(
-            "mdi:" + icon
-          ),
-          size: 30,
-          color: getColor(),
-        ),
+        child: 
+        // Icon(
+        //   MaterialDesignIcons.getIconDataFromIconName(
+        //     "mdi:" + icon
+        //   ),
+        //   size: 30,
+        //   color: getColor(),
+        // ),
+        new Text(text, style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: getColor()), textAlign: TextAlign.center),
         onPressed: () => {
           setState(() {
             _armType = arm_type;
@@ -127,7 +129,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
           borderRadius: new BorderRadius.circular(8.0),
         ),
         child: new Text(buttonText,
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+            style: TextStyle(fontSize: buttonText.length > 2 ? 15.0 : 20.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
         onPressed: () => buttonPressed(buttonText),
       ),
     );
@@ -237,9 +239,9 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      alarmIconButton("home-circle-outline", "arm_home"),
+                      alarmSelectionButton("Arm Home", "arm_home"),
                       alarmButton("0"),
-                      alarmIconButton("home-export-outline", "arm_away")
+                      alarmSelectionButton("Arm Away", "arm_away")
                     ],
                   )
                 ],
