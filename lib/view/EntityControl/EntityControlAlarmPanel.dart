@@ -19,6 +19,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
   final int keyCodeLength = 4;
   String output = "";
   String _readableState = "";
+  String _armType = "arm_away";
 
   @override
   void initState() {
@@ -31,7 +32,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
       "id": gd.socketId,
       "type": "call_service",
       "domain": entity.entityId.split('.').first,
-      "service": "alarm_arm_away",
+      "service": "alarm_" + _armType,
       "service_data": {"entity_id": entity.entityId, "code": output}
     };
 
@@ -85,6 +86,35 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
     } else {
       return "Armed";
     }
+  }
+
+  Widget alarmIconButton(String icon, String arm_type) {
+    Color getColor() {
+      return _armType == arm_type ? ThemeInfo.colorIconActive : ThemeInfo.colorIconInActive;
+    }
+
+    return Container(
+      height: 50,
+      width: 80,
+      margin: EdgeInsets.all(8),
+      child: new OutlineButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(8.0),
+        ),
+        child: Icon(
+          MaterialDesignIcons.getIconDataFromIconName(
+            "mdi:" + icon
+          ),
+          size: 30,
+          color: getColor(),
+        ),
+        onPressed: () => {
+          setState(() {
+            _armType = arm_type;
+          })
+        },
+      )
+    );
   }
 
   Widget alarmButton(String buttonText) {
@@ -207,9 +237,9 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      alarmButton(""),
+                      alarmIconButton("home-circle-outline", "arm_home"),
                       alarmButton("0"),
-                      alarmButton(""),
+                      alarmIconButton("home-export-outline", "arm_away")
                     ],
                   )
                 ],
