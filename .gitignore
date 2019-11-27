@@ -33,6 +33,7 @@
 lib/generated_plugin_registrant.dart
 
 /DoNotUpload/
+android/app/build.gradle
 android/key.properties
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
