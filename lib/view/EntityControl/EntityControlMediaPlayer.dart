@@ -61,22 +61,6 @@ class EntityControlMediaPlayer extends StatelessWidget {
                   ),
                 ),
               ),
-
-//              entity.entityPicture != ""
-//                  ? Expanded(
-//                      child: Column(
-//                        children: <Widget>[
-//                          Container(
-//                            child: Image.network('${entity.entityPicture}'),
-//                          ),
-//                          AutoSizeText(
-//                            entity.mediaTitle,
-//                            maxLines: 1,
-//                          )
-//                        ],
-//                      ),
-//                    )
-//                  : Container(),
               entity.entityPicture != "" &&
                       entity.entityPicture != "null" &&
                       entity.mediaTitle != "null" &&
