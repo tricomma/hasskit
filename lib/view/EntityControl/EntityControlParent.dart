@@ -92,7 +92,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
         } else if (entity.entityId.contains("binary_sensor.")) {
           entityControl = EntityControlBinarySensor(
             entityId: widget.entityId,
-            rowHeight: 60,
+            rowHeight: 30,
           );
         } else if (entity.entityId.contains("sensor.")) {
           entityControl = EntityControlSensor(entityId: widget.entityId);
@@ -343,7 +343,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                     entity.entityType == EntityType.lightSwitches ||
                             entity.entityType == EntityType.climateFans
                         ? Expanded(
-                            flex: 10,
+                            flex: 100,
                             child: Container(
                               padding: EdgeInsets.all(8),
                               child: EntityControlBinarySensor(

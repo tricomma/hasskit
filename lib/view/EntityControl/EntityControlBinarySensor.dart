@@ -37,7 +37,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
   Widget build(BuildContext context) {
     List<Sensor> binarySensorsReversed = gd.sensors.reversed.toList();
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
       height: gd.mediaQueryHeight - kBottomNavigationBarHeight - kToolbarHeight,
       child: ModalProgressHUD(
         inAsyncCall: inAsyncCall,
@@ -49,6 +49,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
         child: inAsyncCall
             ? Container()
             : ListView.builder(
+                shrinkWrap: true,
                 itemCount: binarySensorsReversed.length,
                 itemBuilder: (BuildContext context, int index) {
                   var rec = binarySensorsReversed[index];
@@ -87,6 +88,17 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                     height: widget.rowHeight,
                     child: Row(
                       children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            '$formattedChangedTime',
+                            style: Theme.of(context).textTheme.subtitle,
+                            textScaleFactor: gd.textScaleFactor,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                        SizedBox(width: widget.rowHeight / 4),
                         Stack(
                           alignment: Alignment.center,
                           children: <Widget>[
@@ -125,14 +137,8 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                           ],
                         ),
                         SizedBox(width: widget.rowHeight / 4),
-                        Text(
-                          '$formattedChangedTime',
-                          style: Theme.of(context).textTheme.subtitle,
-                          textScaleFactor: gd.textScaleFactor,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(width: widget.rowHeight / 4),
                         Expanded(
+                          flex: 2,
                           child: rec.isStateOn
                               ? Text(
                                   '${printDuration(timeDiff, abbreviated: true, tersity: DurationTersity.second, delimiter: ', ', conjugation: ' and ')} ago',
