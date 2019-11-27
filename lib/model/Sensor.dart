@@ -28,9 +28,9 @@ class Sensor {
   }
 
   bool get isStateOn {
-    return state.toLowerCase().contains('on') ||
-        state.toLowerCase().contains('open') ||
-        state.toLowerCase().contains('opened');
+    return !state.toLowerCase().contains('off') &&
+        !state.toLowerCase().contains('unavailable') &&
+        !state.toLowerCase().contains('closed');
   }
 //  Map<String, dynamic> toJson() => {
 //    'friendlyName': friendlyName,

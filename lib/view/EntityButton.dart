@@ -68,7 +68,7 @@ class _EntityButtonDisplayState extends State<EntityButtonDisplay> {
           margin: gd.getClickedStatus(widget.entityId)
               ? EdgeInsets.fromLTRB(3, 3, 3, 3)
               : EdgeInsets.zero,
-          padding: EdgeInsets.all(4 * 3 / gd.itemsPerRow),
+          padding: EdgeInsets.all(4 * 4 / gd.itemsPerRow),
           decoration: BoxDecoration(
             color: gd.entities[widget.entityId].isStateOn
                 ? ThemeInfo.colorBackgroundActive
