@@ -120,6 +120,8 @@ class _HomeAssistantLoginWebViewState extends State<HomeAssistantLoginWebView> {
         var authCode = url.split('code=')[1];
         gd.sendHttpPost(gd.loginDataCurrent.getUrl, authCode, context);
         log.w('authCode [' + authCode + ']');
+        //prevent autoConnect hijack gd.loginDataCurrent.url set back
+        gd.autoConnect = true;
         widget.closePage();
       }
     });

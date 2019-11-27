@@ -37,7 +37,7 @@ class ViewSort extends StatelessWidget {
         row1.length > 0
             ? SliverEntitiesSort(
                 roomIndex: roomIndex,
-                itemPerRow: gd.itemsPerRow,
+                itemPerRow: gd.baseSetting.itemsPerRow,
                 entities: row1,
                 rowNumber: 1,
               )
@@ -56,7 +56,7 @@ class ViewSort extends StatelessWidget {
         row2.length > 0
             ? SliverEntitiesSort(
                 roomIndex: roomIndex,
-                itemPerRow: gd.itemsPerRow,
+                itemPerRow: gd.baseSetting.itemsPerRow,
                 entities: row2,
                 rowNumber: 2,
               )
@@ -75,7 +75,7 @@ class ViewSort extends StatelessWidget {
         row3.length > 0
             ? SliverEntitiesSort(
                 roomIndex: roomIndex,
-                itemPerRow: gd.itemsPerRow,
+                itemPerRow: gd.baseSetting.itemsPerRow,
                 entities: row3,
                 rowNumber: 3,
               )
@@ -94,7 +94,7 @@ class ViewSort extends StatelessWidget {
         row4.length > 0
             ? SliverEntitiesSort(
                 roomIndex: roomIndex,
-                itemPerRow: gd.itemsPerRow,
+                itemPerRow: gd.baseSetting.itemsPerRow,
                 entities: row4,
                 rowNumber: 4,
               )

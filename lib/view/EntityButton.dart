@@ -55,7 +55,8 @@ class _EntityButtonDisplayState extends State<EntityButtonDisplay> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(8 * 3 / gd.itemsPerRow)),
+      borderRadius:
+          BorderRadius.all(Radius.circular(8 * 3 / gd.baseSetting.itemsPerRow)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: AnimatedContainer(
@@ -68,7 +69,7 @@ class _EntityButtonDisplayState extends State<EntityButtonDisplay> {
           margin: gd.getClickedStatus(widget.entityId)
               ? EdgeInsets.fromLTRB(3, 3, 3, 3)
               : EdgeInsets.zero,
-          padding: EdgeInsets.all(4 * 4 / gd.itemsPerRow),
+          padding: EdgeInsets.all(4 * 4 / gd.baseSetting.itemsPerRow),
           decoration: BoxDecoration(
             color: gd.entities[widget.entityId].isStateOn
                 ? ThemeInfo.colorBackgroundActive
@@ -91,7 +92,7 @@ class _EntityButtonDisplayState extends State<EntityButtonDisplay> {
                             : ThemeInfo.textNameButtonInActive,
                         maxLines: 2,
                         textScaleFactor:
-                            gd.textScaleFactor * 3 / gd.itemsPerRow,
+                            gd.textScaleFactor * 3 / gd.baseSetting.itemsPerRow,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -113,7 +114,8 @@ class _EntityButtonDisplayState extends State<EntityButtonDisplay> {
                     ? ThemeInfo.textStatusButtonActive
                     : ThemeInfo.textStatusButtonInActive,
                 maxLines: 1,
-                textScaleFactor: gd.textScaleFactor * 3 / gd.itemsPerRow,
+                textScaleFactor:
+                    gd.textScaleFactor * 3 / gd.baseSetting.itemsPerRow,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -199,7 +201,7 @@ class EntityIcon extends StatelessWidget {
                     color: ThemeInfo.colorBottomSheet,
                   ),
                   textScaleFactor:
-                      gd.textScaleFactor * 0.8 * 3 / gd.itemsPerRow,
+                      gd.textScaleFactor * 0.8 * 3 / gd.baseSetting.itemsPerRow,
                 ),
               ],
             ),

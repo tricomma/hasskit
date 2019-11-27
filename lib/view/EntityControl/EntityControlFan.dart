@@ -155,8 +155,9 @@ class _EntityControlFanState extends State<EntityControlFan> {
                                 "${gd.entities[widget.entityId].getStateDisplay}"),
                             style: ThemeInfo.textStatusButtonActive,
                             maxLines: 1,
-                            textScaleFactor:
-                                gd.textScaleFactor * 3 / gd.itemsPerRow,
+                            textScaleFactor: gd.textScaleFactor *
+                                3 /
+                                gd.baseSetting.itemsPerRow,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                           ),

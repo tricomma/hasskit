@@ -105,7 +105,7 @@ class _SettingPageState extends State<SettingPage> {
       selector: (_, generalData) => ("${generalData.useSSL} | "
           "${generalData.currentTheme} | "
           "${generalData.connectionStatus} | "
-          "${generalData.itemsPerRow} | "
+          "${generalData.baseSetting.itemsPerRow} | "
           "${generalData.loginDataList.length} | "),
       builder: (_, string, __) {
         return Container(
@@ -211,6 +211,10 @@ class _SettingPageState extends State<SettingPage> {
                                                 : "http://" +
                                                     gd.trimUrl(
                                                         _controller.text));
+                                        log.w(
+                                            "gd.loginDataCurrent.url ${gd.loginDataCurrent.url}");
+                                        //prevent autoConnect hijack gd.loginDataCurrent.url
+                                        gd.autoConnect = false;
                                         gd.webViewLoading = true;
                                         showModalBottomSheet(
                                           context: context,
@@ -447,7 +451,7 @@ class _ThemeSelector extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      gd.themeIndex = 1;
+                      gd.baseSetting.themeIndex = 1;
                       gd.baseSettingSave(true);
                     },
                     child: Card(
@@ -481,7 +485,7 @@ class _ThemeSelector extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      gd.themeIndex = 0;
+                      gd.baseSetting.themeIndex = 0;
                       gd.baseSettingSave(true);
                     },
                     child: Card(
@@ -536,7 +540,7 @@ class _LayoutSelector extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      gd.itemsPerRow = 3;
+                      gd.baseSetting.itemsPerRow = 3;
                       gd.baseSettingSave(true);
                     },
                     child: Card(
@@ -561,7 +565,7 @@ class _LayoutSelector extends StatelessWidget {
                             Spacer(),
                             Icon(
                               Icons.check_circle,
-                              color: gd.itemsPerRow == 3
+                              color: gd.baseSetting.itemsPerRow == 3
                                   ? Colors.amber
                                   : Colors.transparent,
                             ),
@@ -574,7 +578,7 @@ class _LayoutSelector extends StatelessWidget {
                 Expanded(
                   child: InkWell(
                     onTap: () {
-                      gd.itemsPerRow = 4;
+                      gd.baseSetting.itemsPerRow = 4;
                       gd.baseSettingSave(true);
                     },
                     child: Card(
@@ -599,7 +603,7 @@ class _LayoutSelector extends StatelessWidget {
                             Spacer(),
                             Icon(
                               Icons.check_circle,
-                              color: gd.itemsPerRow == 4
+                              color: gd.baseSetting.itemsPerRow == 4
                                   ? Colors.amber
                                   : Colors.transparent,
                             ),

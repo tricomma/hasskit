@@ -70,7 +70,7 @@ class SinglePage extends StatelessWidget {
           "${generalData.mediaQueryHeight} |" +
           "${generalData.roomList.length} |" +
           "${generalData.entities.length} |" +
-          "${generalData.activeDevices.length} |" +
+          "${generalData.baseSetting.notificationDevices.length} |" +
           "${generalData.roomList[roomIndex].name} |" +
           "${generalData.roomList[roomIndex].tempEntityId} |" +
           "${generalData.roomList[roomIndex].imageIndex} |" +

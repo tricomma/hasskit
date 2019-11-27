@@ -524,42 +524,7 @@ class GeneralData with ChangeNotifier {
   }
 
   ThemeData get currentTheme {
-    return ThemeInfo.themesData[themeIndex];
-  }
-
-  int _themeIndex = 1;
-
-  int get themeIndex => _themeIndex;
-
-  set themeIndex(int value) {
-    {
-      if (_themeIndex != value) {
-        _themeIndex = value;
-        notifyListeners();
-      }
-    }
-  }
-
-  int _itemsPerRow = 3;
-
-  int get itemsPerRow => _itemsPerRow;
-
-  set itemsPerRow(int value) {
-    {
-      if (_itemsPerRow != value) {
-        _itemsPerRow = value;
-        notifyListeners();
-      }
-    }
-  }
-
-  themeChange() {
-    themeIndex = themeIndex + 1;
-    if (themeIndex >= ThemeInfo.themesData.length) {
-      themeIndex = 0;
-    }
-    log.d('themeIndex $themeIndex');
-    notifyListeners();
+    return ThemeInfo.themesData[baseSetting.themeIndex];
   }
 
   List<LoginData> loginDataList = [];
@@ -644,7 +609,6 @@ class GeneralData with ChangeNotifier {
   }
 
   void loginDataListSortAndSave(String debug) {
-//    log.e('LoginData.loginDataListSortAndSave $debug');
     try {
       if (loginDataList != null && loginDataList.length > 0) {
         loginDataList.sort((a, b) => b.lastAccess.compareTo(a.lastAccess));
@@ -652,10 +616,8 @@ class GeneralData with ChangeNotifier {
         log.d('loginDataList.length ${loginDataList.length}');
       } else {
         gd.saveString('loginDataList', jsonEncode(loginDataList));
-//        log.d('LoginData.loginDataListSortAndSave NO DATA');
       }
       notifyListeners();
-//      loginDataListSortAndSaveFirebaseTimer(10);
     } catch (e) {
       log.w("loginDataListSortAndSave $e");
     }
@@ -1113,7 +1075,7 @@ class GeneralData with ChangeNotifier {
   void roomListSave(bool saveFirebase) {
     _roomListSaveTimer?.cancel();
     _roomListSaveTimer = null;
-    _roomListSaveTimer = Timer(Duration(seconds: 15), () {
+    _roomListSaveTimer = Timer(Duration(seconds: 5), () {
       roomListSaveActually(saveFirebase);
     });
   }
@@ -1512,6 +1474,19 @@ class GeneralData with ChangeNotifier {
     entitiesOverrideSave(true);
   }
 
+  BaseSetting baseSetting = BaseSetting(
+      itemsPerRow: 3,
+      themeIndex: 1,
+      lastArmType: "arm_home",
+      notificationDevices: [],
+      colorPicker: [
+        "0xffEEEEEE",
+        "0xffEF5350",
+        "0xffFFCA28",
+        "0xff66BB6A",
+        "0xff42A5F5",
+        "0xffAB47BC",
+      ]);
   String _baseSettingString;
 
   String get baseSettingString => _baseSettingString;
@@ -1523,43 +1498,23 @@ class GeneralData with ChangeNotifier {
       if (_baseSettingString != null && _baseSettingString.length > 0) {
         log.w('FOUND _baseSettingString $_baseSettingString');
 
-        gd.itemsPerRow = jsonDecode(_baseSettingString)['itemsPerRow'];
-        gd.themeIndex = jsonDecode(_baseSettingString)['themeIndex'];
-
-        var notificationDevices =
-            jsonDecode(_baseSettingString)['notificationDevices'];
-        if (notificationDevices == null || notificationDevices.isEmpty) {
-          baseSetting.notificationDevices = [];
-        } else {
-          baseSetting.notificationDevices = [];
-          gd.activeDevices = [];
-          for (var notificationDevice in notificationDevices) {
-            baseSetting.notificationDevices.add(notificationDevice);
-            gd.activeDevices.add(notificationDevice);
-          }
-        }
-
-        var colorPicker = jsonDecode(_baseSettingString)['colorPicker'];
-        if (colorPicker == null || colorPicker.isEmpty) {
-          baseSetting.colorPicker = baseSettingDefaultColor;
-        } else {
-          baseSetting.colorPicker = [];
-          for (var colorString in colorPicker) {
-            String valueString =
-                colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
-            int value = int.parse(valueString, radix: 16);
-            Color colorPicker = Color(value);
-            baseSetting.colorPicker.add(colorPicker);
-          }
-        }
+        val = jsonDecode(val);
+        baseSetting = BaseSetting.fromJson(val);
       } else {
-        log.w('loadBaseSetting baseSettingString.length == 0');
-        gd.itemsPerRow = 3;
-        gd.themeIndex = 1;
-        gd.activeDevices = [];
-        baseSetting.colorPicker = baseSettingDefaultColor;
+        log.w('CAN NOT FIND baseSetting adding default data');
+        baseSetting.itemsPerRow = 3;
+        baseSetting.themeIndex = 1;
+        baseSetting.lastArmType = "arm_away";
+        baseSetting.notificationDevices = [];
+        baseSetting.colorPicker = [
+          "0xffEEEEEE",
+          "0xffEF5350",
+          "0xffFFCA28",
+          "0xff66BB6A",
+          "0xff42A5F5",
+          "0xffAB47BC",
+        ];
       }
-
       notifyListeners();
     }
   }
@@ -1569,7 +1524,7 @@ class GeneralData with ChangeNotifier {
   void baseSettingSave(bool saveFirebase) {
     _baseSettingSaveTimer?.cancel();
     _baseSettingSaveTimer = null;
-    _baseSettingSaveTimer = Timer(Duration(seconds: 15), () {
+    _baseSettingSaveTimer = Timer(Duration(seconds: 5), () {
       baseSettingSaveActually(saveFirebase);
     });
   }
@@ -1578,16 +1533,12 @@ class GeneralData with ChangeNotifier {
     log.d("baseSettingSaveActually $saveFirebase");
 
     try {
-      List<String> colorPickerString = [];
-      for (var color in baseSetting.colorPicker) {
-        colorPickerString.add(color.toString());
-      }
-
       var jsonBaseSetting = {
-        'itemsPerRow': gd.itemsPerRow,
-        'themeIndex': gd.themeIndex,
-        'notificationDevices': gd.activeDevices,
-        'colorPicker': colorPickerString,
+        'itemsPerRow': baseSetting.itemsPerRow,
+        'themeIndex': baseSetting.themeIndex,
+        'lastArmType': baseSetting.lastArmType,
+        'notificationDevices': baseSetting.notificationDevices,
+        'colorPicker': baseSetting.colorPicker,
       };
 
       var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
@@ -1595,7 +1546,7 @@ class GeneralData with ChangeNotifier {
       url = url.replaceAll(":", "-");
 
       gd.saveString('baseSetting $url', jsonEncode(jsonBaseSetting));
-      log.w('save baseSetting $jsonBaseSetting');
+      log.w('save baseSetting $url $jsonBaseSetting');
 
       if (saveFirebase) baseSettingSaveFirebase();
     } catch (e) {
@@ -1607,6 +1558,15 @@ class GeneralData with ChangeNotifier {
   BaseSetting baseSettingHassKitDemo = BaseSetting(
     themeIndex: 1,
     itemsPerRow: 3,
+    lastArmType: "arm_away",
+    colorPicker: [
+      "0xffEEEEEE",
+      "0xffEF5350",
+      "0xffFFCA28",
+      "0xff66BB6A",
+      "0xff42A5F5",
+      "0xffAB47BC",
+    ],
     notificationDevices: [
       "fan.acorn_fan",
       "climate.air_conditioner_1",
@@ -1635,17 +1595,7 @@ class GeneralData with ChangeNotifier {
       url = url.replaceAll("/", "-");
       url = url.replaceAll(":", "-");
 
-      List<String> colorPickerString = [];
-      for (var color in baseSetting.colorPicker) {
-        colorPickerString.add(color.toString());
-      }
-
-      var jsonBaseSetting = {
-        'itemsPerRow': gd.itemsPerRow,
-        'themeIndex': gd.themeIndex,
-        'notificationDevices': gd.activeDevices,
-        'colorPicker': colorPickerString,
-      };
+      var jsonBaseSetting = baseSetting.toJson();
 
       log.w('baseSettingSaveFirebase $url');
       Firestore.instance
@@ -1683,10 +1633,6 @@ class GeneralData with ChangeNotifier {
               EntityOverride.fromJson(entitiesOverrideIdList);
         }
         log.d('entitiesOverride.length ${entitiesOverride.length}');
-
-        for (int i = 0; i < entitiesOverride.length; i++) {
-          log.d("${entitiesOverride[i]}");
-        }
       } else {
         log.w('CAN NOT FIND entitiesOverride');
         entitiesOverride = {};
@@ -1701,7 +1647,7 @@ class GeneralData with ChangeNotifier {
   void entitiesOverrideSave(bool saveFirebase) {
     _entitiesOverrideSaveTimer?.cancel();
     _entitiesOverrideSaveTimer = null;
-    _entitiesOverrideSaveTimer = Timer(Duration(seconds: 15), () {
+    _entitiesOverrideSaveTimer = Timer(Duration(seconds: 5), () {
       entitiesOverrideSaveActually(saveFirebase);
     });
   }
@@ -1894,6 +1840,7 @@ class GeneralData with ChangeNotifier {
   FirebaseUser get firebaseUser => _firebaseUser;
   set firebaseUser(FirebaseUser val) {
     if (_firebaseUser != val) {
+      log.e("_firebaseUser != val _firebaseUser $_firebaseUser val $val");
       _firebaseUser = val;
       getSettings("_firebaseUser != null");
       createFirebaseDocument();
@@ -1981,15 +1928,16 @@ class GeneralData with ChangeNotifier {
       if (gd.snapshots != null) {
         await for (var documents in gd.snapshots) {
           if (firebaseUser != null && documents.data != null) {
-            log.d("NEW streamData ${documents.data.length}");
-            gd.entitiesOverrideString = "";
-            gd.entitiesOverrideString = documents.data["entitiesOverride"];
+            log.d("getStreamData streamData ${documents.data.length}");
+
             var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
             url = url.replaceAll("/", "-");
             url = url.replaceAll(":", "-");
-            gd.baseSettingString = "";
+
+            gd.entitiesOverrideString = documents.data["entitiesOverride"];
+
             gd.baseSettingString = documents.data["baseSetting $url"];
-            gd.roomListString = "";
+
             gd.roomListString = documents.data["roomList $url"];
           }
         }
@@ -2069,9 +2017,11 @@ class GeneralData with ChangeNotifier {
         var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
         url = url.replaceAll("/", "-");
         url = url.replaceAll(":", "-");
+
         //force the trigger reset
         gd.entitiesOverrideString = "";
         gd.entitiesOverrideString = ds["entitiesOverride"];
+
         //force the trigger reset
         gd.baseSettingString = "";
         gd.baseSettingString = ds['baseSetting $url'];
@@ -2084,6 +2034,11 @@ class GeneralData with ChangeNotifier {
             gd.roomListString = json.encode(gd.roomListHassKitDemo);
           } else {
             gd.roomListString = json.encode(gd.roomListDefault);
+          }
+        }
+        if (gd.baseSetting == null) {
+          if (gd.currentUrl == "http://hasskitdemo.duckdns.org:8123") {
+            gd.baseSetting = gd.baseSettingHassKitDemo;
           }
         }
       },
@@ -2211,12 +2166,9 @@ class GeneralData with ChangeNotifier {
     }
   }
 
-  List<String> activeDevices = [];
-
   List<Entity> get activeDevicesOn {
     List<Entity> entities = [];
-    if (activeDevices == null) activeDevices = [];
-    for (String notificationDevice in gd.activeDevices) {
+    for (String notificationDevice in baseSetting.notificationDevices) {
       if (gd.entities[notificationDevice] != null &&
           gd.entities[notificationDevice].isStateOn) {
         entities.add(gd.entities[notificationDevice]);
@@ -2273,16 +2225,22 @@ class GeneralData with ChangeNotifier {
   }
 
   ScrollController viewNormalController = ScrollController();
-}
 
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
-    }
-    return int.parse(hexColor, radix: 16);
+  Color stringToColor(String colorString) {
+//    String valueString =
+//        colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
+
+    colorString = colorString.replaceAll("0x", "");
+    colorString = colorString.toUpperCase(); // kind of hacky..
+    int value = int.parse(colorString, radix: 16);
+    Color color = Color(value);
+    return color;
   }
 
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+  String colorToString(Color color) {
+    String colorString = color.toString();
+    colorString = colorString.replaceAll("Color(0x", "");
+    colorString = colorString.replaceAll(")", "");
+    return colorString;
+  }
 }

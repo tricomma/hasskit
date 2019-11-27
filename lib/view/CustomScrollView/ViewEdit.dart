@@ -477,24 +477,29 @@ class __EditItemsState extends State<_EditItems> {
                 ),
                 InkWell(
                   onTap: () {
-                    if (gd.activeDevices.contains(entities[index].entityId)) {
-                      gd.activeDevices.remove(entities[index].entityId);
+                    if (gd.baseSetting.notificationDevices
+                        .contains(entities[index].entityId)) {
+                      gd.baseSetting.notificationDevices
+                          .remove(entities[index].entityId);
                       gd.baseSettingSave(true);
                       setState(() {});
                     } else if (gd
                         .activeDevicesSupportedType(entities[index].entityId)) {
-                      gd.activeDevices.add(entities[index].entityId);
+                      gd.baseSetting.notificationDevices
+                          .add(entities[index].entityId);
                       gd.baseSettingSave(true);
                       setState(() {});
                     }
                     gd.delayCancelEditModeTimer(300);
                   },
                   child: Icon(
-                    gd.activeDevices.contains(entities[index].entityId)
+                    gd.baseSetting.notificationDevices
+                            .contains(entities[index].entityId)
                         ? Icons.notifications
                         : Icons.notifications_off,
                     size: 28,
-                    color: gd.activeDevices.contains(entities[index].entityId)
+                    color: gd.baseSetting.notificationDevices
+                            .contains(entities[index].entityId)
                         ? Theme.of(context).textTheme.title.color
                         : (gd.activeDevicesSupportedType(
                                 entities[index].entityId))

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
+import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,6 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
   final int keyCodeLength = 4;
   String output = "";
   String _readableState = "";
-  String _armType = "arm_away";
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
       "id": gd.socketId,
       "type": "call_service",
       "domain": entity.entityId.split('.').first,
-      "service": "alarm_" + _armType,
+      "service": "alarm_" + gd.baseSetting.lastArmType,
       "service_data": {"entity_id": entity.entityId, "code": output}
     };
 
@@ -88,8 +88,10 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
   }
 
   Widget alarmSelectionButton(String text, String armType) {
+    log.d(
+        "text $text armType $armType gd.baseSetting.lastArmType ${gd.baseSetting.lastArmType}");
     Color getColor() {
-      return _armType == armType
+      return gd.baseSetting.lastArmType == armType
           ? Theme.of(context).textTheme.body1.color
           : Theme.of(context).textTheme.body1.color.withOpacity(0.25);
     }
@@ -98,7 +100,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         height: 50,
         width: 80,
         decoration: BoxDecoration(
-          color: _armType == armType
+          color: gd.baseSetting.lastArmType == armType
               ? Theme.of(context).textTheme.body1.color.withOpacity(0.25)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
@@ -117,7 +119,10 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
               textAlign: TextAlign.center),
           onPressed: () => {
             setState(() {
-              _armType = armType;
+              if (gd.baseSetting.lastArmType != armType) {
+                gd.baseSetting.lastArmType = armType;
+                gd.baseSettingSave(true);
+              }
             })
           },
         ));

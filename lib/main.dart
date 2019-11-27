@@ -194,7 +194,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
           "${generalData.viewMode} | " +
-          "${generalData.itemsPerRow} | " +
+          "${generalData.baseSetting.itemsPerRow} | " +
           "${generalData.mediaQueryHeight} | " +
           "${generalData.connectionStatus} | " +
           "${generalData.roomList.length} | ",

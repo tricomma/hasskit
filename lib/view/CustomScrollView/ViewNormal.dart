@@ -58,7 +58,7 @@ class ViewNormal extends StatelessWidget {
                 padding: EdgeInsets.all(12),
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: gd.itemsPerRow,
+                    crossAxisCount: gd.baseSetting.itemsPerRow,
                     mainAxisSpacing: 8.0,
                     crossAxisSpacing: 10.0,
                     childAspectRatio: 1,
@@ -73,7 +73,7 @@ class ViewNormal extends StatelessWidget {
                         child: Opacity(
                           opacity: 0.5,
                           child: IconButton(
-                            iconSize: 60 * 3 / gd.itemsPerRow,
+                            iconSize: 60 * 3 / gd.baseSetting.itemsPerRow,
                             onPressed: () {
                               gd.viewMode = ViewMode.edit;
                             },
@@ -95,7 +95,7 @@ class ViewNormal extends StatelessWidget {
         row1.length > 0
             ? SliverEntitiesNormal(
                 roomIndex: roomIndex,
-                itemPerRow: gd.itemsPerRow,
+                itemPerRow: gd.baseSetting.itemsPerRow,
                 entities: row1,
               )
             : gd.emptySliver,
@@ -112,7 +112,7 @@ class ViewNormal extends StatelessWidget {
         row2.length > 0
             ? SliverEntitiesNormal(
                 roomIndex: roomIndex,
-                itemPerRow: gd.itemsPerRow,
+                itemPerRow: gd.baseSetting.itemsPerRow,
                 entities: row2,
               )
             : gd.emptySliver,
@@ -129,7 +129,7 @@ class ViewNormal extends StatelessWidget {
         row3.length > 0
             ? SliverEntitiesNormal(
                 roomIndex: roomIndex,
-                itemPerRow: gd.itemsPerRow,
+                itemPerRow: gd.baseSetting.itemsPerRow,
                 entities: row3,
               )
             : gd.emptySliver,
@@ -146,7 +146,7 @@ class ViewNormal extends StatelessWidget {
         row4.length > 0
             ? SliverEntitiesNormal(
                 roomIndex: roomIndex,
-                itemPerRow: gd.itemsPerRow,
+                itemPerRow: gd.baseSetting.itemsPerRow,
                 entities: row4,
               )
             : gd.emptySliver,

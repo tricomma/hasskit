@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -25,11 +24,12 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
   Widget build(BuildContext context) {
     List<Widget> widgets = [];
 
-    for (int i = 0; i < baseSetting.colorPicker.length; i++) {
+    for (int i = 0; i < gd.baseSetting.colorPicker.length; i++) {
       var widget = InkWell(
         onTap: () {
           selectedIndex = i;
-          pickerColor = baseSetting.colorPicker[selectedIndex];
+          pickerColor =
+              gd.stringToColor(gd.baseSetting.colorPicker[selectedIndex]);
           //really don't know why index 0 cant change color, maybe addon bug?
           if (i != 0) {
             Flushbar(
@@ -44,12 +44,13 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
         },
         onLongPress: () {
           selectedIndex = i;
-          if (i != 0) {
+//          if (i != 0) {
 //          log.d("onLongPress pickerColor $pickerColor");
 //          log.d("selectedIndex selectedIndex $selectedIndex");
-            pickerColor = baseSetting.colorPicker[selectedIndex];
-            openColorPicker();
-          }
+          pickerColor =
+              gd.stringToColor(gd.baseSetting.colorPicker[selectedIndex]);
+          openColorPicker();
+//          }
         },
         child: Container(
           margin: EdgeInsets.all(5),
@@ -60,7 +61,7 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
 //                            border: Border.all(width: 0, color: Colors.white),
           ),
           child: CircleAvatar(
-            backgroundColor: baseSetting.colorPicker[i],
+            backgroundColor: gd.stringToColor(gd.baseSetting.colorPicker[i]),
           ),
         ),
       );
@@ -112,13 +113,18 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
             onPressed: () {
               setState(
                 () {
-                  baseSetting.colorPicker[selectedIndex] =
+                  gd.baseSetting.colorPicker[selectedIndex] =
                       baseSettingDefaultColor[selectedIndex];
-                  pickerColor = baseSetting.colorPicker[selectedIndex];
+                  pickerColor = gd.stringToColor(
+                    baseSettingDefaultColor[selectedIndex],
+                  );
+                  log.d(
+                      "AlertDialog Reset selectedIndex $selectedIndex pickerColor $pickerColor BaseSetting.baseSettingDefaultColor[selectedIndex] ${baseSettingDefaultColor[selectedIndex]}");
                 },
               );
               sendColor();
               Navigator.of(context).pop();
+              gd.baseSettingSave(true);
             },
           ),
           RaisedButton(
@@ -127,8 +133,9 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
               setState(
                 () {
                   log.d(
-                      "RaisedButton selectedIndex $selectedIndex pickerColor $pickerColor");
-                  baseSetting.colorPicker[selectedIndex] = pickerColor;
+                      "AlertDialog OK selectedIndex $selectedIndex pickerColor $pickerColor");
+                  gd.baseSetting.colorPicker[selectedIndex] =
+                      gd.colorToString(pickerColor);
                 },
               );
               sendColor();
