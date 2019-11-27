@@ -289,7 +289,7 @@ class GeneralData with ChangeNotifier {
       return;
     }
 
-    if (newEntity.entityId.contains("media_player")) {
+    if (newEntity.entityId.contains("alarm_control_panel")) {
       log.e(
           "\n\nsocketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity.state}] [volumeLevel: ${newEntity.volumeLevel}] [isVolumeMuted: ${newEntity.isVolumeMuted}] ${newEntity.supportedFeatures} ${newEntity.getSupportedFeaturesMediaPlayer}");
       log.w("socketSubscribeEvents message $message");

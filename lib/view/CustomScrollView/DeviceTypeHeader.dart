@@ -51,18 +51,10 @@ class DeviceTypeHeaderEditNormal extends StatelessWidget {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: Stack(
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.bottomRight,
               children: <Widget>[
-//                Column(
-//                  children: <Widget>[
-//                    Container(
-//                      height: 5,
-//                      color: Colors.red,
-//                    ),
-//                    Container(height: 5),
-//                  ],
-//                ),
                 Container(
+                  height: 2,
                   padding: icon.icon == Icons.looks_one ||
                           icon.icon == Icons.looks_two ||
                           icon.icon == Icons.looks_3 ||
@@ -74,7 +66,7 @@ class DeviceTypeHeaderEditNormal extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.topRight,
                         colors: [
-                          ThemeInfo.colorBottomSheet.withOpacity(0.4),
+                          ThemeInfo.colorBottomSheet.withOpacity(0.0),
                           ThemeInfo.colorBottomSheet.withOpacity(0.8),
                           ThemeInfo.colorBottomSheet.withOpacity(0.7),
                           ThemeInfo.colorBottomSheet.withOpacity(0.6),
@@ -86,13 +78,14 @@ class DeviceTypeHeaderEditNormal extends StatelessWidget {
                           ThemeInfo.colorBottomSheet.withOpacity(0.0),
                         ]),
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Opacity(opacity: 0.5, child: icon),
-                      SizedBox(width: 8),
-                      Text("$title"),
-                    ],
-                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    SizedBox(width: 10),
+                    Opacity(opacity: 0.5, child: icon),
+                    SizedBox(width: 8),
+                    Text("$title"),
+                  ],
                 ),
               ],
             ),

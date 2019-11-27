@@ -124,15 +124,15 @@ class _EntityControlParentState extends State<EntityControlParent> {
                         alignment: Alignment.center,
                         children: <Widget>[
                           Container(
-                            width: gd.mediaQueryWidth - 100,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                color: ThemeInfo.colorBottomSheetReverse,
-                                width: 1.0,
-                              ),
+//                              border: Border.all(
+//                                color: ThemeInfo.colorBottomSheetReverse,
+//                                width: 1.0,
+//                              ),
                             ),
                             height: 40,
+                            margin: EdgeInsets.symmetric(horizontal: 65),
                           ),
                           Positioned(
                             left: 10,
@@ -210,7 +210,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                   children: <Widget>[
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 60),
+                                        SizedBox(width: 65),
                                         Expanded(
                                           child: Container(
                                             width: double.infinity,
@@ -261,7 +261,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 40),
+                                        SizedBox(width: 65),
                                       ],
                                     ),
                                     Container(

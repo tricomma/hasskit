@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
@@ -88,35 +87,40 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
     }
   }
 
-  Widget alarmSelectionButton(String text, String arm_type) {
+  Widget alarmSelectionButton(String text, String armType) {
     Color getColor() {
-      return _armType == arm_type ? ThemeInfo.colorIconActive : Colors.redAccent;
+      return _armType == armType
+          ? Theme.of(context).textTheme.body1.color
+          : Theme.of(context).textTheme.body1.color.withOpacity(0.25);
     }
 
     return Container(
-      height: 50,
-      width: 80,
-      margin: EdgeInsets.all(8),
-      child: new OutlineButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(8.0),
+        height: 50,
+        width: 80,
+        decoration: BoxDecoration(
+          color: _armType == armType
+              ? Theme.of(context).textTheme.body1.color.withOpacity(0.25)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(8.0),
         ),
-        child: 
-        // Icon(
-        //   MaterialDesignIcons.getIconDataFromIconName(
-        //     "mdi:" + icon
-        //   ),
-        //   size: 30,
-        //   color: getColor(),
-        // ),
-        new Text(text, style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: getColor()), textAlign: TextAlign.center),
-        onPressed: () => {
-          setState(() {
-            _armType = arm_type;
-          })
-        },
-      )
-    );
+        margin: EdgeInsets.all(8),
+        child: new OutlineButton(
+          shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(8.0),
+          ),
+          child: new Text(text,
+              style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold,
+                color: getColor(),
+              ),
+              textAlign: TextAlign.center),
+          onPressed: () => {
+            setState(() {
+              _armType = armType;
+            })
+          },
+        ));
   }
 
   Widget alarmButton(String buttonText) {
@@ -128,8 +132,13 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(8.0),
         ),
-        child: new Text(buttonText,
-            style: TextStyle(fontSize: buttonText.length > 2 ? 15.0 : 20.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+        child: new Text(
+          buttonText,
+          style: TextStyle(
+              fontSize: buttonText.length > 2 ? 15.0 : 20.0,
+              fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
         onPressed: () => buttonPressed(buttonText),
       ),
     );
