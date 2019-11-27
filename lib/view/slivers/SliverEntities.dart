@@ -8,8 +8,8 @@ import 'package:hasskit/view/EntityControl/EntityControlCameraVideoPlayer.dart';
 import 'package:reorderables/reorderables.dart';
 
 import '../EntityControl/EntityControlParent.dart';
-import '../EntityRectangle.dart';
-import '../EntitySquare.dart';
+import '../EntityCamera.dart';
+import '../EntityButton.dart';
 
 class SliverEntitiesNormal extends StatelessWidget {
   final int roomIndex;
@@ -30,12 +30,12 @@ class SliverEntitiesNormal extends StatelessWidget {
           crossAxisCount: itemPerRow,
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
-          childAspectRatio: itemPerRow <= 2 ? 8 / 5.5 : 8 / 8,
+          childAspectRatio: itemPerRow <= 2 ? 8 / 5.5 : 8 / 5,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             return itemPerRow <= 2
-                ? EntityRectangle(
+                ? EntityCamera(
                     entityId: entities[index].entityId,
                     borderColor: Colors.transparent,
                     onTapCallback: () {
@@ -83,7 +83,7 @@ class SliverEntitiesNormal extends StatelessWidget {
                       );
                     },
                   )
-                : EntitySquare(
+                : EntityButton(
                     entityId: entities[index].entityId,
                     borderColor: Colors.transparent,
                     onTapCallback: () {
@@ -176,12 +176,12 @@ class SliverEntitiesEdit extends StatelessWidget {
           crossAxisCount: itemPerRow,
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
-          childAspectRatio: itemPerRow == 1 ? 8 / 5 : 8 / 8,
+          childAspectRatio: itemPerRow == 1 ? 8 / 5 : 8 / 5,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             return itemPerRow == 1
-                ? EntityRectangle(
+                ? EntityCamera(
                     entityId: entities[index].entityId,
                     borderColor: borderColor,
                     onTapCallback: () {
@@ -215,7 +215,7 @@ class SliverEntitiesEdit extends StatelessWidget {
                       }
                     },
                   )
-                : EntitySquare(
+                : EntityButton(
                     entityId: entities[index].entityId,
                     borderColor: borderColor,
                     onTapCallback: () {
@@ -286,14 +286,14 @@ class SliverEntitiesSort extends StatelessWidget {
         scale: 1,
         child: Container(
           width: width,
-          height: itemPerRow == 1 ? width / 8 * 5 : width,
+          height: itemPerRow == 1 ? width / 8 * 5 : width / 8 * 5,
           child: itemPerRow == 1
-              ? EntityRectangle(
+              ? EntityCamera(
                   entityId: entity.entityId,
                   borderColor: ThemeInfo.colorIconActive,
                   onTapCallback: null,
                   onLongPressCallback: null)
-              : EntitySquare(
+              : EntityButton(
                   entityId: entity.entityId,
                   borderColor: ThemeInfo.colorIconActive,
                   onTapCallback: null,

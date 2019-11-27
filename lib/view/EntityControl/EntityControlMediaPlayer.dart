@@ -669,7 +669,7 @@ class MediaPlayerSource extends StatelessWidget {
     for (String source in entity.sourceList) {
       var container = Container(
         alignment: entity.soundModeList.length > 0
-            ? Alignment.center
+            ? Alignment.centerRight
             : Alignment.center,
         child: (AutoSizeText(
           source,
@@ -680,14 +680,14 @@ class MediaPlayerSource extends StatelessWidget {
       sourceList.add(container);
     }
     return Container(
-      margin: EdgeInsets.all(8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4),
         border: Border.all(
-          color: ThemeInfo.pickerActivateStyle.color,
+//          color: ThemeInfo.pickerActivateStyle.color,
           width: 1.0,
         ),
       ),
+      margin: EdgeInsets.all(1),
       child: Column(
         children: <Widget>[
 //          Container(
@@ -717,17 +717,17 @@ class MediaPlayerSource extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    ThemeInfo.colorIconInActive.withOpacity(0),
-                    ThemeInfo.colorIconInActive.withOpacity(0.5),
-                    ThemeInfo.colorIconInActive.withOpacity(0),
+                    Colors.black.withOpacity(0.5),
+                    Colors.black.withOpacity(0.0),
+                    Colors.black.withOpacity(0.5),
                   ]),
             ),
             child: CupertinoPicker(
               squeeze: 1.45,
               diameterRatio: 1.1,
-              offAxisFraction: 0,
+              offAxisFraction: -0.5,
               scrollController: sourceModeController,
-              magnification: 0.7,
+              magnification: 1,
               backgroundColor: Colors.transparent,
               children: sourceList,
               itemExtent: 32, //height of each item
@@ -775,8 +775,9 @@ class MediaPlayerSoundMode extends StatelessWidget {
 
     for (String source in entity.soundModeList) {
       var container = Container(
-        alignment:
-            entity.sourceList.length > 0 ? Alignment.center : Alignment.center,
+        alignment: entity.sourceList.length > 0
+            ? Alignment.centerLeft
+            : Alignment.center,
         child: (AutoSizeText(
           source,
           style: Theme.of(context).textTheme.body1,
@@ -788,13 +789,13 @@ class MediaPlayerSoundMode extends StatelessWidget {
     }
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(4),
         border: Border.all(
-          color: ThemeInfo.pickerActivateStyle.color,
+//          color: ThemeInfo.pickerActivateStyle.color,
           width: 1.0,
         ),
       ),
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.all(1),
       child: Column(
         children: <Widget>[
 //          Container(
@@ -824,17 +825,17 @@ class MediaPlayerSoundMode extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    ThemeInfo.colorIconInActive.withOpacity(0),
-                    ThemeInfo.colorIconInActive.withOpacity(0.5),
-                    ThemeInfo.colorIconInActive.withOpacity(0),
+                    Colors.black.withOpacity(0.5),
+                    Colors.black.withOpacity(0.0),
+                    Colors.black.withOpacity(0.5),
                   ]),
             ),
             child: CupertinoPicker(
               squeeze: 1.45,
               diameterRatio: 1.1,
-              offAxisFraction: 0,
+              offAxisFraction: 0.5,
               scrollController: soundModeController,
-              magnification: 0.7,
+              magnification: 1,
               backgroundColor: Colors.transparent,
               children: sourceList,
               itemExtent: 32, //height of each item

@@ -7,13 +7,13 @@ import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/model/CameraThumbnail.dart';
 import 'package:provider/provider.dart';
 
-class EntityRectangle extends StatelessWidget {
+class EntityCamera extends StatelessWidget {
   final String entityId;
   final Color borderColor;
   final Function onTapCallback;
   final Function onLongPressCallback;
 
-  const EntityRectangle({
+  const EntityCamera({
     @required this.entityId,
     @required this.borderColor,
     @required this.onTapCallback,

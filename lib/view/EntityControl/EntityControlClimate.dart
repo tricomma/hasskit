@@ -166,25 +166,33 @@ class EntityControlClimate extends StatelessWidget {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/gradient-1.png"),
-                          fit: BoxFit.fill),
-                      color: ThemeInfo.colorBottomSheetReverse.withOpacity(0.2),
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.5),
+                            Colors.black.withOpacity(0.0),
+                            Colors.black.withOpacity(0.5),
+                          ]),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(8),
                         bottomLeft: Radius.circular(8),
+                      ),
+                      border: Border.all(
+//          color: ThemeInfo.pickerActivateStyle.color,
+                        width: 1.0,
                       ),
                     ),
                     height: 120,
                     child: CupertinoPicker(
                       squeeze: 1.45,
-                      diameterRatio: 2,
+                      diameterRatio: 1.1,
                       offAxisFraction: -0.5,
                       scrollController: hvacModesScrollController,
-                      magnification: 0.7,
+                      magnification: 1,
                       backgroundColor: Colors.transparent,
                       children: hvacModes,
-                      itemExtent: 60, //height of each item
+                      itemExtent: 32, //height of each item
                       looping: true,
                       onSelectedItemChanged: (int index) {
                         hvacModeIndex = index;
@@ -216,24 +224,32 @@ class EntityControlClimate extends StatelessWidget {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/images/gradient-1.png"),
-                          fit: BoxFit.fill),
-                      color: ThemeInfo.colorBottomSheetReverse.withOpacity(0.2),
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.black.withOpacity(0.5),
+                            Colors.black.withOpacity(0.0),
+                            Colors.black.withOpacity(0.5),
+                          ]),
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(8),
                           bottomRight: Radius.circular(8)),
+                      border: Border.all(
+//          color: ThemeInfo.pickerActivateStyle.color,
+                        width: 1.0,
+                      ),
                     ),
                     height: 120,
                     child: CupertinoPicker(
                       squeeze: 1.45,
-                      diameterRatio: 2,
+                      diameterRatio: 1.1,
                       offAxisFraction: 0.5,
                       scrollController: fanModesScrollController,
-                      magnification: 0.7,
+                      magnification: 1,
                       backgroundColor: Colors.transparent,
                       children: fanModes,
-                      itemExtent: 60, //height of each item
+                      itemExtent: 32, //height of each item
                       looping: true,
                       onSelectedItemChanged: (int index) {
                         fanModeIndex = index;

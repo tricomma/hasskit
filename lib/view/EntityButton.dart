@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
@@ -7,13 +6,13 @@ import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:provider/provider.dart';
 
-class EntitySquare extends StatelessWidget {
+class EntityButton extends StatelessWidget {
   final String entityId;
   final Function onTapCallback;
   final Function onLongPressCallback;
   final Color borderColor;
   final String indicatorIcon;
-  const EntitySquare(
+  const EntityButton(
       {@required this.entityId,
       @required this.onTapCallback,
       @required this.onLongPressCallback,
@@ -35,7 +34,7 @@ class EntitySquare extends StatelessWidget {
           child: InkWell(
             onTap: onTapCallback,
             onLongPress: onLongPressCallback,
-            child: EntitySquareDisplay(entityId: entityId),
+            child: EntityButtonDisplay(entityId: entityId),
           ),
         );
       },
@@ -43,20 +42,20 @@ class EntitySquare extends StatelessWidget {
   }
 }
 
-class EntitySquareDisplay extends StatefulWidget {
-  const EntitySquareDisplay({@required this.entityId});
+class EntityButtonDisplay extends StatefulWidget {
+  const EntityButtonDisplay({@required this.entityId});
 
   final String entityId;
 
   @override
-  _EntitySquareDisplayState createState() => _EntitySquareDisplayState();
+  _EntityButtonDisplayState createState() => _EntityButtonDisplayState();
 }
 
-class _EntitySquareDisplayState extends State<EntitySquareDisplay> {
+class _EntityButtonDisplayState extends State<EntityButtonDisplay> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(16 * 3 / gd.itemsPerRow)),
+      borderRadius: BorderRadius.all(Radius.circular(8 * 3 / gd.itemsPerRow)),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: AnimatedContainer(
@@ -69,10 +68,8 @@ class _EntitySquareDisplayState extends State<EntitySquareDisplay> {
           margin: gd.getClickedStatus(widget.entityId)
               ? EdgeInsets.fromLTRB(3, 3, 3, 3)
               : EdgeInsets.zero,
-          padding: EdgeInsets.all(8 * 3 / gd.itemsPerRow),
+          padding: EdgeInsets.all(4 * 3 / gd.itemsPerRow),
           decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.all(Radius.circular(16 * 3 / gd.itemsPerRow)),
             color: gd.entities[widget.entityId].isStateOn
                 ? ThemeInfo.colorBackgroundActive
                 : ThemeInfo.colorEntityBackground,
@@ -81,44 +78,43 @@ class _EntitySquareDisplayState extends State<EntitySquareDisplay> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                flex: 2,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    EntityIcon(
-                      entityId: widget.entityId,
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        "${gd.textToDisplay(gd.entities[widget.entityId].getOverrideName)}",
+                        style: gd.entities[widget.entityId].isStateOn
+                            ? ThemeInfo.textNameButtonActive
+                            : ThemeInfo.textNameButtonInActive,
+                        maxLines: 2,
+                        textScaleFactor:
+                            gd.textScaleFactor * 3 / gd.itemsPerRow,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     Expanded(
-                      child: EntityIconStatus(entityId: widget.entityId),
+                      flex: 2,
+                      child: Stack(
+                        children: <Widget>[
+                          EntityIcon(entityId: widget.entityId),
+                          EntityIconStatus(entityId: widget.entityId),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    AutoSizeText(
-                      "${gd.textToDisplay(gd.entities[widget.entityId].getOverrideName)}",
-                      style: gd.entities[widget.entityId].isStateOn
-                          ? ThemeInfo.textNameButtonActive
-                          : ThemeInfo.textNameButtonInActive,
-                      maxLines: 2,
-                      textScaleFactor: gd.textScaleFactor * 3 / gd.itemsPerRow,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    AutoSizeText(
-                      "${gd.textToDisplay(gd.entities[widget.entityId].getStateDisplay)}",
-                      style: gd.entities[widget.entityId].isStateOn
-                          ? ThemeInfo.textStatusButtonActive
-                          : ThemeInfo.textStatusButtonInActive,
-                      maxLines: 2,
-                      textScaleFactor: gd.textScaleFactor * 3 / gd.itemsPerRow,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+              Text(
+                "${gd.textToDisplay(gd.entities[widget.entityId].getStateDisplay)}",
+                style: gd.entities[widget.entityId].isStateOn
+                    ? ThemeInfo.textStatusButtonActive
+                    : ThemeInfo.textStatusButtonInActive,
+                maxLines: 1,
+                textScaleFactor: gd.textScaleFactor * 3 / gd.itemsPerRow,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -138,24 +134,40 @@ class EntityIconStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      alignment: Alignment.centerRight,
-      child: (gd.showSpin || gd.entities[entityId].state.contains("..."))
-          ? SpinKitThreeBounce(
-              size: 100,
-              color: ThemeInfo.colorIconActive,
-            )
-          : gd.viewMode == ViewMode.sort
-              ? Icon(
-                  MaterialDesignIcons.getIconDataFromIconName(
-                      "mdi:cursor-move"),
-                  size: 100,
-                  color: Colors.amber.withOpacity(0.8),
-                )
-              : Container(
-                  width: 1,
-                  height: 1,
-                ),
+    return AspectRatio(
+      aspectRatio: 1,
+      child: FittedBox(
+        alignment: Alignment.centerRight,
+        child: (gd.showSpin || gd.entities[entityId].state.contains("..."))
+            ? SpinKitThreeBounce(
+                size: 100,
+                color: ThemeInfo.colorIconActive,
+              )
+            : gd.viewMode == ViewMode.sort
+//                ? Stack(
+//                    children: <Widget>[
+//                      Container(
+//                        width: 100,
+//                        height: 100,
+//                        decoration: BoxDecoration(
+//                            color: Colors.white,
+//                            borderRadius: BorderRadius.circular(8)),
+//                      ),
+//                      SpinKitFadingGrid(
+//                        size: 100,
+//                        color: Colors.black,
+//                      ),
+//                      Container(),
+//                    ],
+//                  )
+                ? Icon(
+                    MaterialDesignIcons.getIconDataFromIconName(
+                        "mdi:cursor-move"),
+                    size: 100,
+                    color: Colors.amber.withOpacity(0.8),
+                  )
+                : Container(),
+      ),
     );
   }
 }
