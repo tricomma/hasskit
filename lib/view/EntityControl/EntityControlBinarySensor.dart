@@ -12,8 +12,11 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class EntityControlBinarySensor extends StatefulWidget {
   final String entityId;
-
-  const EntityControlBinarySensor({@required this.entityId});
+  final double rowHeight;
+  const EntityControlBinarySensor({
+    @required this.entityId,
+    @required this.rowHeight,
+  });
 
   @override
   _EntityControlBinarySensorState createState() =>
@@ -81,7 +84,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                   }
 
                   return Container(
-                    height: 60,
+                    height: widget.rowHeight,
                     child: Row(
                       children: <Widget>[
                         Stack(
@@ -92,13 +95,13 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                                 Container(
                                   alignment: Alignment.topCenter,
                                   width: 2,
-                                  height: 30,
+                                  height: widget.rowHeight / 2,
                                   color: topColor,
                                 ),
                                 Container(
                                   alignment: Alignment.topCenter,
                                   width: 2,
-                                  height: 30,
+                                  height: widget.rowHeight / 2,
                                   color: bottomColor,
                                 ),
                               ],
@@ -106,8 +109,8 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                             Container(
                               padding: EdgeInsets.all(2),
                               alignment: Alignment.center,
-                              width: 50,
-                              height: 50,
+                              width: widget.rowHeight / 6 * 5,
+                              height: widget.rowHeight / 6 * 5,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: binarySensorsReversed[index].isStateOn
@@ -121,14 +124,14 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 16),
+                        SizedBox(width: widget.rowHeight / 4),
                         Text(
                           '$formattedChangedTime',
                           style: Theme.of(context).textTheme.subtitle,
                           textScaleFactor: gd.textScaleFactor,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(width: 16),
+                        SizedBox(width: widget.rowHeight / 4),
                         Expanded(
                           child: rec.isStateOn
                               ? Text(

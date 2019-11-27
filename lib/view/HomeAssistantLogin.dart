@@ -167,17 +167,17 @@ class _HomeAssistantLoginWebViewState extends State<HomeAssistantLoginWebView> {
                   children: <Widget>[
                     RaisedButton(
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/widget');
-                      },
-                      child: const Text('OK'),
-                    ),
-                    SizedBox(width: 8),
-                    RaisedButton(
-                      onPressed: () {
                         widget.closePage();
 //                        Navigator.pop(context);
                       },
                       child: const Text('Cancel'),
+                    ),
+                    SizedBox(width: 8),
+                    RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/widget');
+                      },
+                      child: const Text('OK'),
                     ),
                   ],
                 ),

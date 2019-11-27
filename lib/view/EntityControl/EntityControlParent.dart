@@ -90,7 +90,10 @@ class _EntityControlParentState extends State<EntityControlParent> {
             entity.entityId.contains("scene.")) {
           entityControl = EntityControlToggle(entityId: widget.entityId);
         } else if (entity.entityId.contains("binary_sensor.")) {
-          entityControl = EntityControlBinarySensor(entityId: widget.entityId);
+          entityControl = EntityControlBinarySensor(
+            entityId: widget.entityId,
+            rowHeight: 60,
+          );
         } else if (entity.entityId.contains("sensor.")) {
           entityControl = EntityControlSensor(entityId: widget.entityId);
         } else if (entity.entityId.contains("alarm_control_panel.")) {
@@ -334,9 +337,22 @@ class _EntityControlParentState extends State<EntityControlParent> {
                           ),
 
                     Expanded(
-                      flex: 3,
+                      flex: 2,
                       child: Container(),
                     ),
+                    entity.entityType == EntityType.lightSwitches ||
+                            entity.entityType == EntityType.climateFans
+                        ? Expanded(
+                            flex: 10,
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              child: EntityControlBinarySensor(
+                                rowHeight: 30,
+                                entityId: entity.entityId,
+                              ),
+                            ),
+                          )
+                        : Container(),
 //                  SizedBox(height: 40),
                   ],
                 ),
