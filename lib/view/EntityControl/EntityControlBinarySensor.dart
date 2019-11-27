@@ -37,7 +37,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
   Widget build(BuildContext context) {
     List<Sensor> binarySensorsReversed = gd.sensors.reversed.toList();
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      padding: EdgeInsets.all(8),
       height: gd.mediaQueryHeight - kBottomNavigationBarHeight - kToolbarHeight,
       child: ModalProgressHUD(
         inAsyncCall: inAsyncCall,
@@ -89,7 +89,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                     child: Row(
                       children: <Widget>[
                         Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: Text(
                             '$formattedChangedTime',
                             style: Theme.of(context).textTheme.subtitle,
@@ -141,14 +141,14 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                           flex: 2,
                           child: rec.isStateOn
                               ? Text(
-                                  '${printDuration(timeDiff, abbreviated: true, tersity: DurationTersity.second, delimiter: ', ', conjugation: ' and ')} ago',
+                                  '${printDuration(timeDiff, abbreviated: true, tersity: DurationTersity.minute, spacer: '', delimiter: ' ', conjugation: ' ')}',
                                   style: Theme.of(context).textTheme.subtitle,
                                   textScaleFactor: gd.textScaleFactor,
                                   overflow: TextOverflow.ellipsis,
                                 )
                               : duration != null
                                   ? Text(
-                                      "${printDuration(duration, abbreviated: true, tersity: DurationTersity.second, delimiter: ', ', conjugation: ' and ')} duration",
+                                      "(${printDuration(duration, abbreviated: true, tersity: DurationTersity.second, spacer: '', delimiter: ' ', conjugation: ' ')})",
                                       style:
                                           Theme.of(context).textTheme.subtitle,
                                       textScaleFactor: gd.textScaleFactor,
