@@ -110,8 +110,8 @@ class Entity {
     this.step,
 //    media_player
     this.volumeLevel = 0,
-    this.mediaDuration = 0,
-    this.mediaPosition = 0,
+    this.mediaDuration = -1,
+    this.mediaPosition = -1,
     this.isVolumeMuted = false,
     this.mediaContentType = "",
     this.mediaTitle = "",
@@ -257,12 +257,12 @@ class Entity {
                     json["attributes"]["media_duration"].toString()) !=
                 null
             ? double.tryParse(json["attributes"]["media_duration"].toString())
-            : 0,
+            : -1,
         mediaPosition: double.tryParse(
                     json["attributes"]["media_position"].toString()) !=
                 null
             ? double.tryParse(json["attributes"]["media_position"].toString())
-            : 0,
+            : -1,
         isVolumeMuted: json['attributes']['is_volume_muted'] != null
             ? json['attributes']['is_volume_muted']
             : false,

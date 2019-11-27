@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -143,13 +144,7 @@ class EntityControlMediaPlayer extends StatelessWidget {
               //     Text(entity.mediaDuration.toString())
               //   ],
               // ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  MpSeekSlider(entityId: entityId),
-                ],
-              ),
+              MpSeekSlider(entityId: entityId),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -467,111 +462,105 @@ class MpSeekSlider extends StatefulWidget {
 }
 
 class _MpSeekSliderState extends State<MpSeekSlider> {
-  double mediaPosition;
-  double mediaDuration;
   Entity entity;
-  double mediaPositionLast;
   bool supportSeekSet;
-  DateTime isChanging;
+  DateTime isSeeking;
+  double currentPosition;
+  double mediaPositionLast;
 
   @override
   void initState() {
     super.initState();
+
+    //1000/60=17 mean refresh 60 fps
+    const Duration refreshTime = const Duration(milliseconds: 17);
+    isSeeking = DateTime.now();
     entity = gd.entities[widget.entityId];
-    mediaPosition = entity.mediaPosition;
-    mediaDuration = entity.mediaDuration;
-    isChanging = DateTime.now();
-  }
 
-  String getSeekPosition(double pos) {
-    int hours = 0;
-    int minutes = 0;
-    int seconds = 0;
-    int totalSeconds = (pos).floor();
-
-    if (totalSeconds > 59) {
-      minutes = (totalSeconds / 60).floor();
-
-      if (minutes > 59) {
-        hours = (minutes / 60).floor();
-
-        minutes = minutes - (hours * 60);
+    new Timer.periodic(refreshTime, (Timer t) {
+      if (isSeeking.isBefore(DateTime.now()) &&
+          gd.entities[widget.entityId].state == "playing") {
+        setState(() {
+          currentPosition = currentPosition + refreshTime.inMilliseconds / 1000;
+          currentPosition = currentPosition.clamp(0, entity.mediaDuration);
+        });
       }
-
-      seconds = totalSeconds - ((hours * 60 * 60) + (minutes * 60));
-    } else {
-      seconds = totalSeconds;
-    }
-
-    String secondsShow = "";
-    if (seconds > 9)
-      secondsShow = seconds.toString();
-    else
-      secondsShow = "0" + seconds.toString();
-
-    String minuteShow = "";
-    if (minutes > 9)
-      minuteShow = minutes.toString();
-    else
-      minuteShow = "0" + minutes.toString();
-
-    if (hours > 0) {
-      String hourShow = "";
-
-      if (hours > 9)
-        hourShow = hours.toString();
-      else
-        hourShow = "0" + hours.toString();
-
-      return "$hourShow.$minuteShow.$secondsShow";
-    } else {
-      return "$minuteShow.$secondsShow";
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     entity = gd.entities[widget.entityId];
+    if (entity == null) return Container();
+
     supportSeekSet =
         entity.getSupportedFeaturesMediaPlayer.contains("SUPPORT_SEEK");
-    if (!entity.isStateOn || !supportSeekSet) return Container();
+    if (!entity.isStateOn ||
+        !supportSeekSet ||
+        entity.mediaPosition == null ||
+        entity.mediaPosition < 0 ||
+        entity.mediaDuration == null ||
+        entity.mediaDuration < 0) return Container();
 
-    if (isChanging.isBefore(DateTime.now())) {
-      mediaPosition = entity.mediaPosition;
+    if (mediaPositionLast != entity.mediaPosition) {
+      mediaPositionLast = entity.mediaPosition;
+      currentPosition = entity.mediaPosition;
+      currentPosition = currentPosition.clamp(0, entity.mediaDuration);
     }
-    return Expanded(
-      child: Slider(
-        value: mediaPosition,
-        min: 0.0,
-        max: mediaDuration,
-        divisions: mediaDuration.floor() > 0 ? mediaDuration.floor() : 1,
-        label: getSeekPosition(mediaPosition),
-        onChangeStart: (val) {
-          isChanging = DateTime.now().add(Duration(days: 1));
-        },
-        onChangeEnd: (val) {
-          if (val == mediaPositionLast) return;
-          var outMsg = {
-            "id": gd.socketId,
-            "type": "call_service",
-            "domain": "media_player",
-            "service": "media_seek",
-            "service_data": {"entity_id": widget.entityId, "seek_position": val}
-          };
-          entity.mediaPosition = val;
-          mediaPositionLast = val;
-          gd.sendSocketMessage(jsonEncode(outMsg));
-          isChanging = DateTime.now().add(Duration(seconds: 1));
-        },
-        onChanged: !entity.isStateOn
-            ? null
-            : (val) {
-                setState(() {
-                  mediaPosition = val;
-                  isChanging = DateTime.now().add(Duration(days: 1));
-                });
-              },
-      ),
+
+    var songDurationInt = Duration(seconds: entity.mediaDuration.toInt());
+    var songDurationLabel =
+        "${songDurationInt.inMinutes.remainder(60).toString().padLeft(2, '0')}:${songDurationInt.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+    var currentPositionInt = Duration(seconds: currentPosition.toInt());
+    var currentPositionLabel =
+        "${currentPositionInt.inMinutes.remainder(60).toString().padLeft(2, '0')}:${currentPositionInt.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+
+    return Row(
+      children: <Widget>[
+        Container(
+            padding: EdgeInsets.fromLTRB(12, 0, 0, 0),
+            child: Text("$currentPositionLabel")),
+        Expanded(
+          child: Slider(
+            value: currentPosition,
+            min: 0.0,
+            max: entity.mediaDuration,
+            divisions: 1000,
+            label: "$currentPositionLabel",
+            onChangeStart: (val) {
+              isSeeking = DateTime.now().add(Duration(days: 1));
+            },
+            onChangeEnd: (val) {
+              currentPosition = val.clamp(0, entity.mediaDuration);
+              var outMsg = {
+                "id": gd.socketId,
+                "type": "call_service",
+                "domain": "media_player",
+                "service": "media_seek",
+                "service_data": {
+                  "entity_id": widget.entityId,
+                  "seek_position": currentPosition
+                }
+              };
+              entity.mediaPosition = currentPosition;
+              gd.sendSocketMessage(jsonEncode(outMsg));
+              isSeeking = DateTime.now().subtract(Duration(days: 1));
+            },
+            onChanged: (val) {
+              setState(
+                () {
+                  currentPosition = val;
+                  isSeeking = DateTime.now().add(Duration(days: 1));
+                },
+              );
+            },
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 0, 12, 0),
+          child: Text("$songDurationLabel"),
+        ),
+      ],
     );
   }
 }
