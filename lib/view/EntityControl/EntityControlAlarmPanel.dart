@@ -19,6 +19,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
   final int keyCodeLength = 4;
   String output = "";
   String _readableState = "";
+  String _armType = "arm_away";
 
   @override
   void initState() {
@@ -31,7 +32,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
       "id": gd.socketId,
       "type": "call_service",
       "domain": entity.entityId.split('.').first,
-      "service": "alarm_arm_away",
+      "service": "alarm_" + _armType,
       "service_data": {"entity_id": entity.entityId, "code": output}
     };
 
@@ -87,6 +88,37 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
     }
   }
 
+  Widget alarmSelectionButton(String text, String arm_type) {
+    Color getColor() {
+      return _armType == arm_type ? ThemeInfo.colorIconActive : Colors.redAccent;
+    }
+
+    return Container(
+      height: 50,
+      width: 80,
+      margin: EdgeInsets.all(8),
+      child: new OutlineButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: new BorderRadius.circular(8.0),
+        ),
+        child: 
+        // Icon(
+        //   MaterialDesignIcons.getIconDataFromIconName(
+        //     "mdi:" + icon
+        //   ),
+        //   size: 30,
+        //   color: getColor(),
+        // ),
+        new Text(text, style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold, color: getColor()), textAlign: TextAlign.center),
+        onPressed: () => {
+          setState(() {
+            _armType = arm_type;
+          })
+        },
+      )
+    );
+  }
+
   Widget alarmButton(String buttonText) {
     return Container(
       height: 50,
@@ -97,7 +129,7 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
           borderRadius: new BorderRadius.circular(8.0),
         ),
         child: new Text(buttonText,
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+            style: TextStyle(fontSize: buttonText.length > 2 ? 15.0 : 20.0, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
         onPressed: () => buttonPressed(buttonText),
       ),
     );
@@ -207,9 +239,9 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      alarmButton(""),
+                      alarmSelectionButton("Arm Home", "arm_home"),
                       alarmButton("0"),
-                      alarmButton(""),
+                      alarmSelectionButton("Arm Away", "arm_away")
                     ],
                   )
                 ],
