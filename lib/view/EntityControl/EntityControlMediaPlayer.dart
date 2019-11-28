@@ -18,9 +18,7 @@ class EntityControlMediaPlayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<GeneralData, String>(
-      selector: (_, generalData) => "${generalData.eventEntity(entityId)} "
-          "${generalData.entities[entityId].isStateOn} "
-          "${generalData.entities[entityId].state} "
+      selector: (_, generalData) => "${generalData.entities[entityId].state} "
           "${generalData.entities[entityId].volumeLevel} "
           "${generalData.entities[entityId].isVolumeMuted} "
           "${generalData.entities[entityId].mediaContentType} "

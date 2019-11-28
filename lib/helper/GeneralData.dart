@@ -340,14 +340,18 @@ class GeneralData with ChangeNotifier {
       oldEntity.step = newEntity.step;
 //media_player
       oldEntity.volumeLevel = newEntity.volumeLevel;
+      oldEntity.mediaDuration = newEntity.mediaDuration;
+      oldEntity.mediaPosition = newEntity.mediaPosition;
       oldEntity.isVolumeMuted = newEntity.isVolumeMuted;
       oldEntity.mediaContentType = newEntity.mediaContentType;
       oldEntity.mediaTitle = newEntity.mediaTitle;
+      oldEntity.mediaArtist = newEntity.mediaArtist;
       oldEntity.source = newEntity.source;
       oldEntity.sourceList = newEntity.sourceList;
       oldEntity.soundMode = newEntity.soundMode;
       oldEntity.soundModeList = newEntity.soundModeList;
       oldEntity.soundModeRaw = newEntity.soundModeRaw;
+      oldEntity.entityPicture = newEntity.entityPicture;
 
       notifyListeners();
     } else {
@@ -2234,6 +2238,7 @@ class GeneralData with ChangeNotifier {
       colorString = colorString.replaceAll("0X", "");
       colorString = colorString.toUpperCase(); // kind of hacky..
       colorString = colorString.replaceAll("COLOR(", "");
+      colorString = colorString.replaceAll(")", "");
       int value = int.parse(colorString, radix: 16);
       Color color = Color(value);
       return color;

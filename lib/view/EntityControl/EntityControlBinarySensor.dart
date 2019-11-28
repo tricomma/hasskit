@@ -186,15 +186,15 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                           ),
                           Container(
                             alignment: rec.isStateOn
-                                ? Alignment.centerLeft
-                                : Alignment.centerRight,
-                            width: 52,
+                                ? Alignment.center
+                                : Alignment.center,
+                            width: 40,
                             margin: rec.isStateOn
-                                ? EdgeInsets.only(left: 2)
-                                : EdgeInsets.only(right: 8),
+                                ? EdgeInsets.only(left: 4, right: 4)
+                                : EdgeInsets.only(left: 4, right: 4),
                             padding: rec.isStateOn
-                                ? EdgeInsets.all(8)
-                                : EdgeInsets.all(8),
+                                ? EdgeInsets.all(2)
+                                : EdgeInsets.all(2),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: rec.isStateOn

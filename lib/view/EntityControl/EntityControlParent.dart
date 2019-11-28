@@ -119,30 +119,11 @@ class _EntityControlParentState extends State<EntityControlParent> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-//                              border: Border.all(
-//                                color: ThemeInfo.colorBottomSheetReverse,
-//                                width: 1.0,
-//                              ),
-                            ),
-                            height: 40,
-                            margin: EdgeInsets.symmetric(horizontal: 65),
-                          ),
                           Positioned(
                             left: 10,
                             child: Container(
                               width: 50,
                               height: 50,
-                              decoration: BoxDecoration(
-                                color: ThemeInfo.colorBottomSheet,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: ThemeInfo.colorBottomSheetReverse,
-                                  width: 1.0,
-                                ),
-                              ),
                               child: Icon(
                                 MaterialDesignIcons.getIconDataFromIconName(
                                   gd.entities[widget.entityId].getDefaultIcon,
@@ -177,7 +158,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 40),
+                                        SizedBox(width: 60),
                                       ],
                                     ),
                                     Container(
@@ -206,7 +187,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                   children: <Widget>[
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 65),
+                                        SizedBox(width: 60),
                                         Expanded(
                                           child: Container(
                                             width: double.infinity,
@@ -257,7 +238,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 65),
+                                        SizedBox(width: 60),
                                       ],
                                     ),
                                     Container(

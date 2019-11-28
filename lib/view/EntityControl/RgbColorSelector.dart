@@ -30,27 +30,20 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
           selectedIndex = i;
           pickerColor =
               gd.stringToColor(gd.baseSetting.colorPicker[selectedIndex]);
-          //really don't know why index 0 cant change color, maybe addon bug?
-          if (i != 0) {
-            Flushbar(
-              backgroundColor: ThemeInfo.colorBottomSheet,
-              icon: Icon(Icons.info),
-              overlayColor: Colors.red,
-              messageText: Text("Long Press To Edit Color"),
-              duration: Duration(seconds: 3),
-            )..show(context);
-          }
+          Flushbar(
+            backgroundColor: ThemeInfo.colorBottomSheet,
+            icon: Icon(Icons.info),
+            overlayColor: Colors.red,
+            messageText: Text("Long Press To Edit Color"),
+            duration: Duration(seconds: 3),
+          )..show(context);
           sendColor();
         },
         onLongPress: () {
           selectedIndex = i;
-//          if (i != 0) {
-//          log.d("onLongPress pickerColor $pickerColor");
-//          log.d("selectedIndex selectedIndex $selectedIndex");
           pickerColor =
               gd.stringToColor(gd.baseSetting.colorPicker[selectedIndex]);
           openColorPicker();
-//          }
         },
         child: Container(
           margin: EdgeInsets.all(5),
@@ -58,7 +51,6 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: ThemeInfo.colorBottomSheetReverse,
-//                            border: Border.all(width: 0, color: Colors.white),
           ),
           child: CircleAvatar(
             backgroundColor: gd.stringToColor(gd.baseSetting.colorPicker[i]),
