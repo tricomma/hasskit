@@ -63,24 +63,30 @@ class EntityControlMediaPlayer extends StatelessWidget {
                       entity.entityPicture != "null" &&
                       entity.mediaTitle != "null" &&
                       entity.mediaArtist != "null"
-                  ? Container(
-                      height: gd.mediaQueryHeight / 2,
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                '${entity.entityPicture}',
-                                loadingBuilder: (BuildContext context,
-                                    Widget child,
-                                    ImageChunkEvent loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(
-                                    child: SpinKitThreeBounce(
-                                      size: 40,
-                                      color: Colors.grey.withOpacity(0.5),
-                                    ),
+                  ? FittedBox(
+                      child: Container(
+                        height: entity.sourceList.length > 1 ||
+                                entity.soundModeList.length > 1
+                            ? gd.mediaQueryHeight / 3
+                            : gd.mediaQueryHeight / 2,
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  entity.entityPicture.contains("http")
+                                      ? '${entity.entityPicture}'
+                                      : '${gd.currentUrl + entity.entityPicture}',
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return Center(
+                                      child: SpinKitThreeBounce(
+                                        size: 40,
+                                        color: Colors.grey.withOpacity(0.5),
+                                      ),
 //                                    child: CircularProgressIndicator(
 //                                      value: loadingProgress
 //                                                  .expectedTotalBytes !=
@@ -90,21 +96,22 @@ class EntityControlMediaPlayer extends StatelessWidget {
 //                                              loadingProgress.expectedTotalBytes
 //                                          : null,
 //                                    ),
-                                  );
-                                },
+                                    );
+                                  },
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            child: AutoSizeText(
-                              "${gd.textToDisplay(entity.mediaTitle)} - ${gd.textToDisplay(entity.mediaArtist)}",
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                          )
-                        ],
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              child: AutoSizeText(
+                                "${gd.textToDisplay(entity.mediaTitle)} - ${gd.textToDisplay(entity.mediaArtist)}",
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     )
                   : Container(),
@@ -113,8 +120,13 @@ class EntityControlMediaPlayer extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(child: MediaPlayerSource(entityId: entityId)),
-                  Expanded(child: MediaPlayerSoundMode(entityId: entityId)),
+                  entity.sourceList.length > 1
+                      ? Expanded(child: MediaPlayerSource(entityId: entityId))
+                      : Container(),
+                  entity.soundModeList.length > 1
+                      ? Expanded(
+                          child: MediaPlayerSoundMode(entityId: entityId))
+                      : Container(),
                 ],
               ),
               // Row(
@@ -644,6 +656,7 @@ class MediaPlayerSource extends StatelessWidget {
 
     log.d("entity.sourceList ${entity.sourceList}");
     log.d("entity.source ${entity.source}");
+
     var index = entity.sourceList.indexOf(entity.source);
     log.d("index $index");
 
@@ -653,7 +666,7 @@ class MediaPlayerSource extends StatelessWidget {
 
     for (String source in entity.sourceList) {
       var container = Container(
-        alignment: entity.soundModeList.length > 0
+        alignment: entity.soundModeList.length > 1
             ? Alignment.centerRight
             : Alignment.center,
         child: (AutoSizeText(
@@ -710,7 +723,7 @@ class MediaPlayerSource extends StatelessWidget {
             child: CupertinoPicker(
               squeeze: 1.45,
               diameterRatio: 1.1,
-              offAxisFraction: -0.5,
+              offAxisFraction: entity.soundModeList.length > 1 ? -0.5 : 0,
               scrollController: sourceModeController,
               magnification: 1,
               backgroundColor: Colors.transparent,
@@ -760,7 +773,7 @@ class MediaPlayerSoundMode extends StatelessWidget {
 
     for (String source in entity.soundModeList) {
       var container = Container(
-        alignment: entity.sourceList.length > 0
+        alignment: entity.sourceList.length > 1
             ? Alignment.centerLeft
             : Alignment.center,
         child: (AutoSizeText(
@@ -818,7 +831,7 @@ class MediaPlayerSoundMode extends StatelessWidget {
             child: CupertinoPicker(
               squeeze: 1.45,
               diameterRatio: 1.1,
-              offAxisFraction: 0.5,
+              offAxisFraction: entity.sourceList.length > 1 ? 0.5 : 0,
               scrollController: soundModeController,
               magnification: 1,
               backgroundColor: Colors.transparent,

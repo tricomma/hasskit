@@ -406,8 +406,8 @@ class Entity {
     String domain = entityId.split(".")[0];
     String stateTranslate = isStateOn ? "on" : "off";
 
-    log.d(
-        "getDefaultIcon entityId $entityId icon $icon domain $domain.$deviceClass.$stateTranslate state $state");
+//    log.d(
+//        "getDefaultIcon entityId $entityId icon $icon domain $domain.$deviceClass.$stateTranslate state $state");
 
     if (domain != "null") {
       if (deviceClass != null &&
