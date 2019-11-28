@@ -225,7 +225,6 @@ class GeneralData with ChangeNotifier {
         log.e('socketGetStates entity.entityId');
         continue;
       }
-
       _entities[entity.entityId] = entity;
     }
 

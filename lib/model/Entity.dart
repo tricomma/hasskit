@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
+import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/WebSocket.dart';
 
 enum EntityType {
@@ -391,142 +392,120 @@ class Entity {
   }
 
   String get getDefaultIcon {
-    if (gd.entitiesOverride[entityId] != null &&
-        gd.entitiesOverride[entityId].icon != null &&
-        gd.entitiesOverride[entityId].icon.length > 0) {
-      return twoStateIcons(gd.entitiesOverride[entityId].icon);
+    if (twoStateIcons() != null) {
+      return twoStateIcons();
+    }
+    if (getOverrideIcon != "") {
+      return getOverrideIcon;
     }
 
-    if (!["", null, "null"].contains(icon)) {
-      return twoStateIcons(icon);
+    if (icon != null && icon != "null") {
+      return icon;
     }
 
-    var deviceClass = entityId.split('.')[0];
-    var deviceName = entityId.split('.')[1];
+    String domain = entityId.split(".")[0];
+    String stateTranslate = isStateOn ? "on" : "off";
 
-    if ([null, ''].contains(deviceClass) || [null, ''].contains(deviceName)) {
-      return 'mdi:help-circle';
-    }
+    log.d(
+        "getDefaultIcon entityId $entityId icon $icon domain $domain.$deviceClass.$stateTranslate state $state");
 
-    if (gd.classDefaultIcon(deviceClass) != "") {
-      return '${twoStateIcons(gd.classDefaultIcon(deviceClass))}';
-    }
-
-    if (deviceName.contains('automation')) {
-      return 'mdi:home-automation';
-    }
-
-    if (deviceName.contains('cover')) {
-      return isStateOn ? 'mdi:garage-open' : 'mdi:garage';
-    }
-
-    if (deviceName.contains('device')) {
-      return 'mdi:tablet-cellphone';
-    }
-    if (deviceName.contains('door_window')) {
-      return isStateOn ? 'mdi:window-closed' : 'mdi:window-open';
-    }
-
-    if (deviceName.contains('fan')) {
-      return isStateOn ? 'mdi:fan' : 'mdi:fan-off';
+    if (domain != "null") {
+      if (deviceClass != null &&
+          MaterialDesignIcons.defaultIconsByDeviceClass[
+                  "$domain.$deviceClass.$stateTranslate"] !=
+              null) {
+        return MaterialDesignIcons
+            .defaultIconsByDeviceClass["$domain.$deviceClass.$stateTranslate"];
+      }
+      if (MaterialDesignIcons
+              .defaultIconsByDeviceClass["$domain.$deviceClass"] !=
+          null) {
+        return MaterialDesignIcons
+            .defaultIconsByDeviceClass["$domain.$deviceClass"];
+      }
+      if (MaterialDesignIcons
+              .defaultIconsByDeviceClass["$domain.$stateTranslate"] !=
+          null) {
+        return MaterialDesignIcons
+            .defaultIconsByDeviceClass["$domain.$stateTranslate"];
+      }
     }
 
-    if (deviceName.contains('illumination')) {
-      return 'mdi:brightness-4';
+    //https://www.home-assistant.io/integrations/sensor/
+    if (entityId.contains("sensor.")) {
+      if (entityId.contains("battery")) return 'mdi:battery';
+      if (entityId.contains("humidity")) return 'mdi:water-percent';
+      if (entityId.contains("illuminance")) return 'mdi:brightness-6';
+      if (entityId.contains("signal_strength")) return 'mdi:signal';
+      if (entityId.contains("temperature")) return 'mdi:thermometer';
+      if (entityId.contains("power")) return 'mdi:power';
+      if (entityId.contains("pressure")) return 'mdi:gauge';
+      if (entityId.contains("timestamp")) return 'mdi:clock';
     }
 
-    if (deviceName.contains('humidity')) {
-      return 'mdi:water-percent';
+    //https://www.home-assistant.io/integrations/cover/
+    if (entityId.contains("cover.")) {
+      if (entityId.contains("awning")) return 'mdi:window-shutter';
+      if (entityId.contains("blind")) return 'mdi:blinds';
+      if (entityId.contains("curtain")) return 'mdi:blinds';
+      if (entityId.contains("damper")) return 'mdi:window-close';
+      if (entityId.contains("door")) return 'mdi:door-closed';
+      if (entityId.contains("garage")) return 'mdi:garage';
+      if (entityId.contains("shade")) return 'mdi:blinds';
+      if (entityId.contains("shutter")) return 'mdi:window-shutter';
+      if (entityId.contains("window")) return 'mdi:window-close';
     }
 
-    if (deviceName.contains('light')) {
-      return isStateOn ? 'mdi:lightbulb-on' : 'mdi:lightbulb';
+    if (MaterialDesignIcons.defaultIconsByDomains["$domain$stateTranslate"] !=
+        null) {
+      return MaterialDesignIcons
+          .defaultIconsByDomains["$domain$stateTranslate"];
     }
 
-    if (deviceName.contains('lock')) {
-      return isStateOn ? 'mdi:lock-open' : 'mdi:lock';
-    }
-
-    if (deviceName.contains('motion')) {
-      return isStateOn ? 'mdi:run' : 'mdi:walk';
-    }
-
-    if (deviceName.contains('pressure')) {
-      return 'mdi:gauge';
-    }
-
-    if (deviceName.contains('remote')) {
-      return 'mdi:remote';
-    }
-
-    if (deviceName.contains('script')) {
-      return 'mdi:script-text';
-    }
-    if (deviceName.contains('smoke')) {
-      return 'mdi:fire';
-    }
-    if (deviceName.contains('temperature')) {
-      return 'mdi:thermometer';
-    }
-    if (deviceName.contains('time')) {
-      return 'mdi:clock';
-    }
-    if (deviceName.contains('switch')) {
-      return 'mdi:toggle-switch';
-    }
-    if (deviceName.contains('vacuum')) {
-      return 'mdi:robot-vacuum';
-    }
-    if (deviceName.contains('water_leak')) {
-      return 'mdi:water-off';
-    }
-    if (deviceName.contains('water')) {
-      return 'mdi:water';
-    }
-    if (deviceName.contains('yr_symbol')) {
-      return 'mdi:weather-partlycloudy';
+    if (MaterialDesignIcons.defaultIconsByDomains["$domain"] != null) {
+      return MaterialDesignIcons.defaultIconsByDomains["$domain"];
     }
 
     return 'mdi:help-circle';
   }
 
-  String twoStateIcons(String anyState) {
-    if (isStateOn && anyState == "mdi:bell") return "mdi:bell-ring";
-    if (!isStateOn && anyState == "mdi:bell-ring") return "mdi:bell";
+  String twoStateIcons() {
+    if (isStateOn && icon == "mdi:bell") return "mdi:bell-ring";
+    if (!isStateOn && icon == "mdi:bell-ring") return "mdi:bell";
 
-    if (isStateOn && anyState == "mdi:blinds") return "mdi:blinds-open";
-    if (!isStateOn && anyState == "mdi:blinds-open") return "mdi:blinds";
+    if (isStateOn && icon == "mdi:blinds") return "mdi:blinds-open";
+    if (!isStateOn && icon == "mdi:blinds-open") return "mdi:blinds";
 
-    if (isStateOn && anyState == "mdi:door-closed") return "mdi:door-open";
-    if (!isStateOn && anyState == "mdi:door-open") return "mdi:door-closed";
+    if (isStateOn && icon == "mdi:door-closed") return "mdi:door-open";
+    if (!isStateOn && icon == "mdi:door-open") return "mdi:door-closed";
 
-    if (isStateOn && anyState == "mdi:fan-off") return "mdi:fan";
-    if (!isStateOn && anyState == "mdi:fan") return "mdi:fan-off";
+    if (isStateOn && icon == "mdi:fan-off") return "mdi:fan";
+    if (!isStateOn && icon == "mdi:fan") return "mdi:fan-off";
 
-    if (isStateOn && anyState == "mdi:garage") return "mdi:garage-open";
-    if (!isStateOn && anyState == "mdi:garage-open") return "mdi:garage";
+    if (isStateOn && icon == "mdi:garage") return "mdi:garage-open";
+    if (!isStateOn && icon == "mdi:garage-open") return "mdi:garage";
 
-    if (isStateOn && anyState == "mdi:lightbulb") return "mdi:lightbulb-on";
-    if (!isStateOn && anyState == "mdi:lightbulb-on") return "mdi:lightbulb";
+    if (isStateOn && icon == "mdi:lightbulb") return "mdi:lightbulb-on";
+    if (!isStateOn && icon == "mdi:lightbulb-on") return "mdi:lightbulb";
 
-    if (isStateOn && anyState == "mdi:lightbulb-outline")
+    if (isStateOn && icon == "mdi:lightbulb-outline")
       return "mdi:lightbulb-on-outline";
-    if (!isStateOn && anyState == "mdi:lightbulb-on-outline")
+    if (!isStateOn && icon == "mdi:lightbulb-on-outline")
       return "mdi:lightbulb-outline";
 
-    if (isStateOn && anyState == "mdi:lock") return "mdi:lock-open";
-    if (!isStateOn && anyState == "mdi:lock-open") return "mdi:lock";
-    if (isStateOn && anyState == "mdi:window-closed") return "mdi:window-open";
-    if (!isStateOn && anyState == "mdi:window-open") return "mdi:window-closed";
-    if (isStateOn && anyState == "mdi:walk") return "mdi:run";
-    if (!isStateOn && anyState == "mdi:run") return "mdi:walk";
+    if (isStateOn && icon == "mdi:lock") return "mdi:lock-open";
+    if (!isStateOn && icon == "mdi:lock-open") return "mdi:lock";
+    if (isStateOn && icon == "mdi:window-closed") return "mdi:window-open";
+    if (!isStateOn && icon == "mdi:window-open") return "mdi:window-closed";
+    if (isStateOn && icon == "mdi:walk") return "mdi:run";
+    if (!isStateOn && icon == "mdi:run") return "mdi:walk";
 
-    if (isStateOn && anyState == "mdi:window-shutter")
+    if (isStateOn && icon == "mdi:window-shutter")
       return "mdi:window-shutter-open";
-    if (!isStateOn && anyState == "mdi:window-shutter-open")
+    if (!isStateOn && icon == "mdi:window-shutter-open")
       return "mdi:window-shutter";
 
-    return anyState;
+    return null;
   }
 
   bool get isStateOn {
