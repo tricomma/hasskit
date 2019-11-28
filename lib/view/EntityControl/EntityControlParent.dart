@@ -89,7 +89,6 @@ class _EntityControlParentState extends State<EntityControlParent> {
         } else if (entity.entityId.contains("binary_sensor.")) {
           entityControl = EntityControlBinarySensor(
             entityId: widget.entityId,
-            rowHeight: 50,
           );
         } else if (entity.entityId.contains("sensor.")) {
           entityControl = EntityControlSensor(entityId: widget.entityId);
@@ -312,10 +311,27 @@ class _EntityControlParentState extends State<EntityControlParent> {
                     !showEditName
                         ? Stack(
                             children: <Widget>[
-                              Container(
-                                width: double.infinity,
-                                child:
-                                    !showEditName ? entityControl : Container(),
+                              Column(
+                                children: <Widget>[
+                                  Container(
+                                    width: double.infinity,
+                                    child: !showEditName
+                                        ? entityControl
+                                        : Container(),
+                                  ),
+                                  entity.entityType ==
+                                              EntityType.lightSwitches ||
+                                          entity.entityType ==
+                                              EntityType.climateFans
+                                      ? Container(
+                                          height: 60,
+                                          child: EntityControlBinarySensor(
+                                            entityId: entity.entityId,
+                                            horizontalMode: true,
+                                          ),
+                                        )
+                                      : Container(),
+                                ],
                               ),
                             ],
                           )
@@ -337,22 +353,13 @@ class _EntityControlParentState extends State<EntityControlParent> {
                       flex: 2,
                       child: Container(),
                     ),
-                    entity.entityType == EntityType.lightSwitches ||
-                            entity.entityType == EntityType.climateFans
-                        ? Expanded(
-                            flex: 100,
-                            child: EntityControlBinarySensor(
-                              rowHeight: 30,
-                              entityId: entity.entityId,
-                            ),
-                          )
-                        : Container(),
+
 //                  SizedBox(height: 40),
                   ],
                 ),
               ),
               Positioned(
-                top: 25,
+                bottom: 10,
                 right: 10,
                 child: InkWell(
                   onTap: () {
@@ -361,7 +368,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                   child: Icon(
                     Icons.cancel,
                     color: ThemeInfo.colorBottomSheetReverse,
-                    size: 40,
+                    size: 28,
                   ),
                 ),
               ),

@@ -489,12 +489,15 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
     if (mediaPositionLast != entity.mediaPosition) {
       mediaPositionLast = entity.mediaPosition;
       currentPosition = entity.mediaPosition;
+      log.e(
+          "mediaPositionLast != entity.mediaPosition mediaPositionLast $mediaPositionLast entity.mediaPosition ${entity.mediaPosition}");
       currentPosition = currentPosition.clamp(0, entity.mediaDuration);
     }
 
     var songDurationInt = Duration(seconds: entity.mediaDuration.toInt());
     var songDurationLabel =
         "${songDurationInt.inMinutes.remainder(60).toString().padLeft(2, '0')}:${songDurationInt.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+
     var currentPositionInt = Duration(seconds: currentPosition.toInt());
     var currentPositionLabel =
         "${currentPositionInt.inMinutes.remainder(60).toString().padLeft(2, '0')}:${currentPositionInt.inSeconds.remainder(60).toString().padLeft(2, '0')}";

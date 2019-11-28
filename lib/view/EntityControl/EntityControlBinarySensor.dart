@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -12,10 +13,10 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class EntityControlBinarySensor extends StatefulWidget {
   final String entityId;
-  final double rowHeight;
+  final bool horizontalMode;
   const EntityControlBinarySensor({
     @required this.entityId,
-    @required this.rowHeight,
+    this.horizontalMode = false,
   });
 
   @override
@@ -35,7 +36,16 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
 
   @override
   Widget build(BuildContext context) {
-    List<Sensor> binarySensorsReversed = gd.sensors.reversed.toList();
+//    List<Sensor> binarySensorsReversed = gd.sensors.reversed.toList();
+    List<Sensor> binarySensorsReversed = [];
+    for (int i = gd.sensors.length - 1; i > 0; i--) {
+      if (gd.sensors[i - 1] == null ||
+          gd.sensors[i - 1].isStateOn == null ||
+          gd.sensors[i - 1].isStateOn != gd.sensors[i].isStateOn) {
+        binarySensorsReversed.add(gd.sensors[i]);
+      }
+    }
+
     return Container(
       padding: EdgeInsets.all(8),
       height: gd.mediaQueryHeight - kBottomNavigationBarHeight - kToolbarHeight,
@@ -44,123 +54,166 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
         opacity: 0,
         progressIndicator: SpinKitThreeBounce(
           size: 40,
-          color: Colors.grey.withOpacity(0.5),
+          color: Colors.grey.withOpacity(0.025),
         ),
         child: inAsyncCall
             ? Container()
-            : ListView.builder(
-                shrinkWrap: true,
-                itemCount: binarySensorsReversed.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var rec = binarySensorsReversed[index];
-                  var changedTime = DateTime.parse(rec.lastChanged).toLocal();
-                  var formattedChangedTime =
-                      DateFormat('kk:mm:ss').format(changedTime);
-                  var timeDiff = DateTime.now()
-                      .difference(DateTime.parse(rec.lastChanged));
-                  Duration duration;
+            : !widget.horizontalMode
+                ? ListView.builder(
+                    itemCount: binarySensorsReversed.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var rec = binarySensorsReversed[index];
+                      var changedTime =
+                          DateTime.parse(rec.lastChanged).toLocal();
+                      var formattedChangedTime =
+                          DateFormat('kk:mm:ss').format(changedTime);
+                      var timeDiff = DateTime.now()
+                          .difference(DateTime.parse(rec.lastChanged));
+                      Duration duration;
 
-                  if (!rec.isStateOn &&
-                      index + 1 < binarySensorsReversed.length &&
-                      binarySensorsReversed[index + 1] != null &&
-                      binarySensorsReversed[index + 1].isStateOn) {
-                    var date1 = DateTime.parse(rec.lastChanged);
-                    var date2 = DateTime.parse(
-                        binarySensorsReversed[index + 1].lastChanged);
-                    duration = date1.difference(date2);
-                  }
-//                var topColor = ThemeInfo.colorIconInActive.withOpacity(0.5);
-                  var topColor = Colors.transparent;
-                  if (index == 0)
-                    topColor = Colors.transparent;
-                  else if (rec.isStateOn) {
-                    topColor = ThemeInfo.colorIconActive.withOpacity(1);
-                  }
-//                var bottomColor = ThemeInfo.colorIconInActive.withOpacity(0.5);
-                  var bottomColor = Colors.transparent;
-                  if (index >= binarySensorsReversed.length - 1)
-                    bottomColor = Colors.transparent;
-                  else if (binarySensorsReversed[index + 1].isStateOn) {
-                    bottomColor = ThemeInfo.colorIconActive.withOpacity(1);
-                  }
+                      if (!rec.isStateOn &&
+                          index + 1 < binarySensorsReversed.length &&
+                          binarySensorsReversed[index + 1] != null &&
+                          binarySensorsReversed[index + 1].isStateOn) {
+                        var date1 = DateTime.parse(rec.lastChanged);
+                        var date2 = DateTime.parse(
+                            binarySensorsReversed[index + 1].lastChanged);
+                        duration = date1.difference(date2);
+                      }
 
-                  return Container(
-                    height: widget.rowHeight,
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            '$formattedChangedTime',
-                            style: Theme.of(context).textTheme.subtitle,
-                            textScaleFactor: gd.textScaleFactor,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.right,
+                      return Stack(
+                        alignment: rec.isStateOn
+                            ? Alignment.topLeft
+                            : Alignment.bottomLeft,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(left: 25),
+                            color: ThemeInfo.colorIconActive,
+                            width: 2,
+                            height: 5,
                           ),
-                        ),
-                        SizedBox(width: widget.rowHeight / 4),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: <Widget>[
-                            Column(
+                          Container(
+                            height: 50,
+                            child: Row(
                               children: <Widget>[
+                                SizedBox(width: 6),
                                 Container(
-                                  alignment: Alignment.topCenter,
-                                  width: 2,
-                                  height: widget.rowHeight / 2,
-                                  color: topColor,
+                                  padding: EdgeInsets.all(2),
+                                  alignment: Alignment.center,
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: rec.isStateOn
+                                        ? ThemeInfo.colorIconActive
+                                            .withOpacity(0.25)
+                                        : ThemeInfo.colorIconInActive
+                                            .withOpacity(0),
+                                    border: Border.all(
+                                      color: ThemeInfo.colorIconActive,
+                                      width: 2.0,
+                                    ),
+                                  ),
+                                  child: FittedBox(
+                                    child: Text(
+                                        "${stateString(deviceClass, binarySensorsReversed[index].isStateOn)}"),
+                                  ),
                                 ),
-                                Container(
-                                  alignment: Alignment.topCenter,
-                                  width: 2,
-                                  height: widget.rowHeight / 2,
-                                  color: bottomColor,
-                                ),
-                              ],
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(2),
-                              alignment: Alignment.center,
-                              width: widget.rowHeight / 6 * 5,
-                              height: widget.rowHeight / 6 * 5,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: binarySensorsReversed[index].isStateOn
-                                    ? ThemeInfo.colorIconActive
-                                    : ThemeInfo.colorIconInActive,
-                              ),
-                              child: FittedBox(
-                                child: Text(
-                                    "${stateString(deviceClass, binarySensorsReversed[index].isStateOn)}"),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: widget.rowHeight / 4),
-                        Expanded(
-                          flex: 2,
-                          child: rec.isStateOn
-                              ? Text(
-                                  '${printDuration(timeDiff, abbreviated: true, tersity: DurationTersity.minute, spacer: '', delimiter: ' ', conjugation: ' ')}',
+                                SizedBox(width: 8),
+                                Text(
+                                  '$formattedChangedTime',
                                   style: Theme.of(context).textTheme.subtitle,
                                   textScaleFactor: gd.textScaleFactor,
                                   overflow: TextOverflow.ellipsis,
-                                )
-                              : duration != null
-                                  ? Text(
-                                      "(${printDuration(duration, abbreviated: true, tersity: DurationTersity.second, spacer: '', delimiter: ' ', conjugation: ' ')})",
-                                      style:
-                                          Theme.of(context).textTheme.subtitle,
-                                      textScaleFactor: gd.textScaleFactor,
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  : Text(""),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+                                  textAlign: TextAlign.right,
+                                ),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  flex: 2,
+                                  child: rec.isStateOn
+                                      ? Text(
+                                          '${printDuration(timeDiff, abbreviated: false, tersity: DurationTersity.minute, spacer: ' ', delimiter: ' ', conjugation: ' and ')} ago',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle,
+                                          textScaleFactor: gd.textScaleFactor,
+                                          overflow: TextOverflow.ellipsis,
+                                        )
+                                      : duration != null
+                                          ? Text(
+                                              "Duration: ${printDuration(duration, abbreviated: true, tersity: DurationTersity.second, spacer: '', delimiter: ' ', conjugation: ' and ')}",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subtitle,
+                                              textScaleFactor:
+                                                  gd.textScaleFactor,
+                                              overflow: TextOverflow.ellipsis,
+                                            )
+                                          : Text(""),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  )
+                : ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    reverse: true,
+                    itemCount: binarySensorsReversed.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var rec = binarySensorsReversed[index];
+                      var changedTime =
+                          DateTime.parse(rec.lastChanged).toLocal();
+                      var formattedChangedTime =
+                          DateFormat('kk:mm').format(changedTime);
+
+                      if (!rec.isStateOn &&
+                          index + 1 < binarySensorsReversed.length &&
+                          binarySensorsReversed[index + 1] != null &&
+                          binarySensorsReversed[index + 1].isStateOn) {}
+
+                      return Stack(
+                        alignment: rec.isStateOn
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
+                        children: <Widget>[
+                          Container(
+                            width: 5,
+                            height: 2,
+                            color: ThemeInfo.colorIconActive,
+                          ),
+                          Container(
+                            alignment: rec.isStateOn
+                                ? Alignment.centerLeft
+                                : Alignment.centerRight,
+                            width: 52,
+                            margin: rec.isStateOn
+                                ? EdgeInsets.only(left: 2)
+                                : EdgeInsets.only(right: 8),
+                            padding: rec.isStateOn
+                                ? EdgeInsets.all(8)
+                                : EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: rec.isStateOn
+                                  ? ThemeInfo.colorIconActive.withOpacity(0.25)
+                                  : ThemeInfo.colorIconInActive.withOpacity(0),
+                              border: Border.all(
+                                color: ThemeInfo.colorIconActive,
+                                width: 2.0,
+                              ),
+                            ),
+                            child: AutoSizeText(
+                              "$formattedChangedTime",
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
       ),
     );
   }
