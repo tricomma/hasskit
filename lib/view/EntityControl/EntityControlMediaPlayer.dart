@@ -449,9 +449,9 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
   Entity entity;
   bool supportSeekSet;
   DateTime isSeeking;
-  double currentPosition;
+  double currentPosition = 0.0;
   double mediaPositionLast;
-
+  Timer timerPeriodic;
   @override
   void initState() {
     super.initState();
@@ -461,15 +461,26 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
     isSeeking = DateTime.now();
     entity = gd.entities[widget.entityId];
 
-    new Timer.periodic(refreshTime, (Timer t) {
-      if (isSeeking.isBefore(DateTime.now()) &&
-          gd.entities[widget.entityId].state == "playing") {
-        setState(() {
-          currentPosition = currentPosition + refreshTime.inMilliseconds / 1000;
-          currentPosition = currentPosition.clamp(0, entity.mediaDuration);
-        });
-      }
-    });
+    if (entity != null &&
+        entity.getSupportedFeaturesMediaPlayer.contains("SUPPORT_SEEK")) {
+      timerPeriodic = Timer.periodic(refreshTime, (Timer t) {
+        if (isSeeking.isBefore(DateTime.now()) &&
+            entity != null &&
+            gd.entities[widget.entityId].state == "playing") {
+          setState(() {
+            currentPosition =
+                currentPosition + refreshTime.inMilliseconds / 1000;
+            currentPosition = currentPosition.clamp(0, entity.mediaDuration);
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    timerPeriodic.cancel();
+    super.dispose();
   }
 
   @override

@@ -2229,18 +2229,27 @@ class GeneralData with ChangeNotifier {
   Color stringToColor(String colorString) {
 //    String valueString =
 //        colorString.split('(0x')[1].split(')')[0]; // kind of hacky..
-
-    colorString = colorString.replaceAll("0x", "");
-    colorString = colorString.toUpperCase(); // kind of hacky..
-    int value = int.parse(colorString, radix: 16);
-    Color color = Color(value);
-    return color;
+    try {
+      colorString = colorString.replaceAll("0x", "");
+      colorString = colorString.replaceAll("0X", "");
+      colorString = colorString.toUpperCase(); // kind of hacky..
+      colorString = colorString.replaceAll("COLOR(", "");
+      int value = int.parse(colorString, radix: 16);
+      Color color = Color(value);
+      return color;
+    } catch (e) {
+      log.d("stringToColor $colorString ");
+      log.d("stringToColor $e");
+      return Colors.grey;
+    }
   }
 
   String colorToString(Color color) {
     String colorString = color.toString();
-    colorString = colorString.replaceAll("Color(0x", "");
+    colorString = colorString.toUpperCase();
+    colorString = colorString.replaceAll("COLOR(0X", "");
     colorString = colorString.replaceAll(")", "");
+    log.d("colorToString ${color.toString()} $colorString");
     return colorString;
   }
 }
