@@ -281,83 +281,16 @@ class GeneralData with ChangeNotifier {
   }
 
   void socketSubscribeEvents(dynamic message) {
-//    print('socketSubscribeEvents $message');
-    Entity newEntity = Entity.fromJson(message['event']['data']['new_state']);
-    if (newEntity == null || newEntity.entityId == null) {
-      log.w('socketSubscribeEvents newEntity == null');
+    String entityId = message['event']['data']['new_state']["entity_id"];
+    if (entityId == null || entityId == "" || entityId == "null") {
       return;
     }
 
-    if (newEntity.entityId.contains("media_player")) {
-      log.e(
-          "\n\nsocketSubscribeEvents [${newEntity.entityId}] [state: ${newEntity.state}] [volumeLevel: ${newEntity.volumeLevel}] [isVolumeMuted: ${newEntity.isVolumeMuted}] ${newEntity.supportedFeatures} ${newEntity.getSupportedFeaturesMediaPlayer}");
-      log.w("socketSubscribeEvents message $message");
-    }
+    log.w("socketSubscribeEvents $entityId");
+    _entities[entityId] =
+        Entity.fromJson(message['event']['data']['new_state']);
 
-    eventsEntities = "${newEntity.entityId}+${newEntity.state}";
-    eventEntityUpdate(newEntity.entityId);
-    Entity oldEntity = entities[newEntity.entityId];
-
-//all
-    if (oldEntity != null) {
-      oldEntity.state = newEntity.state;
-      oldEntity.icon = newEntity.icon;
-      oldEntity.friendlyName = newEntity.friendlyName;
-
-//climate
-      oldEntity.hvacModes = newEntity.hvacModes;
-      oldEntity.minTemp = newEntity.minTemp;
-      oldEntity.maxTemp = newEntity.maxTemp;
-      oldEntity.targetTempStep = newEntity.targetTempStep;
-      oldEntity.currentTemperature = newEntity.currentTemperature;
-      oldEntity.temperature = newEntity.temperature;
-      oldEntity.fanMode = newEntity.fanMode;
-      oldEntity.fanModes = newEntity.fanModes;
-      oldEntity.deviceCode = newEntity.deviceCode;
-      oldEntity.manufacturer = newEntity.manufacturer;
-
-//fan
-      oldEntity.speedList = newEntity.speedList;
-      oldEntity.oscillating = newEntity.oscillating;
-      oldEntity.speedLevel = newEntity.speedLevel;
-      oldEntity.speed = newEntity.speed;
-      oldEntity.angle = newEntity.angle;
-      oldEntity.directSpeed = newEntity.directSpeed;
-
-//lights
-      oldEntity.supportedFeatures = newEntity.supportedFeatures;
-      oldEntity.brightness = newEntity.brightness;
-      oldEntity.rgbColor = newEntity.rgbColor;
-      oldEntity.minMireds = newEntity.minMireds;
-      oldEntity.maxMireds = newEntity.maxMireds;
-      oldEntity.colorTemp = newEntity.colorTemp;
-      oldEntity.currentPosition = newEntity.currentPosition;
-//input_number
-      oldEntity.initial = newEntity.initial;
-      oldEntity.min = newEntity.min;
-      oldEntity.max = newEntity.max;
-      oldEntity.step = newEntity.step;
-//media_player
-      oldEntity.volumeLevel = newEntity.volumeLevel;
-      oldEntity.mediaDuration = newEntity.mediaDuration;
-      oldEntity.mediaPosition = newEntity.mediaPosition;
-      oldEntity.isVolumeMuted = newEntity.isVolumeMuted;
-      oldEntity.mediaContentType = newEntity.mediaContentType;
-      oldEntity.mediaTitle = newEntity.mediaTitle;
-      oldEntity.mediaArtist = newEntity.mediaArtist;
-      oldEntity.source = newEntity.source;
-      oldEntity.sourceList = newEntity.sourceList;
-      oldEntity.soundMode = newEntity.soundMode;
-      oldEntity.soundModeList = newEntity.soundModeList;
-      oldEntity.soundModeRaw = newEntity.soundModeRaw;
-      oldEntity.entityPicture = newEntity.entityPicture;
-
-      notifyListeners();
-    } else {
-      _entities[newEntity.entityId] = newEntity;
-      log.e('WTF newEntity ${newEntity.entityId}');
-      notifyListeners();
-    }
+    notifyListeners();
   }
 
   String _eventsEntities;
