@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -205,9 +204,10 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                                 width: 2.0,
                               ),
                             ),
-                            child: AutoSizeText(
+                            child: Text(
                               "$formattedChangedTime",
                               maxLines: 1,
+                              textScaleFactor: gd.textScaleFactor * 0.75,
                             ),
                           ),
                         ],

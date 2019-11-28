@@ -287,6 +287,8 @@ class GeneralData with ChangeNotifier {
     }
 
     log.w("socketSubscribeEvents $entityId");
+
+    eventEntityUpdate(entityId);
     _entities[entityId] =
         Entity.fromJson(message['event']['data']['new_state']);
 
