@@ -31,6 +31,30 @@ class BottomSheetMenu {
       }
     }
 
+    if (!showSort) {
+      classIds.clear();
+      for (String entityId in gd.roomList[roomIndex].row3) {
+        if (!classIds.contains(gd.entityTypeCombined(entityId))) {
+          classIds.add(gd.entityTypeCombined(entityId));
+        } else {
+          showSort = true;
+          break;
+        }
+      }
+    }
+
+    if (!showSort) {
+      classIds.clear();
+      for (String entityId in gd.roomList[roomIndex].row4) {
+        if (!classIds.contains(gd.entityTypeCombined(entityId))) {
+          classIds.add(gd.entityTypeCombined(entityId));
+        } else {
+          showSort = true;
+          break;
+        }
+      }
+    }
+
     log.d(
         "BottomSheetMenu roomIndex $roomIndex gd.roomList.length ${gd.roomList.length}");
     bool showMoveLeft = false;
