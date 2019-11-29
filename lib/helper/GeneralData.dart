@@ -288,7 +288,7 @@ class GeneralData with ChangeNotifier {
 
     log.w("socketSubscribeEvents $entityId");
 
-    if (entityId.contains("media_player"))
+    if (entityId.contains("light."))
       log.w(
           "socketSubscribeEvents new_state ${message['event']['data']['new_state'].toString()}");
 
@@ -1015,6 +1015,7 @@ class GeneralData with ChangeNotifier {
   Timer _roomListSaveTimer;
 
   void roomListSave(bool saveFirebase) {
+    notifyListeners();
     _roomListSaveTimer?.cancel();
     _roomListSaveTimer = null;
     _roomListSaveTimer = Timer(Duration(seconds: 5), () {
@@ -1464,6 +1465,7 @@ class GeneralData with ChangeNotifier {
   Timer _baseSettingSaveTimer;
 
   void baseSettingSave(bool saveFirebase) {
+    notifyListeners();
     _baseSettingSaveTimer?.cancel();
     _baseSettingSaveTimer = null;
     _baseSettingSaveTimer = Timer(Duration(seconds: 5), () {
@@ -1587,6 +1589,7 @@ class GeneralData with ChangeNotifier {
   Timer _entitiesOverrideSaveTimer;
 
   void entitiesOverrideSave(bool saveFirebase) {
+    notifyListeners();
     _entitiesOverrideSaveTimer?.cancel();
     _entitiesOverrideSaveTimer = null;
     _entitiesOverrideSaveTimer = Timer(Duration(seconds: 5), () {

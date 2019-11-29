@@ -85,7 +85,8 @@ class EntityControlMediaPlayer extends StatelessWidget {
                                     return Center(
                                       child: SpinKitThreeBounce(
                                         size: 40,
-                                        color: Colors.grey.withOpacity(0.5),
+                                        color: ThemeInfo.colorIconActive
+                                            .withOpacity(0.5),
                                       ),
 //                                    child: CircularProgressIndicator(
 //                                      value: loadingProgress

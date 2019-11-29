@@ -46,14 +46,13 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
     }
 
     return Container(
-      padding: EdgeInsets.all(8),
       height: gd.mediaQueryHeight - kBottomNavigationBarHeight - kToolbarHeight,
       child: ModalProgressHUD(
         inAsyncCall: inAsyncCall,
         opacity: 0,
         progressIndicator: SpinKitThreeBounce(
           size: 40,
-          color: Colors.grey.withOpacity(0.025),
+          color: ThemeInfo.colorIconActive.withOpacity(0.5),
         ),
         child: inAsyncCall
             ? Container()
@@ -86,7 +85,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                             : Alignment.bottomLeft,
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.only(left: 25),
+                            margin: EdgeInsets.only(left: 33),
                             color: ThemeInfo.colorIconActive,
                             width: 2,
                             height: 5,
@@ -95,7 +94,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                             height: 50,
                             child: Row(
                               children: <Widget>[
-                                SizedBox(width: 6),
+                                SizedBox(width: 14),
                                 Container(
                                   padding: EdgeInsets.all(2),
                                   alignment: Alignment.center,
@@ -178,30 +177,38 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                             ? Alignment.centerRight
                             : Alignment.centerLeft,
                         children: <Widget>[
-                          Container(
-                            width: 5,
-                            height: 2,
-                            color: ThemeInfo.colorIconActive,
-                          ),
+//                          Container(
+//                            width: 5,
+//                            height: 2,
+//                            color: ThemeInfo.colorIconActive,
+//                          ),
                           Container(
                             alignment: rec.isStateOn
                                 ? Alignment.center
                                 : Alignment.center,
                             width: 40,
                             margin: rec.isStateOn
-                                ? EdgeInsets.only(left: 4, right: 4)
-                                : EdgeInsets.only(left: 4, right: 4),
+                                ? EdgeInsets.only(left: 8, right: 0)
+                                : EdgeInsets.only(left: 0, right: 8),
                             padding: rec.isStateOn
                                 ? EdgeInsets.all(2)
                                 : EdgeInsets.all(2),
                             decoration: BoxDecoration(
-                              shape: BoxShape.circle,
+                              borderRadius: rec.isStateOn
+                                  ? BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      bottomLeft: Radius.circular(8),
+                                    )
+                                  : BorderRadius.only(
+                                      topRight: Radius.circular(8),
+                                      bottomRight: Radius.circular(8),
+                                    ),
                               color: rec.isStateOn
                                   ? ThemeInfo.colorIconActive.withOpacity(0.25)
                                   : ThemeInfo.colorIconInActive.withOpacity(0),
                               border: Border.all(
-                                color: ThemeInfo.colorIconActive,
-                                width: 2.0,
+                                color: ThemeInfo.colorIconActive.withOpacity(1),
+                                width: 1.0,
                               ),
                             ),
                             child: Text(

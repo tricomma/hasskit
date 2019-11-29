@@ -51,32 +51,43 @@ class DeviceTypeHeaderEditNormal extends StatelessWidget {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: Stack(
-              alignment: Alignment.bottomRight,
               children: <Widget>[
-                Container(
-                  height: 2,
-                  padding: icon.icon == Icons.looks_one ||
-                          icon.icon == Icons.looks_two ||
-                          icon.icon == Icons.looks_3 ||
-                          icon.icon == Icons.looks_4
-                      ? EdgeInsets.fromLTRB(10, 2, 10, 2)
-                      : EdgeInsets.fromLTRB(16, 2, 8, 2),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.topRight,
-                        colors: [
-                          ThemeInfo.colorBottomSheet.withOpacity(0.0),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.8),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.7),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.6),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.5),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.4),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.3),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.2),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.1),
-                          ThemeInfo.colorBottomSheet.withOpacity(0.0),
-                        ]),
+                Positioned(
+                  left: 16,
+                  bottom: 7,
+                  child: Container(
+                    height: 1,
+                    width: gd.mediaQueryWidth - 32,
+                    padding: icon.icon == Icons.looks_one ||
+                            icon.icon == Icons.looks_two ||
+                            icon.icon == Icons.looks_3 ||
+                            icon.icon == Icons.looks_4
+                        ? EdgeInsets.fromLTRB(10, 2, 10, 2)
+                        : EdgeInsets.fromLTRB(16, 2, 8, 2),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.topRight,
+                          colors: [
+                            ThemeInfo.colorBottomSheetReverse.withOpacity(0.0),
+                            ThemeInfo.colorBottomSheetReverse.withOpacity(0.5),
+//                            ThemeInfo.colorBottomSheet.withOpacity(0.7),
+//                            ThemeInfo.colorBottomSheet.withOpacity(0.6),
+//                            ThemeInfo.colorBottomSheet.withOpacity(0.5),
+//                            ThemeInfo.colorBottomSheet.withOpacity(0.4),
+//                            ThemeInfo.colorBottomSheet.withOpacity(0.3),
+//                            ThemeInfo.colorBottomSheet.withOpacity(0.2),
+//                            ThemeInfo.colorBottomSheet.withOpacity(0.1),
+                            ThemeInfo.colorBottomSheetReverse.withOpacity(0.0),
+                          ]),
+                      boxShadow: [
+                        new BoxShadow(
+                          color: ThemeInfo.colorBottomSheet.withOpacity(0.5),
+                          offset: new Offset(0.0, 1.0),
+                          blurRadius: 1.0,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Row(

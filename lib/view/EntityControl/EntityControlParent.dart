@@ -110,7 +110,7 @@ class _EntityControlParentState extends State<EntityControlParent> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    SizedBox(height: kToolbarHeight),
+                    SizedBox(height: 24),
                     Container(
                       height: 50,
                       child: Stack(
@@ -297,18 +297,6 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                         ? entityControl
                                         : Container(),
                                   ),
-                                  entity.entityType ==
-                                              EntityType.lightSwitches ||
-                                          entity.entityType ==
-                                              EntityType.climateFans
-                                      ? Container(
-                                          height: 60,
-                                          child: EntityControlBinarySensor(
-                                            entityId: entity.entityId,
-                                            horizontalMode: true,
-                                          ),
-                                        )
-                                      : Container(),
                                 ],
                               ),
                             ],
@@ -331,27 +319,79 @@ class _EntityControlParentState extends State<EntityControlParent> {
                               ),
                             ],
                           ),
-
                     Expanded(
-                      flex: 2,
                       child: Container(),
                     ),
-
-//                  SizedBox(height: 40),
+                    entity.entityType == EntityType.lightSwitches ||
+                            entity.entityType == EntityType.climateFans
+                        ? Column(
+                            children: <Widget>[
+                              Container(
+                                height: 20,
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: EntityControlBinarySensor(
+                                  entityId: entity.entityId,
+                                  horizontalMode: true,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                            ],
+                          )
+                        : Container(),
                   ],
                 ),
               ),
+              entity.entityType == EntityType.lightSwitches ||
+                      entity.entityType == EntityType.climateFans
+                  ? Positioned(
+                      bottom: 6,
+                      left: 6,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: ThemeInfo.colorBottomSheet,
+                          boxShadow: [
+                            new BoxShadow(
+                              color: ThemeInfo.colorBottomSheet,
+                              offset: new Offset(0.0, 0.0),
+                              blurRadius: 6.0,
+                            )
+                          ],
+                        ),
+                        child: Icon(
+                          MaterialDesignIcons.getIconDataFromIconName(
+                              "mdi:history"),
+                          color: ThemeInfo.colorBottomSheetReverse
+                              .withOpacity(0.25),
+                          size: 28,
+                        ),
+                      ),
+                    )
+                  : Container(),
               Positioned(
-                bottom: 10,
-                right: 10,
+                bottom: 6,
+                right: 6,
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);
                   },
-                  child: Icon(
-                    Icons.cancel,
-                    color: ThemeInfo.colorBottomSheetReverse,
-                    size: 28,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: ThemeInfo.colorBottomSheet,
+                      boxShadow: [
+                        new BoxShadow(
+                          color: ThemeInfo.colorBottomSheet,
+                          offset: new Offset(0.0, 0.0),
+                          blurRadius: 6.0,
+                        )
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.cancel,
+                      color: ThemeInfo.colorBottomSheetReverse.withOpacity(1),
+                      size: 28,
+                    ),
                   ),
                 ),
               ),
@@ -387,9 +427,17 @@ class __IconSelectionState extends State<_IconSelection> {
           width: double.infinity,
           height: 28,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-              color: ThemeInfo.colorIconActive),
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+            color: ThemeInfo.colorIconActive,
+            boxShadow: [
+              new BoxShadow(
+                color: ThemeInfo.colorBottomSheet,
+                offset: new Offset(0.0, 0.0),
+                blurRadius: 6.0,
+              )
+            ],
+          ),
           child: Center(
             child: Text(
               "Select Custom Icon",

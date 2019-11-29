@@ -203,7 +203,7 @@ class EntityIconStatus extends StatelessWidget {
         child: (gd.showSpin || gd.entities[entityId].state.contains("..."))
             ? SpinKitThreeBounce(
                 size: 100,
-                color: ThemeInfo.colorIconActive,
+                color: ThemeInfo.colorIconActive.withOpacity(0.5),
               )
             : Container(),
       ),
@@ -264,6 +264,19 @@ class EntityIcon extends StatelessWidget {
                     : entity.state.contains("pending")
                         ? ThemeInfo.colorIconActive
                         : Colors.red),
+          ],
+        ),
+      );
+    } else if (entity.rgbColor.length > 2) {
+      iconWidget = FittedBox(
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Icon(
+              entity.mdiIcon,
+              color: Color.fromRGBO(entity.rgbColor[0], entity.rgbColor[1],
+                  entity.rgbColor[2], 1),
+            ),
           ],
         ),
       );

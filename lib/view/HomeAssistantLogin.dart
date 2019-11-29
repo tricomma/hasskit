@@ -43,7 +43,7 @@ class HomeAssistantLogin extends StatelessWidget {
                 SizedBox(height: 25),
                 SpinKitThreeBounce(
                   size: 40,
-                  color: ThemeInfo.colorIconActive,
+                  color: ThemeInfo.colorIconActive.withOpacity(0.5),
                 ),
                 SizedBox(height: 25),
                 Text(

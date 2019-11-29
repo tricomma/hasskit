@@ -205,7 +205,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
             opacity: 1,
             progressIndicator: SpinKitThreeBounce(
               size: 40,
-              color: ThemeInfo.colorIconActive,
+              color: ThemeInfo.colorIconActive.withOpacity(0.5),
             ),
             color: ThemeInfo.colorBackgroundDark,
             child: CupertinoTabScaffold(

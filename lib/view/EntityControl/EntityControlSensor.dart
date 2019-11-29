@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
+import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/model/Sensor.dart';
 import 'package:hasskit/helper/SensorChart.dart';
 import 'package:http/http.dart' as http;
@@ -64,7 +65,7 @@ class _EntityControlSensorState extends State<EntityControlSensor> {
         opacity: 0,
         progressIndicator: SpinKitThreeBounce(
           size: 40,
-          color: Colors.grey.withOpacity(0.5),
+          color: ThemeInfo.colorIconActive.withOpacity(0.5),
         ),
         child: Container(
           height: gd.mediaQueryWidth * 5 / 8,
