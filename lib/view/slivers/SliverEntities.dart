@@ -103,12 +103,10 @@ class SliverEntitiesNormal extends StatelessWidget {
                                   null &&
                               gd.entitiesOverride[entities[index].entityId]
                                       .openRequireAttention !=
-                                  null &&
-                              gd.entitiesOverride[entities[index].entityId]
-                                      .openRequireAttention ==
-                                  true ||
+                                  null ||
                           entities[index].entityId.contains('lock.') &&
-                              !entities[index].isStateOn) {
+                              !entities[index].isStateOn ||
+                          entities[index].currentPosition != null) {
                         showModalBottomSheet(
                           context: context,
                           elevation: 1,

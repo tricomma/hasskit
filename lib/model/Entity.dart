@@ -456,10 +456,10 @@ class Entity {
       if (entityId.contains("window")) return 'mdi:window-close';
     }
 
-    if (MaterialDesignIcons.defaultIconsByDomains["$domain$stateTranslate"] !=
+    if (MaterialDesignIcons.defaultIconsByDomains["$domain.$stateTranslate"] !=
         null) {
       return MaterialDesignIcons
-          .defaultIconsByDomains["$domain$stateTranslate"];
+          .defaultIconsByDomains["$domain.$stateTranslate"];
     }
 
     if (MaterialDesignIcons.defaultIconsByDomains["$domain"] != null) {

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
@@ -42,11 +40,10 @@ class _EntityControlParentState extends State<EntityControlParent> {
   Widget build(BuildContext context) {
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
-//          "${generalData.toggleStatusMap[widget.entityId]} " +
           "${generalData.entities[widget.entityId].state} " +
           "${generalData.entities[widget.entityId].getFriendlyName} " +
           "${generalData.entities[widget.entityId].getOverrideIcon} " +
-          "${jsonEncode(generalData.entitiesOverride[widget.entityId])} ",
+          "",
       builder: (context, data, child) {
         final Entity entity = gd.entities[widget.entityId];
         if (entity == null) {
@@ -326,6 +323,11 @@ class _EntityControlParentState extends State<EntityControlParent> {
                                       .requestFocus(new FocusNode());
                                   setState(() {});
                                 },
+                                clickChangeIcon: () {
+                                  FocusScope.of(context)
+                                      .requestFocus(new FocusNode());
+                                  setState(() {});
+                                },
                               ),
                             ],
                           ),
@@ -364,8 +366,12 @@ class _EntityControlParentState extends State<EntityControlParent> {
 class _IconSelection extends StatefulWidget {
   final String entityId;
   final Function closeIconSelection;
-  const _IconSelection(
-      {@required this.entityId, @required this.closeIconSelection});
+  final Function clickChangeIcon;
+  const _IconSelection({
+    @required this.entityId,
+    @required this.closeIconSelection,
+    @required this.clickChangeIcon,
+  });
 
   @override
   __IconSelectionState createState() => __IconSelectionState();
@@ -428,10 +434,9 @@ class __IconSelectionState extends State<_IconSelection> {
                                 entityOverride;
                           }
 
-                          FocusScope.of(context).requestFocus(new FocusNode());
+                          widget.clickChangeIcon();
 
                           gd.entitiesOverrideSave(true);
-//                          widget.closeIconSelection();
                         },
                         child: Container(
                           decoration: BoxDecoration(

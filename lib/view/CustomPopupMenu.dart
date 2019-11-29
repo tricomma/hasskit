@@ -70,7 +70,7 @@ class BottomSheetMenu {
                       roomIndex,
                       'Arrange ${gd.roomList[roomIndex].name} Devices',
                       MaterialDesignIcons.getIconDataFromIconName(
-                          "mdi:cursor-move"),
+                          "mdi:vector-arrange-above"),
                       showSort,
                       sortRoom),
                   _createTile(
