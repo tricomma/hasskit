@@ -287,7 +287,9 @@ class EntityIcon extends StatelessWidget {
           children: <Widget>[
             Icon(
               entity.mdiIcon,
-              color: entity.isStateOn
+              color: entity.isStateOn ||
+                      entity.entityId.contains("sensor.") &&
+                          !entity.entityId.contains("binary_sensor.")
                   ? ThemeInfo.colorIconActive
                   : ThemeInfo.colorIconInActive,
             ),

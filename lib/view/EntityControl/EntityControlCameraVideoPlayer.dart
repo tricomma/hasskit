@@ -58,11 +58,15 @@ class _EntityControlCameraVideoPlayerState
                 color: ThemeInfo.colorIconActive.withOpacity(0.5),
               ),
               color: ThemeInfo.colorBackgroundDark,
-              child: Center(
+              child: Container(
+                color: ThemeInfo.colorBackgroundDark,
+                child: Center(
                   child: AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              )),
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  ),
+                ),
+              ),
             ),
           );
         } catch (e) {

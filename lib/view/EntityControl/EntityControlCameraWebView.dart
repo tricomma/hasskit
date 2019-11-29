@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
+import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -43,20 +44,23 @@ class _EntityControlCameraWebViewState
       builder: (context, data, child) {
         return gd.cameraStreamUrl.length < 10
             ? Container()
-            : WebView(
-                initialUrl: gd.cameraStreamUrl,
-                javascriptMode: JavascriptMode.unrestricted,
-                initialMediaPlaybackPolicy:
-                    AutoMediaPlaybackPolicy.always_allow,
-                onWebViewCreated: (WebViewController webViewController) {
-                  _controller.complete(webViewController);
-                },
-                onPageFinished: (String urlVal) {
-                  showSpin = false;
-                  url = urlVal;
-                  log.d('Page finished loading: $url');
+            : Container(
+                color: ThemeInfo.colorBackgroundDark,
+                child: WebView(
+                  initialUrl: gd.cameraStreamUrl,
+                  javascriptMode: JavascriptMode.unrestricted,
+                  initialMediaPlaybackPolicy:
+                      AutoMediaPlaybackPolicy.always_allow,
+                  onWebViewCreated: (WebViewController webViewController) {
+                    _controller.complete(webViewController);
+                  },
+                  onPageFinished: (String urlVal) {
+                    showSpin = false;
+                    url = urlVal;
+                    log.d('Page finished loading: $url');
 //                        delayedHide();
-                },
+                  },
+                ),
               );
       },
     );

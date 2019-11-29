@@ -490,7 +490,9 @@ class _MpSeekSliderState extends State<MpSeekSlider> {
 
   @override
   void dispose() {
-    timerPeriodic.cancel();
+    if (timerPeriodic != null) {
+      timerPeriodic.cancel();
+    }
     super.dispose();
   }
 
