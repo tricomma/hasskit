@@ -288,6 +288,10 @@ class GeneralData with ChangeNotifier {
 
     log.w("socketSubscribeEvents $entityId");
 
+    if (entityId.contains("media_player"))
+      log.w(
+          "socketSubscribeEvents new_state ${message['event']['data']['new_state'].toString()}");
+
     eventEntityUpdate(entityId);
     _entities[entityId] =
         Entity.fromJson(message['event']['data']['new_state']);

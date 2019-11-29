@@ -5,6 +5,7 @@ import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:provider/provider.dart';
+import 'package:vector_math/vector_math_64.dart' as vm;
 
 class EntityButton extends StatelessWidget {
   final String entityId;
@@ -34,8 +35,69 @@ class EntityButton extends StatelessWidget {
           child: InkWell(
             onTap: onTapCallback,
             onLongPress: onLongPressCallback,
-            child: EntityButtonDisplay(entityId: entityId),
+            child: gd.viewMode == ViewMode.sort
+                ? EntityButtonDisplayAnimated(entityId: entityId)
+                : EntityButtonDisplay(entityId: entityId),
           ),
+        );
+      },
+    );
+  }
+}
+
+class EntityButtonDisplayAnimated extends StatefulWidget {
+  const EntityButtonDisplayAnimated({@required this.entityId});
+
+  final String entityId;
+
+  @override
+  _EntityButtonDisplayAnimatedState createState() =>
+      _EntityButtonDisplayAnimatedState();
+}
+
+class _EntityButtonDisplayAnimatedState
+    extends State<EntityButtonDisplayAnimated>
+    with SingleTickerProviderStateMixin {
+  AnimationController animationController;
+  Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    )..repeat(reverse: false);
+
+    animation = Tween<double>(
+      begin: 50.0,
+      end: 120.0,
+    ).animate(animationController);
+  }
+
+  vm.Vector3 shake() {
+//    double progress = animationController.value;
+//    double offset = sin(progress * pi * 10.0);
+//    double offset = 1;
+    return vm.Vector3(random.nextDouble() * random.nextInt(5),
+        random.nextDouble() * random.nextInt(5), 0.0);
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        return Transform(
+          transform: Matrix4.translation(shake()),
+          child: EntityButtonDisplay(entityId: widget.entityId),
         );
       },
     );
@@ -44,9 +106,7 @@ class EntityButton extends StatelessWidget {
 
 class EntityButtonDisplay extends StatefulWidget {
   const EntityButtonDisplay({@required this.entityId});
-
   final String entityId;
-
   @override
   _EntityButtonDisplayState createState() => _EntityButtonDisplayState();
 }
@@ -145,30 +205,7 @@ class EntityIconStatus extends StatelessWidget {
                 size: 100,
                 color: ThemeInfo.colorIconActive,
               )
-            : gd.viewMode == ViewMode.sort
-//                ? Stack(
-//                    children: <Widget>[
-//                      Container(
-//                        width: 100,
-//                        height: 100,
-//                        decoration: BoxDecoration(
-//                            color: Colors.white,
-//                            borderRadius: BorderRadius.circular(8)),
-//                      ),
-//                      SpinKitFadingGrid(
-//                        size: 100,
-//                        color: Colors.black,
-//                      ),
-//                      Container(),
-//                    ],
-//                  )
-                ? Icon(
-                    MaterialDesignIcons.getIconDataFromIconName(
-                        "mdi:cursor-move"),
-                    size: 100,
-                    color: Colors.amber.withOpacity(0.8),
-                  )
-                : Container(),
+            : Container(),
       ),
     );
   }
