@@ -25,6 +25,7 @@ class _SliverWebViewState extends State<SliverWebView> {
   bool showAddress = false;
   bool isValidUrl = true;
   bool pinWebView = false;
+  double opacity = 0.2;
   double aspect = 0.7;
   double aspectDisplay = 0.7;
   String currentUrl;
@@ -57,6 +58,19 @@ class _SliverWebViewState extends State<SliverWebView> {
     });
   }
 
+  Timer _changeOpacityTimer;
+
+  void changeOpacity() {
+    opacity = 1;
+    _changeOpacityTimer?.cancel();
+    _changeOpacityTimer = null;
+    _changeOpacityTimer = Timer(Duration(seconds: 10), () {
+      setState(() {
+        opacity = 0.2;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -85,246 +99,250 @@ class _SliverWebViewState extends State<SliverWebView> {
                   });
                 },
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
-                    decoration: BoxDecoration(
-                      color: showAddress
-                          ? ThemeInfo.colorBottomSheet.withOpacity(1)
-                          : ThemeInfo.colorBottomSheet.withOpacity(0),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              if (showAddress)
-                                changeUrl(textController.text.trim());
-                              showAddress = !showAddress;
-                              Flushbar(
-                                message: "Edit webview",
-                                duration: Duration(seconds: 3),
-                                shouldIconPulse: true,
-                                icon: Icon(
-                                  Icons.info,
-                                  color: ThemeInfo.colorIconActive,
-                                ),
-                              )..show(context);
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ThemeInfo.colorBottomSheet
-                                      .withOpacity(0.5),
-                                  offset: new Offset(0.0, 0.0),
-                                  blurRadius: 3.0,
-                                )
-                              ],
-                            ),
-                            child: showAddress
-                                ? Icon(
-                                    MaterialDesignIcons.getIconDataFromIconName(
-                                        "mdi:content-save"))
-                                : Icon(
-                                    MaterialDesignIcons.getIconDataFromIconName(
-                                        "mdi:pencil")),
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        InkWell(
-                          onTap: () {
-                            webController.reload();
-                            Flushbar(
-                              message: "Reload webview",
-                              duration: Duration(seconds: 3),
-                              shouldIconPulse: true,
-                              icon: Icon(
-                                Icons.info,
-                                color: ThemeInfo.colorIconActive,
-                              ),
-                            )..show(context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ThemeInfo.colorBottomSheet
-                                      .withOpacity(0.5),
-                                  offset: new Offset(0.0, 0.0),
-                                  blurRadius: 3.0,
-                                )
-                              ],
-                            ),
-                            child: Icon(
-                                MaterialDesignIcons.getIconDataFromIconName(
-                                    "mdi:refresh")),
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              pinWebView = !pinWebView;
-                              Flushbar(
-                                message: pinWebView
-                                    ? "Pin webview - Prevent webview scrolling"
-                                    : "Unpin webview - Allow webview scrolling",
-                                duration: Duration(seconds: 3),
-                                shouldIconPulse: true,
-                                icon: Icon(
-                                  Icons.info,
-                                  color: ThemeInfo.colorIconActive,
-                                ),
-                              )..show(context);
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ThemeInfo.colorBottomSheet
-                                      .withOpacity(0.5),
-                                  offset: new Offset(0.0, 0.0),
-                                  blurRadius: 3.0,
-                                )
-                              ],
-                            ),
-                            child: pinWebView
-                                ? Icon(
-                                    MaterialDesignIcons.getIconDataFromIconName(
-                                        "mdi:pin"))
-                                : Icon(
-                                    MaterialDesignIcons.getIconDataFromIconName(
-                                        "mdi:pin-off")),
-                          ),
-                        ),
-                        Expanded(child: Container()),
-                        showAddress
-                            ? Row(
-                                children: <Widget>[
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        textController.text =
-                                            gd.webViewPresets[0];
-                                        changeUrl(textController.text);
-                                        showAddress = false;
-                                      });
-                                    },
-                                    child: Container(
-                                      child: Text(
-                                        "Windy",
-                                        textScaleFactor: gd.textScaleFactor,
-                                      ),
-                                    ),
+              Opacity(
+                opacity: showAddress ? 1 : opacity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(4, 4, 4, 4),
+                      decoration: BoxDecoration(
+                        color: showAddress
+                            ? ThemeInfo.colorBottomSheet.withOpacity(1)
+                            : ThemeInfo.colorBottomSheet.withOpacity(0),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                changeOpacity();
+                                if (showAddress)
+                                  changeUrl(textController.text.trim());
+                                showAddress = !showAddress;
+                                Flushbar(
+                                  message: "Edit webview",
+                                  duration: Duration(seconds: 3),
+                                  shouldIconPulse: true,
+                                  icon: Icon(
+                                    Icons.info,
+                                    color: ThemeInfo.colorIconActive,
                                   ),
-                                  Container(child: Text(" | ")),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        textController.text =
-                                            gd.webViewPresets[1];
-                                        changeUrl(textController.text);
-                                        showAddress = false;
-                                      });
-                                    },
-                                    child: Container(
-                                      child: Text(
-                                        "Y! Weather",
-                                        textScaleFactor: gd.textScaleFactor,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(child: Text(" | ")),
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        textController.text =
-                                            gd.webViewPresets[2];
-                                        changeUrl(textController.text);
-                                        showAddress = false;
-                                      });
-                                    },
-                                    child: Text(
-                                      "LiveScore",
-                                      textScaleFactor: gd.textScaleFactor,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
+                                )..show(context);
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: ThemeInfo.colorBottomSheet
+                                        .withOpacity(0.5),
+                                    offset: new Offset(0.0, 0.0),
+                                    blurRadius: 3.0,
+                                  )
                                 ],
-                              )
-                            : Container()
-                      ],
-                    ),
-                  ),
-                  showAddress
-                      ? Flexible(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            decoration: BoxDecoration(
-                              color: ThemeInfo.colorBottomSheet.withOpacity(1),
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
                               ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                TextFormField(
-                                  decoration: InputDecoration(
-                                    hintText: "https://www.siteadress.com",
-                                  ),
-                                  controller: textController,
-                                  autocorrect: false,
-                                  autovalidate: true,
-                                  autofocus: true,
-                                  maxLines: 3,
-                                  onEditingComplete: () {
-                                    changeUrl(textController.text);
-                                  },
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text("Aspect"),
-                                    SizedBox(width: 8),
-                                    Icon(MaterialDesignIcons
-                                        .getIconDataFromIconName(
-                                            "mdi:crop-landscape")),
-                                    Expanded(
-                                      child: Slider(
-                                        label:
-                                            "${aspectDisplay.toStringAsFixed(1)}",
-                                        divisions: 10,
-                                        min: 0.5,
-                                        value: aspectDisplay,
-                                        max: 1.5,
-                                        onChanged: (val) {
-                                          setState(() {
-                                            aspectDisplay = val;
-                                            changeAspect(val);
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    Icon(MaterialDesignIcons
-                                        .getIconDataFromIconName(
-                                            "mdi:crop-portrait")),
-                                  ],
-                                ),
-                              ],
+                              child: showAddress
+                                  ? Icon(MaterialDesignIcons
+                                      .getIconDataFromIconName(
+                                          "mdi:content-save"))
+                                  : Icon(MaterialDesignIcons
+                                      .getIconDataFromIconName("mdi:pencil")),
                             ),
                           ),
-                        )
-                      : Container(),
-                ],
+                          SizedBox(width: 4),
+                          InkWell(
+                            onTap: () {
+                              changeOpacity();
+                              webController.reload();
+                              Flushbar(
+                                message: "Reload webview",
+                                duration: Duration(seconds: 3),
+                                shouldIconPulse: true,
+                                icon: Icon(
+                                  Icons.info,
+                                  color: ThemeInfo.colorIconActive,
+                                ),
+                              )..show(context);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: ThemeInfo.colorBottomSheet
+                                        .withOpacity(0.5),
+                                    offset: new Offset(0.0, 0.0),
+                                    blurRadius: 3.0,
+                                  )
+                                ],
+                              ),
+                              child: Icon(
+                                  MaterialDesignIcons.getIconDataFromIconName(
+                                      "mdi:refresh")),
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                changeOpacity();
+                                pinWebView = !pinWebView;
+                                Flushbar(
+                                  message: pinWebView
+                                      ? "Pin webview - Prevent webview scrolling"
+                                      : "Unpin webview - Allow webview scrolling",
+                                  duration: Duration(seconds: 3),
+                                  shouldIconPulse: true,
+                                  icon: Icon(
+                                    Icons.info,
+                                    color: ThemeInfo.colorIconActive,
+                                  ),
+                                )..show(context);
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: ThemeInfo.colorBottomSheet
+                                        .withOpacity(0.5),
+                                    offset: new Offset(0.0, 0.0),
+                                    blurRadius: 3.0,
+                                  )
+                                ],
+                              ),
+                              child: pinWebView
+                                  ? Icon(MaterialDesignIcons
+                                      .getIconDataFromIconName("mdi:pin"))
+                                  : Icon(MaterialDesignIcons
+                                      .getIconDataFromIconName("mdi:pin-off")),
+                            ),
+                          ),
+                          Expanded(child: Container()),
+                          showAddress
+                              ? Row(
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          textController.text =
+                                              gd.webViewPresets[0];
+                                          changeUrl(textController.text);
+                                          showAddress = false;
+                                        });
+                                      },
+                                      child: Container(
+                                        child: Text(
+                                          "Windy",
+                                          textScaleFactor: gd.textScaleFactor,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(child: Text(" | ")),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          textController.text =
+                                              gd.webViewPresets[1];
+                                          changeUrl(textController.text);
+                                          showAddress = false;
+                                        });
+                                      },
+                                      child: Container(
+                                        child: Text(
+                                          "Y! Weather",
+                                          textScaleFactor: gd.textScaleFactor,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(child: Text(" | ")),
+                                    InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          textController.text =
+                                              gd.webViewPresets[2];
+                                          changeUrl(textController.text);
+                                          showAddress = false;
+                                        });
+                                      },
+                                      child: Text(
+                                        "LiveScore",
+                                        textScaleFactor: gd.textScaleFactor,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                  ],
+                                )
+                              : Container()
+                        ],
+                      ),
+                    ),
+                    showAddress
+                        ? Flexible(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                color:
+                                    ThemeInfo.colorBottomSheet.withOpacity(1),
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(12),
+                                  bottomRight: Radius.circular(12),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  TextFormField(
+                                    decoration: InputDecoration(
+                                      hintText: "https://www.siteadress.com",
+                                    ),
+                                    controller: textController,
+                                    autocorrect: false,
+                                    autovalidate: true,
+                                    autofocus: true,
+                                    maxLines: 3,
+                                    onEditingComplete: () {
+                                      changeUrl(textController.text);
+                                    },
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text("Aspect"),
+                                      SizedBox(width: 8),
+                                      Icon(MaterialDesignIcons
+                                          .getIconDataFromIconName(
+                                              "mdi:crop-landscape")),
+                                      Expanded(
+                                        child: Slider(
+                                          label:
+                                              "${aspectDisplay.toStringAsFixed(1)}",
+                                          divisions: 10,
+                                          min: 0.5,
+                                          value: aspectDisplay,
+                                          max: 1.5,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              aspectDisplay = val;
+                                              changeAspect(val);
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      Icon(MaterialDesignIcons
+                                          .getIconDataFromIconName(
+                                              "mdi:crop-portrait")),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
               ),
               showSpin
                   ? Container(
