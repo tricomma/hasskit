@@ -327,8 +327,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
                         ? Column(
                             children: <Widget>[
                               Container(
-                                height: 20,
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                height: 25,
+                                padding: EdgeInsets.symmetric(horizontal: 16),
                                 child: EntityControlBinarySensor(
                                   entityId: entity.entityId,
                                   horizontalMode: true,
@@ -344,14 +344,14 @@ class _EntityControlParentState extends State<EntityControlParent> {
               entity.entityType == EntityType.lightSwitches ||
                       entity.entityType == EntityType.climateFans
                   ? Positioned(
-                      bottom: 6,
-                      left: 6,
+                      bottom: 8,
+                      left: 8,
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: ThemeInfo.colorBottomSheet,
                           boxShadow: [
-                            new BoxShadow(
+                            BoxShadow(
                               color: ThemeInfo.colorBottomSheet,
                               offset: new Offset(0.0, 0.0),
                               blurRadius: 6.0,
@@ -369,8 +369,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
                     )
                   : Container(),
               Positioned(
-                bottom: 6,
-                right: 6,
+                bottom: 8,
+                right: 8,
                 child: InkWell(
                   onTap: () {
                     Navigator.pop(context);

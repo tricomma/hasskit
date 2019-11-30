@@ -2198,4 +2198,10 @@ class GeneralData with ChangeNotifier {
     log.d("colorToString ${color.toString()} $colorString");
     return colorString;
   }
+
+  List<String> webViewPresets = [
+    "https://embed.windy.com",
+    "https://www.yahoo.com/news/weather",
+    "https://livescore.com",
+  ];
 }

@@ -186,7 +186,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                             alignment: rec.isStateOn
                                 ? Alignment.center
                                 : Alignment.center,
-                            width: 40,
+                            width: 50,
                             margin: rec.isStateOn
                                 ? EdgeInsets.only(left: 8, right: 0)
                                 : EdgeInsets.only(left: 0, right: 8),
@@ -214,7 +214,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                             child: Text(
                               "$formattedChangedTime",
                               maxLines: 1,
-                              textScaleFactor: gd.textScaleFactor * 0.75,
+                              textScaleFactor: gd.textScaleFactor,
                             ),
                           ),
                         ],
