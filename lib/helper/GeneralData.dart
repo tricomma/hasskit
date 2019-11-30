@@ -215,7 +215,7 @@ class GeneralData with ChangeNotifier {
   }
 
   void socketGetStates(List<dynamic> message) {
-    log.d('getStates');
+//    log.d('socketGetStates $message');
     _entities.clear();
     _entities = {};
 
@@ -232,53 +232,53 @@ class GeneralData with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String> lovelaceEntities = [];
-
-  void socketLovelaceConfig(dynamic message) {
-    log.d('getLovelaceConfig');
-
-    List<dynamic> viewsParse = message['result']['views'];
-//    log.d('viewsParse.length ${viewsParse.length}');
-
-    for (var viewParse in viewsParse) {
-      List<dynamic> badgesParse = viewParse['badges'];
-      for (var badgeParse in badgesParse) {
-        badgeParse = processEntityId(badgeParse.toString());
-//        log.d('badgeParse $badgeParse');
-        if (isEntityNameValid(badgeParse) &&
-            !lovelaceEntities.contains(badgeParse)) {
-          lovelaceEntities.add(badgeParse);
-        }
-      }
-
-      List<dynamic> cardsParse = viewParse['cards'];
-
-      for (var cardParse in cardsParse) {
-        var type = cardParse['type'];
-        if (type == 'entities' || type == 'glance') {
-          List<dynamic> entitiesParse = cardParse['entities'];
-          for (var entityParse in entitiesParse) {
-            entityParse = processEntityId(entityParse.toString());
-//            log.d('entityParse 1 $entityParse');
-            if (isEntityNameValid(entityParse) &&
-                !lovelaceEntities.contains(entityParse)) {
-              lovelaceEntities.add(entityParse);
-            }
-          }
-        } else {
-          var entityParse = cardParse['entity'];
-          entityParse = processEntityId(entityParse.toString());
-//          log.d('entityParse 2 $entityParse');
-          if (isEntityNameValid(entityParse) &&
-              !lovelaceEntities.contains(entityParse)) {
-            lovelaceEntities.add(entityParse);
-          }
-        }
-      }
-    }
-
-    notifyListeners();
-  }
+//  List<String> lovelaceEntities = [];
+//
+//  void socketLovelaceConfig(dynamic message) {
+//    log.d('getLovelaceConfig $message');
+//
+//    List<dynamic> viewsParse = message['result']['views'];
+////    log.d('viewsParse.length ${viewsParse.length}');
+//
+//    for (var viewParse in viewsParse) {
+//      List<dynamic> badgesParse = viewParse['badges'];
+//      for (var badgeParse in badgesParse) {
+//        badgeParse = processEntityId(badgeParse.toString());
+////        log.d('badgeParse $badgeParse');
+//        if (isEntityNameValid(badgeParse) &&
+//            !lovelaceEntities.contains(badgeParse)) {
+//          lovelaceEntities.add(badgeParse);
+//        }
+//      }
+//
+//      List<dynamic> cardsParse = viewParse['cards'];
+//
+//      for (var cardParse in cardsParse) {
+//        var type = cardParse['type'];
+//        if (type == 'entities' || type == 'glance') {
+//          List<dynamic> entitiesParse = cardParse['entities'];
+//          for (var entityParse in entitiesParse) {
+//            entityParse = processEntityId(entityParse.toString());
+////            log.d('entityParse 1 $entityParse');
+//            if (isEntityNameValid(entityParse) &&
+//                !lovelaceEntities.contains(entityParse)) {
+//              lovelaceEntities.add(entityParse);
+//            }
+//          }
+//        } else {
+//          var entityParse = cardParse['entity'];
+//          entityParse = processEntityId(entityParse.toString());
+////          log.d('entityParse 2 $entityParse');
+//          if (isEntityNameValid(entityParse) &&
+//              !lovelaceEntities.contains(entityParse)) {
+//            lovelaceEntities.add(entityParse);
+//          }
+//        }
+//      }
+//    }
+//
+//    notifyListeners();
+//  }
 
   void socketSubscribeEvents(dynamic message) {
     String entityId = message['event']['data']['new_state']["entity_id"];
@@ -286,11 +286,11 @@ class GeneralData with ChangeNotifier {
       return;
     }
 
-    log.w("socketSubscribeEvents $entityId");
+//    log.w("socketSubscribeEvents $entityId");
 
-    if (entityId.contains("light."))
-      log.w(
-          "socketSubscribeEvents new_state ${message['event']['data']['new_state'].toString()}");
+//    if (entityId.contains("light."))
+//    log.w(
+//        "socketSubscribeEvents new_state ${message['event']['data']['new_state'].toString()}");
 
     eventEntityUpdate(entityId);
     _entities[entityId] =
@@ -643,19 +643,19 @@ class GeneralData with ChangeNotifier {
     }
   }
 
-  int _loveLaceConfigId = 0;
-
-  get loveLaceConfigId => _loveLaceConfigId;
-
-  set loveLaceConfigId(int value) {
-    if (value == null) {
-      throw new ArgumentError();
-    }
-    if (_loveLaceConfigId != value) {
-      _loveLaceConfigId = value;
-      notifyListeners();
-    }
-  }
+//  int _loveLaceConfigId = 0;
+//
+//  get loveLaceConfigId => _loveLaceConfigId;
+//
+//  set loveLaceConfigId(int value) {
+//    if (value == null) {
+//      throw new ArgumentError();
+//    }
+//    if (_loveLaceConfigId != value) {
+//      _loveLaceConfigId = value;
+//      notifyListeners();
+//    }
+//  }
 
   bool _useSSL = false;
 

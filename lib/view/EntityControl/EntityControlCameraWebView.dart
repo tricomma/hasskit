@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
@@ -22,7 +23,6 @@ class _EntityControlCameraWebViewState
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
   bool showSpin = true;
-
   String url = "";
   @override
   void initState() {
@@ -42,26 +42,47 @@ class _EntityControlCameraWebViewState
       selector: (_, generalData) =>
           generalData.cameraStreamUrl + url + showSpin.toString(),
       builder: (context, data, child) {
-        return gd.cameraStreamUrl.length < 10
-            ? Container()
-            : Container(
+        return RotatedBox(
+          quarterTurns: 1,
+          child: Stack(
+            children: <Widget>[
+              Container(
                 color: ThemeInfo.colorBackgroundDark,
-                child: WebView(
-                  initialUrl: gd.cameraStreamUrl,
-                  javascriptMode: JavascriptMode.unrestricted,
-                  initialMediaPlaybackPolicy:
-                      AutoMediaPlaybackPolicy.always_allow,
-                  onWebViewCreated: (WebViewController webViewController) {
-                    _controller.complete(webViewController);
-                  },
-                  onPageFinished: (String urlVal) {
-                    showSpin = false;
-                    url = urlVal;
-                    log.d('Page finished loading: $url');
-//                        delayedHide();
-                  },
-                ),
-              );
+                child: gd.cameraStreamUrl.length < 10
+                    ? Container()
+                    : WebView(
+                        initialUrl: gd.cameraStreamUrl,
+                        javascriptMode: JavascriptMode.disabled,
+                        initialMediaPlaybackPolicy:
+                            AutoMediaPlaybackPolicy.always_allow,
+                        onWebViewCreated:
+                            (WebViewController webViewController) {
+                          _controller.complete(webViewController);
+                        },
+                        onPageFinished: (String urlVal) async {
+                          log.d("1 onPageFinished");
+                          await Future.delayed(
+                              const Duration(milliseconds: 1500));
+                          log.d("2 onPageFinished");
+                          setState(() {
+                            url = urlVal;
+                            showSpin = false;
+                          });
+                        },
+                      ),
+              ),
+              showSpin
+                  ? Container(
+                      color: ThemeInfo.colorBackgroundDark.withOpacity(1),
+                      child: SpinKitThreeBounce(
+                        size: 40,
+                        color: ThemeInfo.colorIconActive.withOpacity(0.5),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        );
       },
     );
   }

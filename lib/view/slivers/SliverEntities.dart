@@ -6,7 +6,6 @@ import 'package:hasskit/model/Entity.dart';
 import 'package:hasskit/view/EntityControl/EntityControlCameraWebView.dart';
 import 'package:hasskit/view/EntityControl/EntityControlCameraVideoPlayer.dart';
 import 'package:reorderables/reorderables.dart';
-
 import '../EntityControl/EntityControlParent.dart';
 import '../EntityCamera.dart';
 import '../EntityButton.dart';
