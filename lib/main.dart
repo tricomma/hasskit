@@ -15,15 +15,19 @@ import 'helper/GeneralData.dart';
 import 'helper/GoogleSign.dart';
 import 'helper/Logger.dart';
 import 'helper/MaterialDesignIcons.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 void main() {
 //  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(builder: (context) => GeneralData()),
-      ],
-      child: MyApp(),
+    EasyLocalization(
+        child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(builder: (context) => GeneralData()),
+        ],
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -35,16 +39,31 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    return Selector<GeneralData, ThemeData>(
-      selector: (_, generalData) => generalData.currentTheme,
-      builder: (_, currentTheme, __) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: currentTheme,
-          title: 'HassKit',
-          home: HomeView(),
-        );
-      },
+    var data = EasyLocalizationProvider.of(context).data;
+    return 
+    EasyLocalizationProvider(
+        data: data,
+        child: Selector<GeneralData, ThemeData>(
+        selector: (_, generalData) => generalData.currentTheme,
+        builder: (_, currentTheme, __) {
+          return MaterialApp(
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              EasylocaLizationDelegate(
+                locale: data.locale,
+                path: 'lang'
+              )
+            ],
+            locale: data.savedLocale,
+            supportedLocales: [Locale('en', 'US'), Locale('sv', 'SE')],
+            debugShowCheckedModeBanner: false,
+            theme: currentTheme,
+            title: 'HassKit',
+            home: HomeView(),
+          );
+        },
+      ),
     );
   }
 }

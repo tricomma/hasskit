@@ -1,0 +1,12 @@
+{
+    "alarm_panel": {
+        "arm_home":"Arm Home",
+        "arm_away": "Arm Away",
+        "disarmed": "Disarmed",
+        "pending": "Pending",
+        "armed_away": "Armed Away",
+        "armed_home": "Armed Home",
+        "armed_night": "Armed Night",
+        "armed": "Armed"
+    }
+}
