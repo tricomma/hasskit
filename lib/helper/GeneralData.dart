@@ -770,7 +770,7 @@ class GeneralData with ChangeNotifier {
         imageIndex: 12,
         tempEntityId: "sensor.temperature_158d0002e98f27",
         favorites: [
-          "WebView0",
+          "WebView1",
           "fan.acorn_fan",
           "climate.air_conditioner_1",
           "cover.cover_06",

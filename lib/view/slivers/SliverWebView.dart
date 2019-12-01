@@ -109,6 +109,9 @@ class _SliverWebViewState extends State<SliverWebView> {
   Widget build(BuildContext context) {
     aspect = gd.baseSetting.getWebViewRatio(widget.webViewsId);
 
+    try{
+
+
     return SliverList(
         delegate: SliverChildListDelegate([
       Container(
@@ -400,6 +403,10 @@ class _SliverWebViewState extends State<SliverWebView> {
           ),
         ),
       )
-    ]));
+    ]));}
+    catch(e){
+      log.e("_SliverWebViewState $e");
+      return gd.emptySliver;
+    }
   }
 }
