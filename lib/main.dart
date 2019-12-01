@@ -68,7 +68,10 @@ class MyApp extends StatelessWidget {
               )
             ],
             locale: gd.localeData.savedLocale,
-            supportedLocales: [Locale('en', 'US'), Locale('sv', 'SE')],
+            supportedLocales: [
+              Locale('en', 'US'), 
+              Locale('sv', 'SE')
+            ],
             debugShowCheckedModeBanner: false,
             theme: currentTheme,
             title: 'HassKit',
@@ -93,8 +96,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   Timer timer30;
   Timer timer5;
   Timer timer60;
-
-  List _languages = List();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -161,7 +162,6 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     if (!mounted) return;
 
     setState(() {
-      _languages = languages;
       gd.currentLocale = currentLocale;
     });
   }

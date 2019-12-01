@@ -5,7 +5,7 @@ import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:provider/provider.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class EntityControlAlarmPanel extends StatefulWidget {
   final String entityId;
@@ -74,17 +74,17 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
 
   String _getStateText(entity) {
     if (entity.state == "disarmed") {
-      return AppLocalizations.of(context).tr('alarm_panel.disarmed');
+      return Translate.getString("alarm_panel.disarmed", context);
     } else if (entity.state == "pending") {
-      return AppLocalizations.of(context).tr('alarm_panel.pending');
+      return Translate.getString("alarm_panel.pending", context);
     } else if (entity.state == "armed_away") {
-      return AppLocalizations.of(context).tr('alarm_panel.armed_away');
+      return Translate.getString("alarm_panel.armed_away", context);
     } else if (entity.state == "armed_home") {
-      return AppLocalizations.of(context).tr('alarm_panel.armed_home');
+      return Translate.getString("alarm_panel.armed_home", context);
     } else if (entity.state == "armed_night") {
-      return AppLocalizations.of(context).tr('alarm_panel.armed_night');
+      return Translate.getString("alarm_panel.armed_night", context);
     } else {
-      return AppLocalizations.of(context).tr('alarm_panel.armed');
+      return Translate.getString("alarm_panel.armed", context);
     }
   }
 
@@ -254,9 +254,9 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      alarmSelectionButton(AppLocalizations.of(context).tr('alarm_panel.arm_home'), "arm_home"),
+                      alarmSelectionButton(Translate.getString("alarm_panel.arm_home", context), "arm_home"),
                       alarmButton("0"),
-                      alarmSelectionButton(AppLocalizations.of(context).tr('alarm_panel.arm_away'), "arm_away")
+                      alarmSelectionButton(Translate.getString("alarm_panel.arm_away", context), "arm_away")
                     ],
                   )
                 ],
