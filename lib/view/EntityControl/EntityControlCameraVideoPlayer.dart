@@ -8,6 +8,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class EntityControlCameraVideoPlayer extends StatefulWidget {
   final String entityId;
@@ -71,7 +72,7 @@ class _EntityControlCameraVideoPlayerState
           );
         } catch (e) {
           return Container(
-            child: Center(child: AutoSizeText("Error: $e")),
+            child: Center(child: AutoSizeText("$Translate.getString(\"global.error\", context): $e")),
           );
         }
       },

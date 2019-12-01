@@ -4,6 +4,7 @@ import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class EntityControlToggle extends StatefulWidget {
   final String entityId;
@@ -214,11 +215,11 @@ class RequireSlideToOpen extends StatelessWidget {
         gd.requireSlideToOpenAddRemove(entityId);
         Flushbar(
           title: required
-              ? "Require Slide to Open Disabled"
-              : "Require Slide to Open Enabled",
+              ? Translate.getString("toggle.require_slide_open_disabled", context)
+              : Translate.getString("toggle.require_slide_open_enabled", context),
           message: required
-              ? "${gd.textToDisplay(gd.entities[entityId].getOverrideName)} now can be opened with 1 touch"
-              : "Prevent accidentally open ${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
+              ? "${gd.textToDisplay(gd.entities[entityId].getOverrideName)} ${Translate.getString('toggle.1_touch', context)}"
+              : "${Translate.getString('toggle.prevent_accidentally_open', context)} ${gd.textToDisplay(gd.entities[entityId].getOverrideName)}",
           duration: Duration(seconds: 3),
         )..show(context);
       },

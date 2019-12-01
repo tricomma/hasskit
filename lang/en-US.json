@@ -1,4 +1,30 @@
 {
+    "global": {
+        "duration": "Duration",
+        "open": "open",
+        "closed": "closed",
+        "on": "on",
+        "off": "off",
+        "error": "Error",
+        "no_data": "has no data available",
+        "reset": "Reset",
+        "ok": "Ok",
+        "left": "Left",
+        "right": "Right",
+        "connect_hass": "Please Connect To\nHome Assistant",
+        "last_update": "Last update"
+    },
+    "edit": {
+        "select_icon": "Select Custom Icon",
+        "reset_icon": "Reset Icon",
+        "rbg_color": "Long Press To Edit Color",
+        "edit": "Edit",
+        "arrange": "Arrange",
+        "move": "Move",
+        "delete": "Delete",
+        "devices": "Devices",
+        "add_room": "Add New Room"
+    },
     "alarm_panel": {
         "arm_home":"Arm Home",
         "arm_away": "Arm Away",
@@ -8,5 +34,25 @@
         "armed_home": "Armed Home",
         "armed_night": "Armed Night",
         "armed": "Armed"
+    },
+    "toggle": {
+        "require_slide_open_disabled": "Require Slide to Open Disabled",
+        "require_slide_open_enabled": "Require Slide to Open Enabled",
+        "prevent_accidentally_open": "Prevent accidentally open",
+        "1_touch": "now can be opened with 1 touch"
+    },
+    "rgb": {
+        "pick_color": "Pick a color!"
+    },
+    "webview": {
+        "edit": "Edit Website",
+        "saved": "Website saved",
+        "reload": "Reload Website",
+        "pin": "Pin Website - Prevent Website scrolling",
+        "unpin": "Unpin Website - Allow Website scrolling",
+        "windy": "Windy",
+        "y_weather": "Y! Weather",
+        "live_score": "LiveScore",
+        "aspect": "Aspect"
     }
 }

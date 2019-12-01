@@ -6,6 +6,7 @@ import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/model/BaseSetting.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class RgbColorSelector extends StatefulWidget {
   final String entityId;
@@ -34,7 +35,7 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
             backgroundColor: ThemeInfo.colorBottomSheet,
             icon: Icon(Icons.info),
             overlayColor: Colors.red,
-            messageText: Text("Long Press To Edit Color"),
+            messageText: Text(Translate.getString("edit.rbg_color", context)),
             duration: Duration(seconds: 3),
           )..show(context);
           sendColor();
@@ -86,7 +87,7 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
       context: context,
       child: AlertDialog(
         contentPadding: EdgeInsets.all(8),
-        title: const Text('Pick a color!'),
+        title: Text(Translate.getString("rgb.pick_color", context)),
         backgroundColor: ThemeInfo.colorBottomSheet,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         content: SingleChildScrollView(
@@ -101,7 +102,7 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
         ),
         actions: <Widget>[
           RaisedButton(
-            child: const Text('Reset'),
+            child: Text(Translate.getString("globa.reset", context)),
             onPressed: () {
               setState(
                 () {
@@ -120,7 +121,7 @@ class _RgbColorSelectorState extends State<RgbColorSelector> {
             },
           ),
           RaisedButton(
-            child: const Text('OK'),
+            child: Text(Translate.getString("global.ok", context)),
             onPressed: () {
               setState(
                 () {
