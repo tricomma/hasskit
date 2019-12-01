@@ -22,6 +22,12 @@ class BaseSetting {
   String lastArmType;
   List<String> notificationDevices;
   List<String> colorPicker;
+  double webView1Ratio;
+  String webView1Url;
+  double webView2Ratio;
+  String webView2Url;
+  double webView3Ratio;
+  String webView3Url;
 
   BaseSetting({
     @required this.itemsPerRow,
@@ -29,6 +35,12 @@ class BaseSetting {
     @required this.lastArmType,
     @required this.notificationDevices,
     @required this.colorPicker,
+    this.webView1Ratio,
+    this.webView1Url,
+    this.webView2Ratio,
+    this.webView2Url,
+    this.webView3Ratio,
+    this.webView3Url,
   });
 
   Map<String, dynamic> toJson() => {
@@ -37,6 +49,12 @@ class BaseSetting {
         'lastArmType': lastArmType,
         'notificationDevices': notificationDevices,
         'colorPicker': colorPicker,
+        'webView1Ratio': webView1Ratio,
+        'webView1Url': webView1Url,
+        'webView2Ratio': webView2Ratio,
+        'webView2Url': webView2Url,
+        'webView3Ratio': webView3Ratio,
+        'webView3Url': webView3Url,
       };
 
   factory BaseSetting.fromJson(Map<String, dynamic> json) {
@@ -58,6 +76,48 @@ class BaseSetting {
               "0xff42A5F5",
               "0xffAB47BC",
             ],
+      webView1Ratio:
+          json['webView1Ratio'] != null ? json['webView1Ratio'] : 0.7,
+      webView1Url: json['webView1Url'] != null
+          ? json['webView1Url']
+          : "https://embed.windy.com",
+      webView2Ratio:
+          json['webView2Ratio'] != null ? json['webView2Ratio'] : 1.0,
+      webView2Url: json['webView2Url'] != null
+          ? json['webView2Url']
+          : "https://www.yahoo.com/news/weather",
+      webView3Ratio:
+          json['webView3Ratio'] != null ? json['webView3Ratio'] : 1.2,
+      webView3Url: json['webView3Url'] != null
+          ? json['webView3Url']
+          : "https://livescore.com",
     );
+  }
+
+  double getWebViewRatio(String webViewId) {
+    switch (webViewId) {
+      case "WebView1":
+        return webView1Ratio;
+      case "WebView2":
+        return webView2Ratio;
+      case "WebView3":
+        return webView3Ratio;
+      default:
+        return webView1Ratio;
+    }
+  }
+
+  String getWebViewUrl(String webViewId) {
+    print("getWebViewUrl $webViewId");
+    switch (webViewId) {
+      case "WebView1":
+        return webView1Url;
+      case "WebView2":
+        return webView2Url;
+      case "WebView3":
+        return webView3Url;
+      default:
+        return webView1Url;
+    }
   }
 }

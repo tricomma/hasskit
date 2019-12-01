@@ -142,6 +142,13 @@ class _ViewEditState extends State<ViewEdit> {
           ),
         ),
         DeviceTypeHeaderEdit(
+          title: "Embeded Website...",
+          icon: Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:web")),
+        ),
+        WebViewItems(
+          roomIndex: widget.roomIndex,
+        ),
+        DeviceTypeHeaderEdit(
           title: "Selected devices...",
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName(
               "mdi:checkbox-marked")),
@@ -152,6 +159,7 @@ class _ViewEditState extends State<ViewEdit> {
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.lightSwitches],
         ),
+
         DeviceTypeHeaderEdit(
           title: "Lights, Switches...",
           icon: Icon(
@@ -292,21 +300,6 @@ class __EditItemsState extends State<_EditItems> {
     if (!widget.selectedItem)
       entities.sort((a, b) => a.getOverrideName.compareTo(b.getOverrideName));
 
-    void removeItemFromGroup(String entityId, String except) {
-      if (except != "favorites" &&
-          gd.roomList[widget.roomIndex].favorites.contains(entityId))
-        gd.roomList[widget.roomIndex].favorites.remove(entityId);
-      if (except != "entities" &&
-          gd.roomList[widget.roomIndex].entities.contains(entityId))
-        gd.roomList[widget.roomIndex].entities.remove(entityId);
-      if (except != "row3" &&
-          gd.roomList[widget.roomIndex].row3.contains(entityId))
-        gd.roomList[widget.roomIndex].row3.remove(entityId);
-      if (except != "row4" &&
-          gd.roomList[widget.roomIndex].row4.contains(entityId))
-        gd.roomList[widget.roomIndex].row4.remove(entityId);
-    }
-
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => InkWell(
@@ -367,7 +360,7 @@ class __EditItemsState extends State<_EditItems> {
                     } else {
                       gd.roomList[widget.roomIndex].favorites
                           .add(entities[index].entityId);
-                      removeItemFromGroup(
+                      removeItemFromGroup(widget.roomIndex,
                           entities[index].entityId, "favorites");
                     }
 
@@ -398,7 +391,8 @@ class __EditItemsState extends State<_EditItems> {
                     } else {
                       gd.roomList[widget.roomIndex].entities
                           .add(entities[index].entityId);
-                      removeItemFromGroup(entities[index].entityId, "entities");
+                      removeItemFromGroup(widget.roomIndex,
+                          entities[index].entityId, "entities");
                     }
                     gd.roomListSave(true);
                     gd.delayCancelEditModeTimer(300);
@@ -427,7 +421,8 @@ class __EditItemsState extends State<_EditItems> {
                     } else {
                       gd.roomList[widget.roomIndex].row3
                           .add(entities[index].entityId);
-                      removeItemFromGroup(entities[index].entityId, "row3");
+                      removeItemFromGroup(
+                          widget.roomIndex, entities[index].entityId, "row3");
                     }
                     gd.roomListSave(true);
                     gd.delayCancelEditModeTimer(300);
@@ -456,7 +451,8 @@ class __EditItemsState extends State<_EditItems> {
                     } else {
                       gd.roomList[widget.roomIndex].row4
                           .add(entities[index].entityId);
-                      removeItemFromGroup(entities[index].entityId, "row4");
+                      removeItemFromGroup(
+                          widget.roomIndex, entities[index].entityId, "row4");
                     }
                     gd.roomListSave(true);
                     gd.delayCancelEditModeTimer(300);
@@ -524,6 +520,216 @@ class __EditItemsState extends State<_EditItems> {
           ),
         ),
         childCount: entities.length,
+      ),
+    );
+  }
+}
+
+void removeItemFromGroup(int roomIndex, String entityId, String except) {
+  if (except != "favorites" &&
+      gd.roomList[roomIndex].favorites.contains(entityId))
+    gd.roomList[roomIndex].favorites.remove(entityId);
+  if (except != "entities" &&
+      gd.roomList[roomIndex].entities.contains(entityId))
+    gd.roomList[roomIndex].entities.remove(entityId);
+  if (except != "row3" && gd.roomList[roomIndex].row3.contains(entityId))
+    gd.roomList[roomIndex].row3.remove(entityId);
+  if (except != "row4" && gd.roomList[roomIndex].row4.contains(entityId))
+    gd.roomList[roomIndex].row4.remove(entityId);
+}
+
+class WebViewItems extends StatefulWidget {
+  final int roomIndex;
+
+  const WebViewItems({@required this.roomIndex});
+
+  @override
+  _WebViewItemsState createState() => _WebViewItemsState();
+}
+
+class _WebViewItemsState extends State<WebViewItems> {
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => InkWell(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            gd.delayCancelEditModeTimer(300);
+          },
+          child: Container(
+            padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
+            margin: EdgeInsets.zero,
+            child: Row(
+              children: <Widget>[
+                Opacity(
+                  opacity: (gd.roomList[widget.roomIndex].favorites
+                              .contains("WebView${index + 1}") ||
+                          gd.roomList[widget.roomIndex].entities
+                              .contains("WebView${index + 1}") ||
+                          gd.roomList[widget.roomIndex].row3
+                              .contains("WebView${index + 1}") ||
+                          gd.roomList[widget.roomIndex].row4
+                              .contains("WebView${index + 1}"))
+                      ? 1
+                      : 0.5,
+                  child: Icon(
+                    MaterialDesignIcons.getIconDataFromIconName("mdi:web"),
+                    size: 28,
+                    color: Theme.of(context).textTheme.title.color,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Opacity(
+                    opacity: (gd.roomList[widget.roomIndex].favorites
+                                .contains("WebView${index + 1}") ||
+                            gd.roomList[widget.roomIndex].entities
+                                .contains("WebView${index + 1}") ||
+                            gd.roomList[widget.roomIndex].row3
+                                .contains("WebView${index + 1}") ||
+                            gd.roomList[widget.roomIndex].row4
+                                .contains("WebView${index + 1}"))
+                        ? 1
+                        : 0.5,
+                    child: AutoSizeText(
+                      "${gd.textToDisplay("Website #${index + 1}")}",
+                      style: Theme.of(context).textTheme.subhead,
+                      overflow: TextOverflow.ellipsis,
+                      textScaleFactor: gd.textScaleFactor,
+                      maxLines: 1,
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    if (gd.roomList[widget.roomIndex].favorites
+                        .contains("WebView${index + 1}")) {
+                      gd.roomList[widget.roomIndex].favorites
+                          .remove("WebView${index + 1}");
+                    } else {
+                      gd.roomList[widget.roomIndex].favorites
+                          .add("WebView${index + 1}");
+                      removeItemFromGroup(
+                          widget.roomIndex, "WebView${index + 1}", "favorites");
+                    }
+
+                    gd.roomListSave(true);
+                    gd.delayCancelEditModeTimer(300);
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.looks_one,
+                    size: 28,
+                    color: gd.roomList[widget.roomIndex].favorites
+                            .contains("WebView${index + 1}")
+                        ? Theme.of(context).textTheme.title.color
+                        : Theme.of(context)
+                            .textTheme
+                            .title
+                            .color
+                            .withOpacity(0.25),
+                  ),
+                ),
+                SizedBox(width: 0),
+                InkWell(
+                  onTap: () {
+                    if (gd.roomList[widget.roomIndex].entities
+                        .contains("WebView${index + 1}")) {
+                      gd.roomList[widget.roomIndex].entities
+                          .remove("WebView${index + 1}");
+                    } else {
+                      gd.roomList[widget.roomIndex].entities
+                          .add("WebView${index + 1}");
+                      removeItemFromGroup(
+                          widget.roomIndex, "WebView${index + 1}", "entities");
+                    }
+                    gd.roomListSave(true);
+                    gd.delayCancelEditModeTimer(300);
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.looks_two,
+                    size: 28,
+                    color: gd.roomList[widget.roomIndex].entities
+                            .contains("WebView${index + 1}")
+                        ? Theme.of(context).textTheme.title.color
+                        : Theme.of(context)
+                            .textTheme
+                            .title
+                            .color
+                            .withOpacity(0.25),
+                  ),
+                ),
+                SizedBox(width: 0),
+                InkWell(
+                  onTap: () {
+                    if (gd.roomList[widget.roomIndex].row3
+                        .contains("WebView${index + 1}")) {
+                      gd.roomList[widget.roomIndex].row3
+                          .remove("WebView${index + 1}");
+                    } else {
+                      gd.roomList[widget.roomIndex].row3
+                          .add("WebView${index + 1}");
+                      removeItemFromGroup(
+                          widget.roomIndex, "WebView${index + 1}", "row3");
+                    }
+                    gd.roomListSave(true);
+                    gd.delayCancelEditModeTimer(300);
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.looks_3,
+                    size: 28,
+                    color: gd.roomList[widget.roomIndex].row3
+                            .contains("WebView${index + 1}")
+                        ? Theme.of(context).textTheme.title.color
+                        : Theme.of(context)
+                            .textTheme
+                            .title
+                            .color
+                            .withOpacity(0.25),
+                  ),
+                ),
+                SizedBox(width: 0),
+                InkWell(
+                  onTap: () {
+                    if (gd.roomList[widget.roomIndex].row4
+                        .contains("WebView${index + 1}")) {
+                      gd.roomList[widget.roomIndex].row4
+                          .remove("WebView${index + 1}");
+                    } else {
+                      gd.roomList[widget.roomIndex].row4
+                          .add("WebView${index + 1}");
+                      removeItemFromGroup(
+                          widget.roomIndex, "WebView${index + 1}", "row4");
+                    }
+                    gd.roomListSave(true);
+                    gd.delayCancelEditModeTimer(300);
+                    setState(() {});
+                  },
+                  child: Icon(
+                    Icons.looks_4,
+                    size: 28,
+                    color: gd.roomList[widget.roomIndex].row4
+                            .contains("WebView${index + 1}")
+                        ? Theme.of(context).textTheme.title.color
+                        : Theme.of(context)
+                            .textTheme
+                            .title
+                            .color
+                            .withOpacity(0.25),
+                  ),
+                ),
+                SizedBox(
+                  width: 4,
+                  height: 48,
+                ),
+              ],
+            ),
+          ),
+        ),
+        childCount: gd.webViewSupportMax,
       ),
     );
   }

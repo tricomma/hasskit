@@ -281,7 +281,14 @@ class GeneralData with ChangeNotifier {
 //  }
 
   void socketSubscribeEvents(dynamic message) {
-    String entityId = message['event']['data']['new_state']["entity_id"];
+    String entityId;
+    try {
+      entityId = message['event']['data']['new_state']["entity_id"];
+    } catch (e) {
+      log.e("socketSubscribeEvents $e");
+      entityId = null;
+    }
+
     if (entityId == null || entityId == "" || entityId == "null") {
       return;
     }
@@ -763,6 +770,7 @@ class GeneralData with ChangeNotifier {
         imageIndex: 12,
         tempEntityId: "sensor.temperature_158d0002e98f27",
         favorites: [
+          "WebView0",
           "fan.acorn_fan",
           "climate.air_conditioner_1",
           "cover.cover_06",
@@ -1483,6 +1491,12 @@ class GeneralData with ChangeNotifier {
         'lastArmType': baseSetting.lastArmType,
         'notificationDevices': baseSetting.notificationDevices,
         'colorPicker': baseSetting.colorPicker,
+        'webView1Ratio': baseSetting.webView1Ratio,
+        'webView1Url': baseSetting.webView1Url,
+        'webView2Ratio': baseSetting.webView2Ratio,
+        'webView2Url': baseSetting.webView2Url,
+        'webView3Ratio': baseSetting.webView3Ratio,
+        'webView3Url': baseSetting.webView3Url,
       };
 
       var url = gd.loginDataCurrent.getUrl.replaceAll(".", "-");
@@ -2204,4 +2218,6 @@ class GeneralData with ChangeNotifier {
     "https://www.yahoo.com/news/weather",
     "https://livescore.com",
   ];
+
+  int webViewSupportMax = 3;
 }

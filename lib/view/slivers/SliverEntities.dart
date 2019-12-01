@@ -33,7 +33,7 @@ class SliverEntitiesNormal extends StatelessWidget {
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
-            return itemPerRow <= 2
+            return itemPerRow <= 1
                 ? EntityCamera(
                     entityId: entities[index].entityId,
                     borderColor: Colors.transparent,

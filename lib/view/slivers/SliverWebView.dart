@@ -11,6 +11,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/gestures.dart';
 
 class SliverWebView extends StatefulWidget {
+  final String webViewsId;
+
+  const SliverWebView({@required this.webViewsId});
   @override
   _SliverWebViewState createState() => _SliverWebViewState();
 }
@@ -19,20 +22,25 @@ class _SliverWebViewState extends State<SliverWebView> {
   final Set<Factory> gestureRecognizers = [
     Factory(() => EagerGestureRecognizer()),
   ].toSet();
+
   WebViewController webController;
   TextEditingController textController = TextEditingController();
   bool showSpin = true;
   bool showAddress = false;
   bool isValidUrl = true;
-  bool pinWebView = false;
+  bool pinWebView = true;
   double opacity = 0.2;
-  double aspect = 0.7;
-  double aspectDisplay = 0.7;
+  double aspect;
+  double aspectDisplay;
   String currentUrl;
   @override
   void initState() {
     super.initState();
-    textController.text = gd.webViewPresets[0];
+    aspectDisplay = gd.baseSetting.getWebViewRatio(widget.webViewsId);
+    aspect = gd.baseSetting.getWebViewRatio(widget.webViewsId);
+    textController.text = gd.baseSetting.getWebViewUrl(widget.webViewsId);
+    log.d(
+        "widget.webViewsId ${widget.webViewsId} textController.text ${textController.text} ");
     currentUrl = textController.text;
   }
 
@@ -42,6 +50,19 @@ class _SliverWebViewState extends State<SliverWebView> {
       currentUrl = url;
       webController.loadUrl(currentUrl);
       showSpin = true;
+
+      if (widget.webViewsId == "WebView1") {
+        gd.baseSetting.webView1Url = url;
+        gd.baseSettingSave(true);
+      }
+      if (widget.webViewsId == "WebView2") {
+        gd.baseSetting.webView2Url = url;
+        gd.baseSettingSave(true);
+      }
+      if (widget.webViewsId == "WebView3") {
+        gd.baseSetting.webView3Url = url;
+        gd.baseSettingSave(true);
+      }
     });
   }
 
@@ -54,6 +75,19 @@ class _SliverWebViewState extends State<SliverWebView> {
       setState(() {
         aspect = val;
         aspectDisplay = val;
+
+        if (widget.webViewsId == "WebView1") {
+          gd.baseSetting.webView1Ratio = val;
+          gd.baseSettingSave(true);
+        }
+        if (widget.webViewsId == "WebView2") {
+          gd.baseSetting.webView2Ratio = val;
+          gd.baseSettingSave(true);
+        }
+        if (widget.webViewsId == "WebView3") {
+          gd.baseSetting.webView3Ratio = val;
+          gd.baseSettingSave(true);
+        }
       });
     });
   }
@@ -73,6 +107,8 @@ class _SliverWebViewState extends State<SliverWebView> {
 
   @override
   Widget build(BuildContext context) {
+    aspect = gd.baseSetting.getWebViewRatio(widget.webViewsId);
+
     return SliverList(
         delegate: SliverChildListDelegate([
       Container(
@@ -99,6 +135,15 @@ class _SliverWebViewState extends State<SliverWebView> {
                   });
                 },
               ),
+              showSpin
+                  ? Container(
+                      color: ThemeInfo.colorBackgroundDark.withOpacity(1),
+                      child: SpinKitThreeBounce(
+                        size: 40,
+                        color: ThemeInfo.colorIconActive.withOpacity(0.5),
+                      ),
+                    )
+                  : Container(),
               Opacity(
                 opacity: showAddress ? 1 : opacity,
                 child: Column(
@@ -121,7 +166,9 @@ class _SliverWebViewState extends State<SliverWebView> {
                                   changeUrl(textController.text.trim());
                                 showAddress = !showAddress;
                                 Flushbar(
-                                  message: "Edit webview",
+                                  message: showAddress
+                                      ? "Edit Website"
+                                      : "Website saved",
                                   duration: Duration(seconds: 3),
                                   shouldIconPulse: true,
                                   icon: Icon(
@@ -139,7 +186,7 @@ class _SliverWebViewState extends State<SliverWebView> {
                                     color: ThemeInfo.colorBottomSheet
                                         .withOpacity(0.5),
                                     offset: new Offset(0.0, 0.0),
-                                    blurRadius: 3.0,
+                                    blurRadius: 1.0,
                                   )
                                 ],
                               ),
@@ -152,75 +199,80 @@ class _SliverWebViewState extends State<SliverWebView> {
                             ),
                           ),
                           SizedBox(width: 4),
-                          InkWell(
-                            onTap: () {
-                              changeOpacity();
-                              webController.reload();
-                              Flushbar(
-                                message: "Reload webview",
-                                duration: Duration(seconds: 3),
-                                shouldIconPulse: true,
-                                icon: Icon(
-                                  Icons.info,
-                                  color: ThemeInfo.colorIconActive,
-                                ),
-                              )..show(context);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: ThemeInfo.colorBottomSheet
-                                        .withOpacity(0.5),
-                                    offset: new Offset(0.0, 0.0),
-                                    blurRadius: 3.0,
-                                  )
-                                ],
-                              ),
-                              child: Icon(
-                                  MaterialDesignIcons.getIconDataFromIconName(
-                                      "mdi:refresh")),
-                            ),
-                          ),
-                          SizedBox(width: 4),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                changeOpacity();
-                                pinWebView = !pinWebView;
-                                Flushbar(
-                                  message: pinWebView
-                                      ? "Pin webview - Prevent webview scrolling"
-                                      : "Unpin webview - Allow webview scrolling",
-                                  duration: Duration(seconds: 3),
-                                  shouldIconPulse: true,
-                                  icon: Icon(
-                                    Icons.info,
-                                    color: ThemeInfo.colorIconActive,
+                          !showAddress
+                              ? InkWell(
+                                  onTap: () {
+                                    changeOpacity();
+                                    webController.reload();
+                                    Flushbar(
+                                      message: "Reload Website",
+                                      duration: Duration(seconds: 3),
+                                      shouldIconPulse: true,
+                                      icon: Icon(
+                                        Icons.info,
+                                        color: ThemeInfo.colorIconActive,
+                                      ),
+                                    )..show(context);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ThemeInfo.colorBottomSheet
+                                              .withOpacity(0.5),
+                                          offset: new Offset(0.0, 0.0),
+                                          blurRadius: 1.0,
+                                        )
+                                      ],
+                                    ),
+                                    child: Icon(MaterialDesignIcons
+                                        .getIconDataFromIconName(
+                                            "mdi:refresh")),
                                   ),
-                                )..show(context);
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: ThemeInfo.colorBottomSheet
-                                        .withOpacity(0.5),
-                                    offset: new Offset(0.0, 0.0),
-                                    blurRadius: 3.0,
-                                  )
-                                ],
-                              ),
-                              child: pinWebView
-                                  ? Icon(MaterialDesignIcons
-                                      .getIconDataFromIconName("mdi:pin"))
-                                  : Icon(MaterialDesignIcons
-                                      .getIconDataFromIconName("mdi:pin-off")),
-                            ),
-                          ),
+                                )
+                              : Container(),
+                          SizedBox(width: 4),
+                          !showAddress
+                              ? InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      changeOpacity();
+                                      pinWebView = !pinWebView;
+                                      Flushbar(
+                                        message: pinWebView
+                                            ? "Pin Website - Prevent Website scrolling"
+                                            : "Unpin Website - Allow Website scrolling",
+                                        duration: Duration(seconds: 3),
+                                        shouldIconPulse: true,
+                                        icon: Icon(
+                                          Icons.info,
+                                          color: ThemeInfo.colorIconActive,
+                                        ),
+                                      )..show(context);
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ThemeInfo.colorBottomSheet
+                                              .withOpacity(0.5),
+                                          offset: new Offset(0.0, 0.0),
+                                          blurRadius: 1.0,
+                                        )
+                                      ],
+                                    ),
+                                    child: pinWebView
+                                        ? Icon(MaterialDesignIcons
+                                            .getIconDataFromIconName("mdi:pin"))
+                                        : Icon(MaterialDesignIcons
+                                            .getIconDataFromIconName(
+                                                "mdi:pin-off")),
+                                  ),
+                                )
+                              : Container(),
                           Expanded(child: Container()),
                           showAddress
                               ? Row(
@@ -303,7 +355,7 @@ class _SliverWebViewState extends State<SliverWebView> {
                                     autocorrect: false,
                                     autovalidate: true,
                                     autofocus: true,
-                                    maxLines: 3,
+                                    maxLines: 1,
                                     onEditingComplete: () {
                                       changeUrl(textController.text);
                                     },
@@ -344,19 +396,10 @@ class _SliverWebViewState extends State<SliverWebView> {
                   ],
                 ),
               ),
-              showSpin
-                  ? Container(
-                      color: ThemeInfo.colorBackgroundDark.withOpacity(1),
-                      child: SpinKitThreeBounce(
-                        size: 40,
-                        color: ThemeInfo.colorIconActive.withOpacity(0.5),
-                      ),
-                    )
-                  : Container(),
             ],
           ),
         ),
-      ),
+      )
     ]));
   }
 }
