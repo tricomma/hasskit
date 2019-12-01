@@ -17,6 +17,7 @@ import 'helper/Logger.dart';
 import 'helper/MaterialDesignIcons.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:devicelocale/devicelocale.dart';
 
 void main() {
 //  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -32,6 +33,16 @@ void main() {
   );
 }
 
+void SetLocale() {
+  if(gd.currentLocale == "sv_SE") {
+    gd.localeData.changeLocale(Locale("sv","SE"));
+  }
+  else {
+    //SET ENG
+    gd.localeData.changeLocale(Locale("en","US"));
+  }
+}
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -39,10 +50,11 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    var data = EasyLocalizationProvider.of(context).data;
+    gd.localeData = EasyLocalizationProvider.of(context).data;
+    SetLocale();
     return 
     EasyLocalizationProvider(
-        data: data,
+        data: gd.localeData,
         child: Selector<GeneralData, ThemeData>(
         selector: (_, generalData) => generalData.currentTheme,
         builder: (_, currentTheme, __) {
@@ -51,11 +63,11 @@ class MyApp extends StatelessWidget {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               EasylocaLizationDelegate(
-                locale: data.locale,
+                locale: gd.localeData.locale,
                 path: 'lang'
               )
             ],
-            locale: data.savedLocale,
+            locale: gd.localeData.savedLocale,
             supportedLocales: [Locale('en', 'US'), Locale('sv', 'SE')],
             debugShowCheckedModeBanner: false,
             theme: currentTheme,
@@ -81,6 +93,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   Timer timer30;
   Timer timer5;
   Timer timer60;
+
+  List _languages = List();
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -123,9 +137,39 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  Future<void> initPlatformState() async {
+    List languages;
+    String currentLocale;
+
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      languages = await Devicelocale.preferredLanguages;
+      print(languages);
+    } on PlatformException {
+      print("Error obtaining preferred languages");
+    }
+    try {
+      currentLocale = await Devicelocale.currentLocale;
+      print(currentLocale);
+    } on PlatformException {
+      print("Error obtaining current locale");
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _languages = languages;
+      gd.currentLocale = currentLocale;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    initPlatformState();
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     WidgetsBinding.instance.addObserver(this);

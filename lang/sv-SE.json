@@ -1,3 +1,12 @@
 {
-    "first_string": "Hej, detta är ett test"
+    "alarm_panel": {
+        "arm_home":"Hemma",
+        "arm_away": "Borta",
+        "disarmed": "Avlarmat",
+        "pending": "Väntar",
+        "armed_away": "Larmat iväg",
+        "armed_home": "Larmat hemma",
+        "armed_night": "Larmat natt",
+        "armed": "Larmat"
+    }
 }
