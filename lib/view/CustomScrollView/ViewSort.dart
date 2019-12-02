@@ -5,7 +5,7 @@ import 'package:hasskit/view/slivers/SliverEntities.dart';
 import 'package:hasskit/view/slivers/SliverNavigationBar.dart';
 import 'package:hasskit/view/CustomScrollView/ViewNormal.dart';
 
-import 'DeviceTypeHeader.dart';
+import '../slivers/SliverHeader.dart';
 
 class ViewSort extends StatelessWidget {
   final int roomIndex;
@@ -32,7 +32,7 @@ class ViewSort extends StatelessWidget {
       slivers: [
         SliverNavigationBar(roomIndex: roomIndex),
         row1.length + row1Cam.length > 0
-            ? DeviceTypeHeaderEditNormal(icon: Icon(Icons.looks_one), title: '')
+            ? SliverHeaderNormal(icon: Icon(Icons.looks_one), title: '')
             : gd.emptySliver,
         row1.length > 0
             ? SliverEntitiesSort(
@@ -51,7 +51,7 @@ class ViewSort extends StatelessWidget {
               )
             : gd.emptySliver,
         row2.length + row2Cam.length > 0
-            ? DeviceTypeHeaderEditNormal(icon: Icon(Icons.looks_two), title: '')
+            ? SliverHeaderNormal(icon: Icon(Icons.looks_two), title: '')
             : gd.emptySliver,
         row2.length > 0
             ? SliverEntitiesSort(
@@ -70,7 +70,7 @@ class ViewSort extends StatelessWidget {
               )
             : gd.emptySliver,
         row3.length + row3Cam.length > 0
-            ? DeviceTypeHeaderEditNormal(icon: Icon(Icons.looks_3), title: '')
+            ? SliverHeaderNormal(icon: Icon(Icons.looks_3), title: '')
             : gd.emptySliver,
         row3.length > 0
             ? SliverEntitiesSort(
@@ -89,7 +89,7 @@ class ViewSort extends StatelessWidget {
               )
             : gd.emptySliver,
         row4.length + row4Cam.length > 0
-            ? DeviceTypeHeaderEditNormal(icon: Icon(Icons.looks_4), title: '')
+            ? SliverHeaderNormal(icon: Icon(Icons.looks_4), title: '')
             : gd.emptySliver,
         row4.length > 0
             ? SliverEntitiesSort(

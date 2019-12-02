@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 
-class DeviceTypeHeaderEdit extends StatelessWidget {
+class SliverHeaderEdit extends StatelessWidget {
   final Icon icon;
   final String title;
-  const DeviceTypeHeaderEdit({@required this.icon, @required this.title});
+  const SliverHeaderEdit({@required this.icon, @required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +36,10 @@ class DeviceTypeHeaderEdit extends StatelessWidget {
   }
 }
 
-class DeviceTypeHeaderEditNormal extends StatelessWidget {
+class SliverHeaderNormal extends StatelessWidget {
   final Icon icon;
   final String title;
-  const DeviceTypeHeaderEditNormal({@required this.icon, @required this.title});
+  const SliverHeaderNormal({@required this.icon, @required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +69,8 @@ class DeviceTypeHeaderEditNormal extends StatelessWidget {
                         end: Alignment.topRight,
                         colors: [
                           ThemeInfo.colorBottomSheetReverse.withOpacity(0.0),
+                          ThemeInfo.colorBottomSheetReverse.withOpacity(0.0),
                           ThemeInfo.colorBottomSheetReverse.withOpacity(0.5),
-                          ThemeInfo.colorBottomSheetReverse.withOpacity(0.25),
                           ThemeInfo.colorBottomSheetReverse.withOpacity(0.0),
                         ]),
                     boxShadow: [

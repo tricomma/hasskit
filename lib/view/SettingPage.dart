@@ -10,7 +10,7 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:validators/validators.dart';
-import 'CustomScrollView/DeviceTypeHeader.dart';
+import 'slivers/SliverHeader.dart';
 import 'HomeAssistantLogin.dart';
 import 'ServerSelectPanel.dart';
 
@@ -144,7 +144,7 @@ class _SettingPageState extends State<SettingPage> {
 //              },
 //            ),
               ),
-              DeviceTypeHeaderEditNormal(
+              SliverHeaderNormal(
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:home-assistant"),
@@ -254,21 +254,21 @@ class _SettingPageState extends State<SettingPage> {
                   childCount: gd.loginDataList.length,
                 ),
               ),
-              DeviceTypeHeaderEditNormal(
+              SliverHeaderNormal(
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName("mdi:cloud-sync"),
                 ),
                 title: "Google Cloud Sync",
               ),
               GoogleSign(),
-              DeviceTypeHeaderEditNormal(
+              SliverHeaderNormal(
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName("mdi:palette"),
                 ),
                 title: "Theme Color",
               ),
               _ThemeSelector(),
-              DeviceTypeHeaderEditNormal(
+              SliverHeaderNormal(
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:view-dashboard-variant"),
@@ -276,7 +276,7 @@ class _SettingPageState extends State<SettingPage> {
                 title: "Layout",
               ),
               _LayoutSelector(),
-              DeviceTypeHeaderEditNormal(
+              SliverHeaderNormal(
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:account-circle"),

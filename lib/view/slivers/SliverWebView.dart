@@ -69,7 +69,7 @@ class _WebViewState extends State<WebView> {
       height: ratio * gd.mediaQueryWidth,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white54,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(4),
           boxShadow: [
             BoxShadow(
@@ -105,25 +105,28 @@ class _WebViewState extends State<WebView> {
                 : Container(),
             Column(
               children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color: showAddress
-                        ? ThemeInfo.colorBottomSheet
-                        : Colors.transparent,
+                Opacity(
+                  opacity: showAddress ? 1 : opacity,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: showAddress
+                          ? ThemeInfo.colorBottomSheet
+                          : Colors.transparent,
 //                  borderRadius: BorderRadius.only(
 //                    topLeft: Radius.circular(12),
 //                    topRight: Radius.circular(12),
 //                  ),
-                  ),
-                  padding: EdgeInsets.all(8),
-                  child: Row(
-                    children: <Widget>[
-                      webButton(context),
-                      reloadButton(context),
-                      pintButton(context),
-                      Spacer(),
-                      presetButtons(),
-                    ],
+                    ),
+                    padding: EdgeInsets.all(8),
+                    child: Row(
+                      children: <Widget>[
+                        webButton(context),
+                        reloadButton(context),
+                        pintButton(context),
+                        Spacer(),
+                        presetButtons(),
+                      ],
+                    ),
                   ),
                 ),
                 addressAndAspect(),
@@ -275,6 +278,9 @@ class _WebViewState extends State<WebView> {
                     autovalidate: true,
                     autofocus: true,
                     maxLines: 3,
+                    onChanged: (val) {
+                      changeOpacity();
+                    },
                     onEditingComplete: () {
                       changeUrl(textController.text);
                     },
