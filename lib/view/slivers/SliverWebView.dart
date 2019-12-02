@@ -169,9 +169,8 @@ class _WebViewState extends State<WebView> {
         },
         onProgressChanged: (InAppWebViewController controller, int progress) {
           setState(() {
-            print(
-                "onProgressChanged progress $progress currentUrl $currentUrl");
             if (progress > 90) showSpin = false;
+//            log.d("onProgressChanged progress $progress");
           });
         },
       ),

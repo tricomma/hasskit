@@ -8,7 +8,6 @@ import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:provider/provider.dart';
 
-
 class EntityControlCameraWebView extends StatefulWidget {
   final String entityId;
 
@@ -82,36 +81,12 @@ class _EntityControlCameraWebViewState
                         },
                         onProgressChanged:
                             (InAppWebViewController controller, int progress) {
-                          if (progress >= 100) {
-                            showSpin = false;
-                          }
                           setState(() {
-                            log.d("onProgressChanged progress $progress");
-
-//              this.progress = progress / 100;
+                            if (progress >= 100) showSpin = false;
+//                            log.d("onProgressChanged progress $progress");
                           });
                         },
                       ),
-//                    : WebView(
-//                        initialUrl: gd.cameraStreamUrl,
-//                        javascriptMode: JavascriptMode.disabled,
-//                        initialMediaPlaybackPolicy:
-//                            AutoMediaPlaybackPolicy.always_allow,
-//                        onWebViewCreated:
-//                            (WebViewController webViewController) {
-//                          _controller.complete(webViewController);
-//                        },
-//                        onPageFinished: (String urlVal) async {
-//                          log.d("1 onPageFinished");
-//                          await Future.delayed(
-//                              const Duration(milliseconds: 1500));
-//                          log.d("2 onPageFinished");
-//                          setState(() {
-//                            url = urlVal;
-//                            showSpin = false;
-//                          });
-//                        },
-//                      ),
               ),
               showSpin
                   ? Container(
