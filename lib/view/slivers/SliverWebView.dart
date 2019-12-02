@@ -16,12 +16,14 @@ class SliverWebView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverList(
-      delegate: SliverChildListDelegate(
-        [
-          WebView(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return WebView(
             webViewsId: webViewsId,
-          ),
-        ],
+          );
+        },
+        addAutomaticKeepAlives: false,
+        childCount: 1,
       ),
     );
   }
@@ -43,9 +45,9 @@ class _WebViewState extends State<WebView> {
   ].toSet();
 
   InAppWebViewController webController;
-  String currentUrl;
-  double ratio;
-  double ratioDisplay;
+  String currentUrl = "https://google.com";
+  double ratio = 0.7;
+  double ratioDisplay = 0.7;
   double opacity = 0.2;
   bool showSpin = true;
   bool showAddress = false;
@@ -53,11 +55,11 @@ class _WebViewState extends State<WebView> {
 
   @override
   void initState() {
+    super.initState();
     currentUrl = gd.baseSetting.getWebViewUrl(widget.webViewsId);
     ratio = gd.baseSetting.getWebViewRatio(widget.webViewsId);
     ratioDisplay = ratio;
     textController.text = currentUrl;
-    super.initState();
   }
 
   @override
@@ -65,15 +67,36 @@ class _WebViewState extends State<WebView> {
     return Container(
       padding: EdgeInsets.all(12),
       height: ratio * gd.mediaQueryWidth,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white54,
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: [
+            BoxShadow(
+              color: ThemeInfo.colorBackgroundDark.withOpacity(0.5),
+              blurRadius: 1.0, // has the effect of softening the shadow
+              spreadRadius: 1.0, // has the effect of extending the shadow
+              offset: Offset(
+                0.0, // horizontal, move right 10
+                1.0, // vertical, move down 10
+              ),
+            ),
+          ],
+        ),
+        padding: EdgeInsets.all(2),
+
+//      child: ClipRRect(
+//        borderRadius: BorderRadius.circular(12),
         child: Stack(
           alignment: Alignment.topLeft,
           children: <Widget>[
             buildInAppWebView(),
             showSpin
                 ? Container(
-                    color: ThemeInfo.colorBackgroundDark.withOpacity(1),
+                    decoration: BoxDecoration(
+//                    borderRadius: BorderRadius.circular(12),
+                      color: ThemeInfo.colorBackgroundDark.withOpacity(1),
+                    ),
                     child: SpinKitThreeBounce(
                       size: 40,
                       color: ThemeInfo.colorIconActive.withOpacity(0.5),
@@ -83,9 +106,15 @@ class _WebViewState extends State<WebView> {
             Column(
               children: <Widget>[
                 Container(
-                  color: showAddress
-                      ? ThemeInfo.colorBottomSheet
-                      : Colors.transparent,
+                  decoration: BoxDecoration(
+                    color: showAddress
+                        ? ThemeInfo.colorBottomSheet
+                        : Colors.transparent,
+//                  borderRadius: BorderRadius.only(
+//                    topLeft: Radius.circular(12),
+//                    topRight: Radius.circular(12),
+//                  ),
+                  ),
                   padding: EdgeInsets.all(8),
                   child: Row(
                     children: <Widget>[
@@ -102,41 +131,47 @@ class _WebViewState extends State<WebView> {
             ),
           ],
         ),
+//      ),
       ),
     );
   }
 
-  InAppWebView buildInAppWebView() {
-    return InAppWebView(
-      initialUrl: currentUrl,
-      gestureRecognizers: pinWebView ? null : gestureRecognizers,
-      initialHeaders: {},
-      initialOptions: InAppWebViewWidgetOptions(
-          inAppWebViewOptions: InAppWebViewOptions(
-        debuggingEnabled: true,
-      )),
-      onWebViewCreated: (InAppWebViewController controller) {
-        print("onWebViewCreated currentUrl $currentUrl");
-        webController = controller;
-      },
-      onLoadStart: (InAppWebViewController controller, String url) {
-        setState(() {
-          print("onLoadStart url $url");
-          showSpin = true;
-        });
-      },
-      onLoadStop: (InAppWebViewController controller, String url) async {
-        setState(() {
-          print("onLoadStop url $url");
-          showSpin = false;
-        });
-      },
-      onProgressChanged: (InAppWebViewController controller, int progress) {
-        setState(() {
-          print("onProgressChanged progress $progress currentUrl $currentUrl");
-          if (progress > 90) showSpin = false;
-        });
-      },
+  //FUCK WebView/InAppWebView with parent ClipRRect will crash in iOS, take 1 day to figure out.
+  Widget buildInAppWebView() {
+    print("buildInAppWebView currentUrl $currentUrl");
+    return Container(
+      child: InAppWebView(
+        initialUrl: currentUrl,
+        gestureRecognizers: pinWebView ? null : gestureRecognizers,
+        initialHeaders: {},
+        initialOptions: InAppWebViewWidgetOptions(
+            inAppWebViewOptions: InAppWebViewOptions(
+          debuggingEnabled: true,
+        )),
+        onWebViewCreated: (InAppWebViewController controller) {
+          print("onWebViewCreated currentUrl $currentUrl");
+          webController = controller;
+        },
+        onLoadStart: (InAppWebViewController controller, String url) {
+          setState(() {
+            print("onLoadStart url $url");
+            showSpin = true;
+          });
+        },
+        onLoadStop: (InAppWebViewController controller, String url) async {
+          setState(() {
+            print("onLoadStop url $url");
+            showSpin = false;
+          });
+        },
+        onProgressChanged: (InAppWebViewController controller, int progress) {
+          setState(() {
+            print(
+                "onProgressChanged progress $progress currentUrl $currentUrl");
+            if (progress > 90) showSpin = false;
+          });
+        },
+      ),
     );
   }
 
@@ -223,10 +258,10 @@ class _WebViewState extends State<WebView> {
               padding: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 color: ThemeInfo.colorBottomSheet.withOpacity(1),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
-                ),
+//                borderRadius: BorderRadius.only(
+//                  bottomLeft: Radius.circular(12),
+//                  bottomRight: Radius.circular(12),
+//                ),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
