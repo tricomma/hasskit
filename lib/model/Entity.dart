@@ -132,7 +132,7 @@ class Entity {
     this.entityPicture = "",
     //device_tracker
     this.sourceType = "",
-    this.batteryLevel = 0,
+    this.batteryLevel = -1,
     this.latitude = 0.0,
     this.longitude = 0.0,
     this.gpsAccuracy = 0
@@ -315,7 +315,7 @@ class Entity {
             : "",
         batteryLevel: int.tryParse(json['attributes']['battery_level'].toString()) != null
             ? int.tryParse(json['attributes']['battery_level'].toString())
-            : 0,
+            : -1,
         latitude: double.tryParse(json['attributes']['latitude'].toString()) != null
             ? double.tryParse(json['attributes']['latitude'].toString())
             : 0,
@@ -706,6 +706,9 @@ class Entity {
       return Translate.getString("states.armed", context);
     }
     if(state.toLowerCase().contains("pending")) return Translate.getString("states.arm_pending", context);
+
+    if(state.toLowerCase() == "not_home") return Translate.getString("states.not_home", context);
+    if(state.toLowerCase() == "home") return Translate.getString("states.home", context);
 
     return state;
   }

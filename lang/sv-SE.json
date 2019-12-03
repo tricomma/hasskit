@@ -113,6 +113,8 @@
         "fan_medium": "Medium",
         "fan_medium_low": "Medium låg",
         "fan_low": "Låg",
-        "fan_lowest": "Lågast"
+        "fan_lowest": "Lågast",
+        "not_home": "Inte hemma",
+        "home": "Hemma"
     }
 }

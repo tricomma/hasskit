@@ -113,6 +113,8 @@
         "fan_medium": "Medium",
         "fan_medium_low": "Medium Low",
         "fan_low": "Low",
-        "fan_lowest": "Lowest"
+        "fan_lowest": "Lowest",
+        "not_home": "Not home",
+        "home": "Home"
     }
 }
