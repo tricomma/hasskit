@@ -6,6 +6,7 @@ import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/WebSocket.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 enum EntityType {
   lightSwitches,
@@ -636,6 +637,47 @@ class Entity {
         return speedLevel;
       if (speed != null && speed.length > 0 && speed != "null") return speed;
     }
+
+    return state;
+  }
+
+  String getStateDisplayTranslated(BuildContext context) {
+    if (isStateOn && entityId.contains("fan.")) {
+      if (speedLevel != null && speedLevel.length > 0 && speedLevel != "null") {
+        if(speedLevel.toLowerCase() == "high") return Translate.getString("states.fan_high", context);
+        if(speedLevel.toLowerCase() == "mediumhigh") return Translate.getString("states.fan_high_medium", context);
+        if(speedLevel.toLowerCase() == "medium") return Translate.getString("states.fan_medium", context);
+        if(speedLevel.toLowerCase() == "mediumlow") return Translate.getString("states.fan_medium_low", context);
+        if(speedLevel.toLowerCase() == "low") return Translate.getString("states.fan_low", context);
+        if(speedLevel.toLowerCase() == "lowest") return Translate.getString("states.fan_lowest", context);
+        return speedLevel;
+      }
+      if (speed != null && speed.length > 0 && speed != "null") {
+        if(speed.toLowerCase() == "high") return Translate.getString("states.fan_high", context);
+        if(speed.toLowerCase() == "mediumhigh") return Translate.getString("states.fan_high_medium", context);
+        if(speed.toLowerCase() == "medium") return Translate.getString("states.fan_medium", context);
+        if(speed.toLowerCase() == "mediumlow") return Translate.getString("states.fan_medium_low", context);
+        if(speed.toLowerCase() == "low") return Translate.getString("states.fan_low", context);
+        if(speed.toLowerCase() == "lowest") return Translate.getString("states.fan_lowest", context);
+        return speed;
+      }
+    }
+
+    if(state.toLowerCase() == "off") return Translate.getString("states.off", context);
+    if(state.toLowerCase() == "on") return Translate.getString("states.on", context);
+    if(state.toLowerCase() == "closed") return Translate.getString("states.closed", context);
+    if(state.toLowerCase() == "open") return Translate.getString("states.open", context);
+    if(state.toLowerCase() == "locked") return Translate.getString("states.locked", context);
+    if(state.toLowerCase() == "unlocked") return Translate.getString("states.unlocked", context);
+    if(state.toLowerCase() == "disarmed") return Translate.getString("states.disarmed", context);
+    if(state.toLowerCase().contains("armed")) {
+      if(state.toLowerCase().contains("away")) return Translate.getString("states.armed_away", context);
+      if(state.toLowerCase().contains("home")) return Translate.getString("states.armed_home", context);
+      if(state.toLowerCase().contains("night")) return Translate.getString("states.armed_night", context);
+      return Translate.getString("states.armed", context);
+    }
+    if(state.toLowerCase().contains("pending")) return Translate.getString("states.arm_pending", context);
+
     return state;
   }
 

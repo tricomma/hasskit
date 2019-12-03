@@ -13,7 +13,14 @@
         "right": "Right",
         "connect_hass": "Please Connect To\nHome Assistant",
         "last_update": "Last update",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "settings": "Settings",
+        "rooms": "Rooms",
+        "disconnect": "Disconnect",
+        "refresh": "Refresh",
+        "last_access": "Last Access",
+        "connected": "Connected",
+        "disconnected": "Disconnected"
     },
     "edit": {
         "select_icon": "Select Custom Icon",
@@ -62,6 +69,7 @@
         "cancel": "Cancel Web Login Connection"
     },
     "settings": {
+        "home_assistant": "Home Assistant Connection",
         "new_connection": "Create New Connection...",
         "use_https": "Use https",
         "connect": "Connect",
@@ -69,6 +77,22 @@
         "theme_color": "Theme Color",
         "layout": "Layout",
         "about": "About HassKit",
-        "about_info": "HassKit is a Touch-Friendly - Zero Config App to help users instantly start using Home Assistant (Hass).\n\nHass is one of the best platforms for Home Automation, with powerful features and the world's widest range of device support. Hass only requires some simple/cheap hardware to get started.\n\nHowever, Hass is not easy to set up and requires a few months to master. HassKit aims to ease the learning steps and improve the quality of life for Hass users by providing a stunning look and 10-second setup to start using this wonderful Home Automation platform.\n\nHassKit is free, open-source and under development. We need your help to improve the app's features for us to better serve you.\n\nPlease find us on Discord and Facebook. Your contributions are always welcome."
+        "about_info": "HassKit is a Touch-Friendly - Zero Config App to help users instantly start using Home Assistant (Hass).\n\nHass is one of the best platforms for Home Automation, with powerful features and the world's widest range of device support. Hass only requires some simple/cheap hardware to get started.\n\nHowever, Hass is not easy to set up and requires a few months to master. HassKit aims to ease the learning steps and improve the quality of life for Hass users by providing a stunning look and 10-second setup to start using this wonderful Home Automation platform.\n\nHassKit is free, open-source and under development. We need your help to improve the app's features for us to better serve you.\n\nPlease find us on Discord and Facebook. Your contributions are always welcome.",
+        "3_buttons": "3 Buttons",
+        "4_buttons": "4 Buttons"
+    },
+    "google_sync": {
+        "use": "Use Cloud Data Sync",
+        "info": "Keep your rooms layout and device customization synchronized accross devices. HassKit won't upload your login data online...",
+        "sign_out": "Sign Out",
+        "sign_in": "Sign In",
+        "force_download": "Force download data from cloud",
+        "sync_problem": "Use ONLY when you have sync issue",
+        "force_upload": "Force upload data to cloud",
+        "force_reset": "Force reset data on cloud"
+    },
+    "theme_selector": {
+        "dark": "Dark Theme",
+        "light": "Light Theme"
     }
 }

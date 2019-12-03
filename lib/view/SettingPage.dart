@@ -134,7 +134,7 @@ class _SettingPageState extends State<SettingPage> {
 //                ),
                 backgroundColor: ThemeInfo.colorBottomSheet.withOpacity(0.5),
                 largeTitle: Text(
-                  "Setting",
+                  Translate.getString("global.settings", context),
                   style: TextStyle(color: ThemeInfo.colorBottomSheetReverse),
                   textScaleFactor: gd.textScaleFactor,
                   overflow: TextOverflow.ellipsis,
@@ -151,7 +151,7 @@ class _SettingPageState extends State<SettingPage> {
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:home-assistant"),
                 ),
-                title: "Home Assistant Connection",
+                title: Translate.getString("settings.home_assistant", context),
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
@@ -462,7 +462,7 @@ class _ThemeSelector extends StatelessWidget {
                             Image.asset("assets/images/icon_transparent.png"),
                             Spacer(),
                             Text(
-                              "Dark Theme",
+                              Translate.getString("theme_selector.dark", context),
                               style: TextStyle(color: Colors.white),
                               textScaleFactor: gd.textScaleFactor,
                             ),
@@ -496,7 +496,7 @@ class _ThemeSelector extends StatelessWidget {
                             Image.asset("assets/images/icon_transparent.png"),
                             Spacer(),
                             Text(
-                              "Light Theme",
+                              Translate.getString("theme_selector.light", context),
                               style: TextStyle(color: Colors.black),
                               textScaleFactor: gd.textScaleFactor,
                             ),
@@ -555,7 +555,7 @@ class _LayoutSelector extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              "3 Buttons",
+                              Translate.getString("settings.3_buttons", context),
                               style: Theme.of(context).textTheme.body1,
                               overflow: TextOverflow.ellipsis,
                               textScaleFactor: gd.textScaleFactor,
@@ -593,7 +593,7 @@ class _LayoutSelector extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              "4 Buttons",
+                              Translate.getString("settings.4_buttons", context),
                               style: Theme.of(context).textTheme.body1,
                               overflow: TextOverflow.ellipsis,
                               textScaleFactor: gd.textScaleFactor,

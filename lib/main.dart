@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/view/PageViewBuilder.dart';
@@ -297,7 +298,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                         "mdi:view-carousel")),
                     title: Text(
 //                  gd.getRoomName(gd.lastSelectedRoom + 1),
-                      "Room",
+                      Translate.getString("global.rooms", context),
                       maxLines: 1,
                       textScaleFactor: gd.textScaleFactor,
                       overflow: TextOverflow.ellipsis,
@@ -310,7 +311,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                     icon: Icon(MaterialDesignIcons.getIconDataFromIconName(
                         "mdi:settings")),
                     title: Text(
-                      'Setting',
+                      Translate.getString("global.settings", context),
                       maxLines: 1,
                       textScaleFactor: gd.textScaleFactor,
                       overflow: TextOverflow.ellipsis,

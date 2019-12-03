@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'Logger.dart';
 
 class Translate {
   static String getString(String key, BuildContext context) {
+    if(key.contains("rooms")) {
+      log.w("ROOMS");
+    }
+
     if(AppLocalizations.of(context) != null) {
-      return AppLocalizations.of(context).tr(key);
+      var t = AppLocalizations.of(context);
+      String val = t.tr(key);
+      return val;
     }
     else {
-      return key;
+      return "e:" + key;
     }
   }
 }
