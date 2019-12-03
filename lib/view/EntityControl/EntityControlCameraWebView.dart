@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class EntityControlCameraWebView extends StatefulWidget {
   final String entityId;
@@ -20,8 +20,7 @@ class EntityControlCameraWebView extends StatefulWidget {
 
 class _EntityControlCameraWebViewState
     extends State<EntityControlCameraWebView> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  InAppWebViewController webController;
   bool showSpin = true;
   String url = "";
   @override
@@ -38,35 +37,53 @@ class _EntityControlCameraWebViewState
 
   @override
   Widget build(BuildContext context) {
+    log.d("build showSpin $showSpin url $url");
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
           generalData.cameraStreamUrl + url + showSpin.toString(),
       builder: (context, data, child) {
+        log.d("Selector showSpin $showSpin url $url");
         return RotatedBox(
-          quarterTurns: 1,
+          quarterTurns:
+              Theme.of(context).platform == TargetPlatform.android ? 1 : 0,
           child: Stack(
             children: <Widget>[
               Container(
                 color: ThemeInfo.colorBackgroundDark,
                 child: gd.cameraStreamUrl.length < 10
                     ? Container()
-                    : WebView(
+                    : InAppWebView(
                         initialUrl: gd.cameraStreamUrl,
-                        javascriptMode: JavascriptMode.disabled,
-                        initialMediaPlaybackPolicy:
-                            AutoMediaPlaybackPolicy.always_allow,
-                        onWebViewCreated:
-                            (WebViewController webViewController) {
-                          _controller.complete(webViewController);
+                        initialHeaders: {},
+                        initialOptions: InAppWebViewWidgetOptions(
+                            inAppWebViewOptions: InAppWebViewOptions(
+                          debuggingEnabled: true,
+                        )),
+                        onWebViewCreated: (InAppWebViewController controller) {
+                          webController = controller;
                         },
-                        onPageFinished: (String urlVal) async {
-                          log.d("1 onPageFinished");
-                          await Future.delayed(
-                              const Duration(milliseconds: 1500));
-                          log.d("2 onPageFinished");
+                        onLoadStart:
+                            (InAppWebViewController controller, String urlVal) {
                           setState(() {
+                            log.d("onLoadStart urlVal $urlVal");
+//              this.url = url;
+                          });
+                        },
+                        onLoadStop: (InAppWebViewController controller,
+                            String urlVal) async {
+                          setState(() {
+                            log.d("onLoadStop url $urlVal");
                             url = urlVal;
                             showSpin = false;
+//              showSpin = false;
+//              this.url = url;
+                          });
+                        },
+                        onProgressChanged:
+                            (InAppWebViewController controller, int progress) {
+                          setState(() {
+                            if (progress >= 100) showSpin = false;
+//                            log.d("onProgressChanged progress $progress");
                           });
                         },
                       ),

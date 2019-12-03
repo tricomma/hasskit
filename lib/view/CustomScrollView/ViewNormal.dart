@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/model/Entity.dart';
-import 'package:hasskit/view/CustomScrollView/DeviceTypeHeader.dart';
+import 'package:hasskit/view/slivers/SliverHeader.dart';
 import 'package:hasskit/view/slivers/SliverEntities.dart';
 import 'package:hasskit/view/slivers/SliverNavigationBar.dart';
 import 'package:hasskit/view/slivers/SliverEntityStatusRunning.dart';
@@ -99,7 +99,7 @@ class ViewNormal extends StatelessWidget {
               )
             : gd.emptySliver,
         webView1.length + row1.length + row1Cam.length > 0
-            ? DeviceTypeHeaderEditNormal(icon: Icon(Icons.looks_one), title: '')
+            ? SliverHeaderNormal(icon: Icon(Icons.looks_one), title: '')
             : gd.emptySliver,
         webView1.contains("WebView1")
             ? SliverWebView(
@@ -131,7 +131,7 @@ class ViewNormal extends StatelessWidget {
               )
             : gd.emptySliver,
         webView2.length + row2.length + row2Cam.length > 0
-            ? DeviceTypeHeaderEditNormal(icon: Icon(Icons.looks_two), title: '')
+            ? SliverHeaderNormal(icon: Icon(Icons.looks_two), title: '')
             : gd.emptySliver,
         webView2.contains("WebView1")
             ? SliverWebView(
@@ -163,7 +163,7 @@ class ViewNormal extends StatelessWidget {
               )
             : gd.emptySliver,
         webView3.length + row3.length + row3Cam.length > 0
-            ? DeviceTypeHeaderEditNormal(icon: Icon(Icons.looks_3), title: '')
+            ? SliverHeaderNormal(icon: Icon(Icons.looks_3), title: '')
             : gd.emptySliver,
         webView3.contains("WebView1")
             ? SliverWebView(
@@ -195,7 +195,7 @@ class ViewNormal extends StatelessWidget {
               )
             : gd.emptySliver,
         webView4.length + row4.length + row4.length > 0
-            ? DeviceTypeHeaderEditNormal(icon: Icon(Icons.looks_4), title: '')
+            ? SliverHeaderNormal(icon: Icon(Icons.looks_4), title: '')
             : gd.emptySliver,
         webView4.contains("WebView1")
             ? SliverWebView(

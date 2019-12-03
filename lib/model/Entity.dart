@@ -523,6 +523,7 @@ class Entity {
 
     if ((entityId.split('.')[0] == 'climate' ||
             entityId.split('.')[0] == 'media_player') &&
+        state.toLowerCase() != 'idle' &&
         state.toLowerCase() != 'off' &&
         state.toLowerCase() != 'unavailable') {
       return true;

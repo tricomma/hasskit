@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/LocaleHelper.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class EntityControlCameraVideoPlayer extends StatefulWidget {
   final String entityId;
@@ -23,6 +24,10 @@ class EntityControlCameraVideoPlayer extends StatefulWidget {
 class _EntityControlCameraVideoPlayerState
     extends State<EntityControlCameraVideoPlayer> {
   VideoPlayerController _controller;
+
+  WebViewController webController;
+  bool showSpin = true;
+
   bool initialized = false;
   String streamUrl = "";
   @override
@@ -42,34 +47,85 @@ class _EntityControlCameraVideoPlayerState
     return Selector<GeneralData, String>(
       selector: (_, generalData) => generalData.cameraStreamUrl,
       builder: (context, data, child) {
+        var entity = gd.entities[widget.entityId];
         if (gd.cameraStreamUrl.length > 100 &&
             !initialized &&
             streamUrl != gd.cameraStreamUrl) {
-          initVideo();
+          initVideo(gd.cameraStreamUrl);
         }
 
         try {
-          return RotatedBox(
-            quarterTurns: 1,
-            child: ModalProgressHUD(
-              inAsyncCall: !_controller.value.initialized,
-              opacity: 1,
-              progressIndicator: SpinKitThreeBounce(
-                size: 40,
-                color: ThemeInfo.colorIconActive.withOpacity(0.5),
-              ),
-              color: ThemeInfo.colorBackgroundDark,
-              child: Container(
+          if (gd.cameraStreamUrl != null && gd.cameraStreamUrl.length > 100) {
+            return RotatedBox(
+              quarterTurns: 1,
+              child: ModalProgressHUD(
+                inAsyncCall: !_controller.value.initialized,
+                opacity: 1,
+                progressIndicator: SpinKitThreeBounce(
+                  size: 40,
+                  color: ThemeInfo.colorIconActive.withOpacity(0.5),
+                ),
                 color: ThemeInfo.colorBackgroundDark,
-                child: Center(
-                  child: AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
+                child: Container(
+                  color: ThemeInfo.colorBackgroundDark,
+                  child: Center(
+                    child: AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
+            );
+          } else {
+            return RotatedBox(
+              quarterTurns: 1,
+              child: ModalProgressHUD(
+                inAsyncCall: false,
+                opacity: 1,
+                progressIndicator: SpinKitThreeBounce(
+                  size: 40,
+                  color: ThemeInfo.colorIconActive.withOpacity(0.5),
+                ),
+                color: ThemeInfo.colorBackgroundDark,
+                child: Stack(
+                    children: <Widget> [Container(
+                    color: ThemeInfo.colorBackgroundDark,
+                    child: Center(
+                      child: AspectRatio(
+                          aspectRatio: 1.7,
+                          child: WebView(
+                            initialUrl:
+                                gd.currentUrl + entity.entityPicture,
+                            gestureRecognizers: null,
+                            javascriptMode: JavascriptMode.unrestricted,
+                            initialMediaPlaybackPolicy:
+                                AutoMediaPlaybackPolicy.always_allow,
+                            onWebViewCreated:
+                                (WebViewController webViewController) {
+                                webController = webViewController;
+                            },
+                            onPageFinished: (String urlVal) async {
+                              setState(() {
+                                showSpin = false;
+                              });
+                            },
+                          )),
+                    ),
+                  ),
+                  showSpin
+                  ? Container(
+                      color: ThemeInfo.colorBackgroundDark.withOpacity(1),
+                      child: SpinKitThreeBounce(
+                        size: 40,
+                        color: ThemeInfo.colorIconActive.withOpacity(0.5),
+                      ),
+                    )
+                  : Container(),],
+                ),
+              ),
+            );
+          }
         } catch (e) {
           return Container(
             child: Center(child: AutoSizeText("$Translate.getString(\"global.error\", context): $e")),
@@ -79,14 +135,15 @@ class _EntityControlCameraVideoPlayerState
     );
   }
 
-  void initVideo() {
-    streamUrl = gd.cameraStreamUrl;
+  void initVideo(String url) {
+    initialized = true;
+    streamUrl = url;
     _controller = VideoPlayerController.network(
 //        'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4'
-        gd.cameraStreamUrl)
+        streamUrl)
       ..initialize().then(
         (_) {
-          log.w("initVideo ${gd.cameraStreamUrl}");
+          log.w("initVideo $streamUrl");
           initialized = true;
           // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
           _controller.play();

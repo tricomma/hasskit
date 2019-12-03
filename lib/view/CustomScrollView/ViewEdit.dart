@@ -6,7 +6,7 @@ import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/model/Entity.dart';
-import 'package:hasskit/view/CustomScrollView/DeviceTypeHeader.dart';
+import 'package:hasskit/view/slivers/SliverHeader.dart';
 import 'package:hasskit/view/CustomScrollView/TemperatureSelector.dart';
 import 'package:hasskit/view/slivers/SliverNavigationBar.dart';
 
@@ -141,14 +141,14 @@ class _ViewEditState extends State<ViewEdit> {
             ],
           ),
         ),
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Embeded Website...",
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:web")),
         ),
         WebViewItems(
           roomIndex: widget.roomIndex,
         ),
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Selected devices...",
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName(
               "mdi:checkbox-marked")),
@@ -160,7 +160,7 @@ class _ViewEditState extends State<ViewEdit> {
           types: [EntityType.lightSwitches],
         ),
 
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Lights, Switches...",
           icon: Icon(
               MaterialDesignIcons.getIconDataFromIconName("mdi:toggle-switch")),
@@ -171,7 +171,7 @@ class _ViewEditState extends State<ViewEdit> {
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.lightSwitches],
         ),
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Climate, Fans...",
           icon: Icon(
               MaterialDesignIcons.getIconDataFromIconName("mdi:thermometer")),
@@ -182,7 +182,7 @@ class _ViewEditState extends State<ViewEdit> {
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.climateFans],
         ),
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Cameras...",
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:webcam")),
         ),
@@ -192,7 +192,7 @@ class _ViewEditState extends State<ViewEdit> {
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.cameras],
         ),
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Media Players...",
           icon:
               Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:theater")),
@@ -203,7 +203,7 @@ class _ViewEditState extends State<ViewEdit> {
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.mediaPlayers],
         ),
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Groups...",
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:blur")),
         ),
@@ -213,7 +213,7 @@ class _ViewEditState extends State<ViewEdit> {
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.group],
         ),
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Accessories...",
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:ballot")),
         ),
@@ -223,7 +223,7 @@ class _ViewEditState extends State<ViewEdit> {
           keyword: _controllerSearch.text.trim(),
           types: [EntityType.accessories],
         ),
-        DeviceTypeHeaderEdit(
+        SliverHeaderEdit(
           title: "Script, Automation...",
           icon: Icon(MaterialDesignIcons.getIconDataFromIconName(
               "mdi:home-automation")),
