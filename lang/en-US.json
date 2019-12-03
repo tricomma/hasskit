@@ -94,5 +94,25 @@
     "theme_selector": {
         "dark": "Dark Theme",
         "light": "Light Theme"
+    },
+    "states": {
+        "off": "Off",
+        "on": "On",
+        "closed": "Closed",
+        "open": "Open",
+        "locked": "Locked",
+        "unlocked": "Unlocked",
+        "disarmed": "Disarmed",
+        "arm_pending": "Pending",
+        "armed_away": "Armed away",
+        "armed_home": "Armed home",
+        "armed_night": "Armed night",
+        "armed": "Armed",
+        "fan_high": "High",
+        "fan_high_medium": "Medium High",
+        "fan_medium": "Medium",
+        "fan_medium_low": "Medium Low",
+        "fan_low": "Low",
+        "fan_lowest": "Lowest"
     }
 }
