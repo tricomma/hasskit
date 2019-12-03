@@ -17,6 +17,7 @@ import 'EntityControlInputNumber.dart';
 import 'EntityControlLightDimmer.dart';
 import 'EntityControlSensor.dart';
 import 'EntityControlToggle.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class EntityControlParent extends StatefulWidget {
   final String entityId;
@@ -440,7 +441,7 @@ class __IconSelectionState extends State<_IconSelection> {
           ),
           child: Center(
             child: Text(
-              "Select Custom Icon",
+              Translate.getString("edit.select_icon", context),
               style: Theme.of(context).textTheme.title,
               overflow: TextOverflow.ellipsis,
               textScaleFactor: gd.textScaleFactor,
@@ -497,7 +498,7 @@ class __IconSelectionState extends State<_IconSelection> {
                             children: <Widget>[
                               index == 0
                                   ? Text(
-                                      "Reset Icon",
+                                      Translate.getString("edit.reset_icon", context),
                                       style: ThemeInfo.textStatusButtonInActive
                                           .copyWith(
                                               color: ThemeInfo

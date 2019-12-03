@@ -9,6 +9,7 @@ import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:flutter/gestures.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class SliverWebView extends StatelessWidget {
   final String webViewsId;
@@ -191,7 +192,7 @@ class _WebViewState extends State<WebView> {
                 },
                 child: Container(
                   child: Text(
-                    "Windy",
+                    Translate.getString("webview.windy", context),
                     textScaleFactor: gd.textScaleFactor,
                   ),
                 ),
@@ -207,7 +208,7 @@ class _WebViewState extends State<WebView> {
                 },
                 child: Container(
                   child: Text(
-                    "Y! Weather",
+                    Translate.getString("webview.y_weather", context),
                     textScaleFactor: gd.textScaleFactor,
                   ),
                 ),
@@ -222,7 +223,7 @@ class _WebViewState extends State<WebView> {
                   });
                 },
                 child: Text(
-                  "LiveScore",
+                  Translate.getString("webview.live_score", context),
                   textScaleFactor: gd.textScaleFactor,
                 ),
               ),
@@ -286,7 +287,7 @@ class _WebViewState extends State<WebView> {
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Aspect"),
+                      Text(Translate.getString("webview.aspect", context)),
                       SizedBox(width: 8),
                       Icon(MaterialDesignIcons.getIconDataFromIconName(
                           "mdi:crop-landscape")),
@@ -355,7 +356,9 @@ class _WebViewState extends State<WebView> {
           if (showAddress) changeUrl(textController.text.trim());
           showAddress = !showAddress;
           Flushbar(
-            message: showAddress ? "Edit Website" : "Website saved",
+            message: showAddress ? 
+              Translate.getString("webview.edit", context) : 
+              Translate.getString("webview.saved", context),
             duration: Duration(seconds: 3),
             shouldIconPulse: true,
             icon: Icon(
@@ -391,7 +394,7 @@ class _WebViewState extends State<WebView> {
               changeOpacity();
               webController.reload();
               Flushbar(
-                message: "Reload Website",
+                message: Translate.getString("webview.reload", context),
                 duration: Duration(seconds: 3),
                 shouldIconPulse: true,
                 icon: Icon(
@@ -427,8 +430,8 @@ class _WebViewState extends State<WebView> {
                 pinWebView = !pinWebView;
                 Flushbar(
                   message: pinWebView
-                      ? "Pin Website - Prevent Website scrolling"
-                      : "Unpin Website - Allow Website scrolling",
+                      ? Translate.getString("webview.pin", context)
+                      : Translate.getString("webview.unpin", context),
                   duration: Duration(seconds: 3),
                   shouldIconPulse: true,
                   icon: Icon(

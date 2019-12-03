@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/helper/WebSocket.dart';
 import 'package:hasskit/view/PageViewBuilder.dart';
@@ -15,17 +16,32 @@ import 'helper/GeneralData.dart';
 import 'helper/GoogleSign.dart';
 import 'helper/Logger.dart';
 import 'helper/MaterialDesignIcons.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:devicelocale/devicelocale.dart';
 
 void main() {
 //  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(builder: (context) => GeneralData()),
-      ],
-      child: MyApp(),
+    EasyLocalization(
+        child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(builder: (context) => GeneralData()),
+        ],
+        child: MyApp(),
+      ),
     ),
   );
+}
+
+void SetLocale() {
+  if(gd.currentLocale == "sv_SE") {
+    gd.localeData.changeLocale(Locale("sv","SE"));
+  }
+  else {
+    //SET ENG
+    gd.localeData.changeLocale(Locale("en","US"));
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -35,16 +51,35 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    return Selector<GeneralData, ThemeData>(
-      selector: (_, generalData) => generalData.currentTheme,
-      builder: (_, currentTheme, __) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: currentTheme,
-          title: 'HassKit',
-          home: HomeView(),
-        );
-      },
+    gd.localeData = EasyLocalizationProvider.of(context).data;
+    SetLocale();
+    return 
+    EasyLocalizationProvider(
+        data: gd.localeData,
+        child: Selector<GeneralData, ThemeData>(
+        selector: (_, generalData) => generalData.currentTheme,
+        builder: (_, currentTheme, __) {
+          return MaterialApp(
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              EasylocaLizationDelegate(
+                locale: gd.localeData.locale,
+                path: 'lang'
+              )
+            ],
+            locale: gd.localeData.savedLocale,
+            supportedLocales: [
+              Locale('en', 'US'), 
+              Locale('sv', 'SE')
+            ],
+            debugShowCheckedModeBanner: false,
+            theme: currentTheme,
+            title: 'HassKit',
+            home: HomeView(),
+          );
+        },
+      ),
     );
   }
 }
@@ -104,9 +139,38 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     super.dispose();
   }
 
+  Future<void> initPlatformState() async {
+    List languages;
+    String currentLocale;
+
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      languages = await Devicelocale.preferredLanguages;
+      print(languages);
+    } on PlatformException {
+      print("Error obtaining preferred languages");
+    }
+    try {
+      currentLocale = await Devicelocale.currentLocale;
+      print(currentLocale);
+    } on PlatformException {
+      print("Error obtaining current locale");
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      gd.currentLocale = currentLocale;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    initPlatformState();
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     WidgetsBinding.instance.addObserver(this);
@@ -234,7 +298,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                         "mdi:view-carousel")),
                     title: Text(
 //                  gd.getRoomName(gd.lastSelectedRoom + 1),
-                      "Room",
+                      Translate.getString("global.rooms", context),
                       maxLines: 1,
                       textScaleFactor: gd.textScaleFactor,
                       overflow: TextOverflow.ellipsis,
@@ -247,7 +311,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                     icon: Icon(MaterialDesignIcons.getIconDataFromIconName(
                         "mdi:settings")),
                     title: Text(
-                      'Setting',
+                      Translate.getString("global.settings", context),
                       maxLines: 1,
                       textScaleFactor: gd.textScaleFactor,
                       overflow: TextOverflow.ellipsis,

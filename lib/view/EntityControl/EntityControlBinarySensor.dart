@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class EntityControlBinarySensor extends StatefulWidget {
   final String entityId;
@@ -114,7 +115,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                                   ),
                                   child: FittedBox(
                                     child: Text(
-                                        "${stateString(deviceClass, binarySensorsReversed[index].isStateOn)}"),
+                                        "${stateString(deviceClass, binarySensorsReversed[index].isStateOn, context)}"),
                                   ),
                                 ),
                                 SizedBox(width: 8),
@@ -139,7 +140,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
                                         )
                                       : duration != null
                                           ? Text(
-                                              "Duration: ${printDuration(duration, abbreviated: true, tersity: DurationTersity.second, spacer: '', delimiter: ' ', conjugation: ' and ')}",
+                                              "${Translate.getString("global.duration", context)}: ${printDuration(duration, abbreviated: true, tersity: DurationTersity.second, spacer: '', delimiter: ' ', conjugation: ' and ')}",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .subtitle,
@@ -279,7 +280,7 @@ class _EntityControlBinarySensorState extends State<EntityControlBinarySensor> {
   }
 }
 
-String stateString(String deviceClass, bool isStateOn) {
+String stateString(String deviceClass, bool isStateOn, BuildContext context) {
 //  log.d("stateString deviceClass $deviceClass");
   if (deviceClass.contains("garage_door") ||
       deviceClass.contains("door") ||
@@ -287,13 +288,13 @@ String stateString(String deviceClass, bool isStateOn) {
       deviceClass.contains("opening") ||
       deviceClass.contains("window")) {
     if (isStateOn) {
-      return "open";
+      return Translate.getString("global.open", context);
     }
-    return "closed";
+    return Translate.getString("global.closed", context);
   }
 
   if (isStateOn) {
-    return "on";
+    return Translate.getString("global.on", context);
   }
-  return "off";
+  return Translate.getString("global.off", context);
 }

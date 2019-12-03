@@ -152,7 +152,7 @@ class _EntityControlFanState extends State<EntityControlFan> {
                           SizedBox(height: 4),
                           Text(
                             gd.textToDisplay(
-                                "${gd.entities[widget.entityId].getStateDisplay}"),
+                                "${gd.entities[widget.entityId].getStateDisplayTranslated(context)}"),
                             style: ThemeInfo.textStatusButtonActive,
                             maxLines: 1,
                             textScaleFactor: gd.textScaleFactor *

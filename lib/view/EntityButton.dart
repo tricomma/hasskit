@@ -169,7 +169,7 @@ class _EntityButtonDisplayState extends State<EntityButtonDisplay> {
                 ),
               ),
               Text(
-                "${gd.textToDisplay(gd.entities[widget.entityId].getStateDisplay)}",
+                "${gd.textToDisplay(gd.entities[widget.entityId].getStateDisplayTranslated(context))}",
                 style: gd.entities[widget.entityId].isStateOn
                     ? ThemeInfo.textStatusButtonActive
                     : ThemeInfo.textStatusButtonInActive,

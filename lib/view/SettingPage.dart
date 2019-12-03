@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
@@ -13,6 +14,7 @@ import 'package:validators/validators.dart';
 import 'slivers/SliverHeader.dart';
 import 'HomeAssistantLogin.dart';
 import 'ServerSelectPanel.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -132,7 +134,7 @@ class _SettingPageState extends State<SettingPage> {
 //                ),
                 backgroundColor: ThemeInfo.colorBottomSheet.withOpacity(0.5),
                 largeTitle: Text(
-                  "Setting",
+                  Translate.getString("global.settings", context),
                   style: TextStyle(color: ThemeInfo.colorBottomSheetReverse),
                   textScaleFactor: gd.textScaleFactor,
                   overflow: TextOverflow.ellipsis,
@@ -149,7 +151,7 @@ class _SettingPageState extends State<SettingPage> {
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:home-assistant"),
                 ),
-                title: "Home Assistant Connection",
+                title: Translate.getString("settings.home_assistant", context),
               ),
               SliverList(
                 delegate: SliverChildListDelegate(
@@ -165,7 +167,7 @@ class _SettingPageState extends State<SettingPage> {
                             decoration: InputDecoration(
                               prefixText: gd.useSSL ? "https://" : "http://",
                               hintText: 'sample.duckdns.org:8123',
-                              labelText: 'Create New Connection...',
+                              labelText: Translate.getString("settings.new_connection", context),
                               suffixIcon: Opacity(
                                 opacity: showCancel ? 1 : 0,
                                 child: IconButton(
@@ -195,7 +197,7 @@ class _SettingPageState extends State<SettingPage> {
                                   onChanged: (val) {
                                     gd.useSSL = val;
                                   }),
-                              Text("Use https"),
+                              Text(Translate.getString("settings.use_https", context)),
                               Expanded(child: Container()),
                               RaisedButton(
                                 onPressed: showConnect
@@ -237,7 +239,7 @@ class _SettingPageState extends State<SettingPage> {
                                         );
                                       }
                                     : null,
-                                child: Text("Connect"),
+                                child: Text(Translate.getString("settings.connect", context)),
                               ),
                             ],
                           )
@@ -258,14 +260,14 @@ class _SettingPageState extends State<SettingPage> {
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName("mdi:cloud-sync"),
                 ),
-                title: "Google Cloud Sync",
+                title: Translate.getString("settings.sync", context),
               ),
               GoogleSign(),
               SliverHeaderNormal(
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName("mdi:palette"),
                 ),
-                title: "Theme Color",
+                title: Translate.getString("settings.theme_color", context),
               ),
               _ThemeSelector(),
               SliverHeaderNormal(
@@ -273,7 +275,7 @@ class _SettingPageState extends State<SettingPage> {
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:view-dashboard-variant"),
                 ),
-                title: "Layout",
+                title: Translate.getString("settings.layout", context),
               ),
               _LayoutSelector(),
               SliverHeaderNormal(
@@ -281,7 +283,7 @@ class _SettingPageState extends State<SettingPage> {
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:account-circle"),
                 ),
-                title: "About HassKit",
+                title: Translate.getString("settings.about", context),
               ),
               Container(
                 child: SliverList(
@@ -296,11 +298,7 @@ class _SettingPageState extends State<SettingPage> {
                                   ThemeInfo.colorBottomSheet.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(8)),
                           child: Text(
-                            "HassKit is a Touch-Friendly - Zero Config App to help users instantly start using Home Assistant (Hass)."
-                            "\n\nHass is one of the best platforms for Home Automation, with powerful features and the world's widest range of device support. Hass only requires some simple/cheap hardware to get started."
-                            "\n\nHowever, Hass is not easy to set up and requires a few months to master. HassKit aims to ease the learning steps and improve the quality of life for Hass users by providing a stunning look and 10-second setup to start using this wonderful Home Automation platform."
-                            "\n\nHassKit is free, open-source and under development. We need your help to improve the app's features for us to better serve you."
-                            "\n\nPlease find us on Discord and Facebook. Your contributions are always welcome.",
+                            Translate.getString("settings.about_info", context),
                             style: Theme.of(context).textTheme.body1,
                             textAlign: TextAlign.justify,
                             textScaleFactor: gd.textScaleFactor,
@@ -464,7 +462,7 @@ class _ThemeSelector extends StatelessWidget {
                             Image.asset("assets/images/icon_transparent.png"),
                             Spacer(),
                             Text(
-                              "Dark Theme",
+                              Translate.getString("theme_selector.dark", context),
                               style: TextStyle(color: Colors.white),
                               textScaleFactor: gd.textScaleFactor,
                             ),
@@ -498,7 +496,7 @@ class _ThemeSelector extends StatelessWidget {
                             Image.asset("assets/images/icon_transparent.png"),
                             Spacer(),
                             Text(
-                              "Light Theme",
+                              Translate.getString("theme_selector.light", context),
                               style: TextStyle(color: Colors.black),
                               textScaleFactor: gd.textScaleFactor,
                             ),
@@ -557,7 +555,7 @@ class _LayoutSelector extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              "3 Buttons",
+                              Translate.getString("settings.3_buttons", context),
                               style: Theme.of(context).textTheme.body1,
                               overflow: TextOverflow.ellipsis,
                               textScaleFactor: gd.textScaleFactor,
@@ -595,7 +593,7 @@ class _LayoutSelector extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              "4 Buttons",
+                              Translate.getString("settings.4_buttons", context),
                               style: Theme.of(context).textTheme.body1,
                               overflow: TextOverflow.ellipsis,
                               textScaleFactor: gd.textScaleFactor,

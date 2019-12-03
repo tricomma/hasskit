@@ -5,6 +5,7 @@ import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:provider/provider.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class EntityControlAlarmPanel extends StatefulWidget {
   final String entityId;
@@ -73,17 +74,17 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
 
   String _getStateText(entity) {
     if (entity.state == "disarmed") {
-      return "Disarmed";
+      return Translate.getString("alarm_panel.disarmed", context);
     } else if (entity.state == "pending") {
-      return "Pending";
+      return Translate.getString("alarm_panel.pending", context);
     } else if (entity.state == "armed_away") {
-      return "Armed away";
+      return Translate.getString("alarm_panel.armed_away", context);
     } else if (entity.state == "armed_home") {
-      return "Armed home";
+      return Translate.getString("alarm_panel.armed_home", context);
     } else if (entity.state == "armed_night") {
-      return "Armed night";
+      return Translate.getString("alarm_panel.armed_night", context);
     } else {
-      return "Armed";
+      return Translate.getString("alarm_panel.armed", context);
     }
   }
 
@@ -161,10 +162,10 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
         _readableState = _getStateText(entity);
         Color alarmColor = Colors.red;
         String alarmIcon = "mdi:shield-lock";
-        if (_readableState == "Disarmed") {
+        if (entity.state == "disarmed") {
           alarmColor = Colors.green;
           alarmIcon = "mdi:shield-check";
-        } else if (_readableState == "Pending") {
+        } else if (entity.state == "pending") {
           alarmColor = ThemeInfo.colorIconActive;
           alarmIcon = "mdi:shield-outline";
         }
@@ -253,9 +254,9 @@ class _EntityControlAlarmPanelState extends State<EntityControlAlarmPanel> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      alarmSelectionButton("Arm Home", "arm_home"),
+                      alarmSelectionButton(Translate.getString("alarm_panel.arm_home", context), "arm_home"),
                       alarmButton("0"),
-                      alarmSelectionButton("Arm Away", "arm_away")
+                      alarmSelectionButton(Translate.getString("alarm_panel.arm_away", context), "arm_away")
                     ],
                   )
                 ],

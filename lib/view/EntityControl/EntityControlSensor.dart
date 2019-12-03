@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:math';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class EntityControlSensor extends StatefulWidget {
   final String entityId;
@@ -43,7 +44,7 @@ class _EntityControlSensorState extends State<EntityControlSensor> {
       displayWidget = Container(
         child: Center(
           child: Text(
-              "${gd.textToDisplay(gd.entities[widget.entityId].getOverrideName)} has no data available ${gd.sensors.length}"),
+              "${gd.textToDisplay(gd.entities[widget.entityId].getOverrideName)} ${Translate.getString('global.no_data', context)} ${gd.sensors.length}"),
         ),
       );
     else if (gd.sensors.length < 4) {

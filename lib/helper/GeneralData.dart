@@ -2220,4 +2220,7 @@ class GeneralData with ChangeNotifier {
   ];
 
   int webViewSupportMax = 3;
+
+  String currentLocale;
+  var localeData;
 }

@@ -6,6 +6,7 @@ import 'package:hasskit/helper/GeneralData.dart';
 import 'package:hasskit/helper/ThemeInfo.dart';
 import 'package:hasskit/model/CameraThumbnail.dart';
 import 'package:provider/provider.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 class EntityCamera extends StatelessWidget {
   final String entityId;
@@ -100,7 +101,7 @@ class EntityCamera extends StatelessWidget {
                               child: Container(),
                             ),
                             Text(
-                              "Last update: ${printDuration(timeDiff, abbreviated: true, tersity: DurationTersity.second, delimiter: ', ', conjugation: ' and ')} ago",
+                              "${Translate.getString('global.last_update', context)}: ${printDuration(timeDiff, abbreviated: true, tersity: DurationTersity.second, delimiter: ', ', conjugation: ' and ')} ago",
                               style: Theme.of(context).textTheme.body1,
                               textScaleFactor: gd.textScaleFactor,
                             ),

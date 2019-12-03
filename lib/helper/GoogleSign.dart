@@ -6,6 +6,7 @@ import 'package:hasskit/helper/Logger.dart';
 import 'package:hasskit/helper/MaterialDesignIcons.dart';
 import 'GeneralData.dart';
 import 'ThemeInfo.dart';
+import 'package:hasskit/helper/LocaleHelper.dart';
 
 GoogleSignIn googleSignIn = GoogleSignIn(
   scopes: <String>[
@@ -60,7 +61,7 @@ class _GoogleSignState extends State<GoogleSign> {
                         ),
                   gd.googleSignInAccount != null
                       ? Text(gd.googleSignInAccount.displayName ?? '')
-                      : Text('Use Cloud Data Sync'),
+                      : Text(Translate.getString("google_sync.use", context)),
 //                  Text(_currentUser.email ?? ''),
 //                  Text('Using Cloud Sync Data'),
                   gd.googleSignInAccount != null
@@ -70,7 +71,7 @@ class _GoogleSignState extends State<GoogleSign> {
                       ? GoogleCloudAction()
                       : Container(),
                   Text(
-                    "Keep your rooms layout and device customization synchronized accross devices. HassKit won't upload your login data online...",
+                    Translate.getString("google_sync.info", context),
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],
@@ -95,7 +96,7 @@ class GoogleLoggedIn extends StatelessWidget {
             children: <Widget>[
               Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:logout")),
               SizedBox(width: 4),
-              Text("Sign Out"),
+              Text(Translate.getString("google_sync.sign_out", context)),
             ],
           ),
           onPressed: _handleSignOut,
@@ -119,8 +120,8 @@ class GoogleCloudAction extends StatelessWidget {
           onTap: () {
             Flushbar flush;
             flush = Flushbar<bool>(
-              title: "Force download data from cloud",
-              message: "Use ONLY when you have sync issue",
+              title: Translate.getString("google_sync.force_download", context),
+              message: Translate.getString("google_sync.sync_problem", context),
               duration: Duration(seconds: 3),
               shouldIconPulse: true,
               icon: Icon(
@@ -133,7 +134,7 @@ class GoogleCloudAction extends StatelessWidget {
                   flush.dismiss(true);
                 },
                 child: Text(
-                  "OK",
+                  Translate.getString("global.ok", context),
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -149,8 +150,8 @@ class GoogleCloudAction extends StatelessWidget {
           onTap: () {
             Flushbar flush;
             flush = Flushbar<bool>(
-              title: "Force upload data to cloud",
-              message: "Use ONLY when you have sync issue",
+              title: Translate.getString("google_sync.force_upload", context),
+              message: Translate.getString("google_sync.sync_problem", context),
               duration: Duration(seconds: 3),
               shouldIconPulse: true,
               icon: Icon(
@@ -163,7 +164,7 @@ class GoogleCloudAction extends StatelessWidget {
                   flush.dismiss(true);
                 },
                 child: Text(
-                  "OK",
+                  Translate.getString("global.ok", context),
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -179,8 +180,8 @@ class GoogleCloudAction extends StatelessWidget {
           onTap: () {
             Flushbar flush;
             flush = Flushbar<bool>(
-              title: "Force reset data on cloud",
-              message: "Use ONLY when you have sync issue",
+              title: Translate.getString("google_sync.force_reset", context),
+              message: Translate.getString("google_sync.sync_problem", context),
               duration: Duration(seconds: 3),
               shouldIconPulse: true,
               icon: Icon(
@@ -193,7 +194,7 @@ class GoogleCloudAction extends StatelessWidget {
                   flush.dismiss(true);
                 },
                 child: Text(
-                  "OK",
+                  Translate.getString("global.ok", context),
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -221,7 +222,7 @@ class GoogleLoggedOut extends StatelessWidget {
             children: <Widget>[
               Icon(MaterialDesignIcons.getIconDataFromIconName("mdi:login")),
               SizedBox(width: 4),
-              Text("Sign In"),
+              Text(Translate.getString("google_sync.sign_in", context)),
             ],
           ),
         ),
@@ -231,7 +232,7 @@ class GoogleLoggedOut extends StatelessWidget {
 
   Future<void> _handleSignIn() async {
     try {
-      log.d("googleSignIn.signIn()");
+      log.d("googleSignIn.signIn()"); 
       await googleSignIn.signIn();
     } catch (error) {
       print(error);
