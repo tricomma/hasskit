@@ -71,6 +71,12 @@ class Entity {
   List<String> soundModeList;
   String soundModeRaw;
   String entityPicture;
+  //device_tracker
+  String sourceType;
+  int batteryLevel;
+  double latitude;
+  double longitude;
+  int gpsAccuracy;
 
   Entity({
     this.entityId,
@@ -124,6 +130,12 @@ class Entity {
     this.soundModeList,
     this.soundModeRaw = "",
     this.entityPicture = "",
+    //device_tracker
+    this.sourceType = "",
+    this.batteryLevel = 0,
+    this.latitude = 0.0,
+    this.longitude = 0.0,
+    this.gpsAccuracy = 0
   });
 
   factory Entity.fromJson(Map<String, dynamic> json) {
@@ -131,6 +143,7 @@ class Entity {
       if (json['entity_id'] == null) {
         return null;
       }
+
       return Entity(
         entityId: json['entity_id'].toString(),
         deviceClass: json['attributes']['device_class'].toString() != null
@@ -296,6 +309,22 @@ class Entity {
         entityPicture: json['attributes']['entity_picture'].toString() != null
             ? json['attributes']['entity_picture'].toString()
             : "",
+        //device_tracker
+        sourceType: json['attributes']['source_type'].toString() != null
+            ? json['attributes']['source_type'].toString()
+            : "",
+        batteryLevel: int.tryParse(json['attributes']['battery_level'].toString()) != null
+            ? int.tryParse(json['attributes']['battery_level'].toString())
+            : 0,
+        latitude: double.tryParse(json['attributes']['latitude'].toString()) != null
+            ? double.tryParse(json['attributes']['latitude'].toString())
+            : 0,
+        longitude: double.tryParse(json['attributes']['longitude'].toString()) != null
+            ? double.tryParse(json['attributes']['longitude'].toString())
+            : 0,
+        gpsAccuracy: int.tryParse(json['attributes']['gps_accuracy'].toString()) != null
+            ? int.tryParse(json['attributes']['gps_accuracy'].toString())
+            : 0,
       );
     } catch (e) {
       log.e("Entity.fromJson newEntity $e");

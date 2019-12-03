@@ -10,6 +10,7 @@ import 'package:hasskit/view/EntityControl/EntityControlClimate.dart';
 import 'package:hasskit/view/EntityControl/EntityControlCoverPosition.dart';
 import 'package:hasskit/view/EntityControl/EntityControlGeneral.dart';
 import 'package:hasskit/view/EntityControl/EntityControlMediaPlayer.dart';
+import 'package:hasskit/view/EntityControl/EntityControlGeoLocation.dart';
 import 'package:provider/provider.dart';
 import 'EntityControlBinarySensor.dart';
 import 'EntityControlFan.dart';
@@ -92,6 +93,8 @@ class _EntityControlParentState extends State<EntityControlParent> {
           entityControl = EntityControlSensor(entityId: widget.entityId);
         } else if (entity.entityId.contains("alarm_control_panel.")) {
           entityControl = EntityControlAlarmPanel(entityId: widget.entityId);
+        } else if(entity.entityId.contains("device_tracker")) {
+          entityControl = EntityGeoLocation(entityId: widget.entityId);
         } else {
           entityControl = EntityControlGeneral(entityId: widget.entityId);
         }
