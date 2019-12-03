@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -48,7 +49,7 @@ class HomeAssistantLogin extends StatelessWidget {
                 ),
                 SizedBox(height: 25),
                 Text(
-                  "Connecting to",
+                  Translate.getString("login.connecting", context),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 25),
@@ -60,7 +61,7 @@ class HomeAssistantLogin extends StatelessWidget {
                 ),
                 SizedBox(height: 25),
                 Text(
-                  "Make sure the following info are correct",
+                  Translate.getString("login.correct_info", context),
                   textAlign: TextAlign.center,
                 ),
                 Text(
@@ -72,9 +73,9 @@ class HomeAssistantLogin extends StatelessWidget {
                   width: 100,
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.pop(context, "Cancel Web Login Connection");
+                      Navigator.pop(context, Translate.getString("login.cancel", context));
                     },
-                    child: Text("Cancel"),
+                    child: Text(Translate.getString("global.cancel", context)),
                   ),
                 ),
                 Expanded(
@@ -151,7 +152,7 @@ class _HomeAssistantLoginWebViewState extends State<HomeAssistantLoginWebView> {
             child: Column(
               children: <Widget>[
                 Text(
-                  "Make sure the following info are correct",
+                  Translate.getString("login.correct_info", context),
                   textAlign: TextAlign.center,
                 ),
                 Text(
@@ -173,14 +174,14 @@ class _HomeAssistantLoginWebViewState extends State<HomeAssistantLoginWebView> {
                         widget.closePage();
 //                        Navigator.pop(context);
                       },
-                      child: const Text('Cancel'),
+                      child: Text(Translate.getString("global.cancel", context)),
                     ),
                     SizedBox(width: 8),
                     RaisedButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed('/widget');
                       },
-                      child: const Text('OK'),
+                      child: Text(Translate.getString("global.ok", context)),
                     ),
                   ],
                 ),

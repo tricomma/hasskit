@@ -12,7 +12,8 @@
         "left": "Left",
         "right": "Right",
         "connect_hass": "Please Connect To\nHome Assistant",
-        "last_update": "Last update"
+        "last_update": "Last update",
+        "cancel": "Cancel"
     },
     "edit": {
         "select_icon": "Select Custom Icon",
@@ -54,5 +55,10 @@
         "y_weather": "Y! Weather",
         "live_score": "LiveScore",
         "aspect": "Aspect"
+    },
+    "login": {
+        "connecting": "Connecting to",
+        "correct_info": "Make sure the following info are correct",
+        "cancel": "Cancel Web Login Connection"
     }
 }
