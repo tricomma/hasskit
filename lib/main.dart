@@ -16,33 +16,32 @@ import 'helper/GeneralData.dart';
 import 'helper/GoogleSign.dart';
 import 'helper/Logger.dart';
 import 'helper/MaterialDesignIcons.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:devicelocale/devicelocale.dart';
-
-var localeData;
 
 void main() {
 //  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
-    EasyLocalization(
-        child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(builder: (context) => GeneralData()),
-        ],
-        child: MyApp(),
-      ),
+//    EasyLocalization(
+//        child:
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => GeneralData(),
+          builder: (context) => GeneralData(),
+        ),
+      ],
+      child: MyApp(),
+//      ),
     ),
   );
 }
 
 void setLocale() {
-  if(gd.currentLocale == "sv_SE") {
-    localeData.changeLocale(Locale("sv","SE"));
-  }
-  else {
+  if (gd.currentLocale == "sv_SE") {
+    gd.localeData.changeLocale(Locale("sv", "SE"));
+  } else {
     //SET ENG
-    localeData.changeLocale(Locale("en","US"));
+    gd.localeData.changeLocale(Locale("en", "US"));
   }
 }
 
@@ -53,35 +52,29 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    localeData = EasyLocalizationProvider.of(context).data;
-    setLocale();
-    return 
-    EasyLocalizationProvider(
-        data: localeData,
-        child: Selector<GeneralData, ThemeData>(
-        selector: (_, generalData) => generalData.currentTheme,
-        builder: (_, currentTheme, __) {
-          return MaterialApp(
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              EasylocaLizationDelegate(
-                locale: localeData.locale,
-                path: 'lang'
-              )
-            ],
-            locale: localeData.savedLocale,
-            supportedLocales: [
-              Locale('en', 'US'), 
-              Locale('sv', 'SE')
-            ],
-            debugShowCheckedModeBanner: false,
-            theme: currentTheme,
-            title: 'HassKit',
-            home: HomeView(),
-          );
-        },
-      ),
+//    gd.localeData = EasyLocalizationProvider.of(context).data;
+//    SetLocale();
+//    return EasyLocalizationProvider(
+//      data: gd.localeData,
+//      child:
+    return Selector<GeneralData, ThemeData>(
+      selector: (_, generalData) => generalData.currentTheme,
+      builder: (_, currentTheme, __) {
+        return MaterialApp(
+//          localizationsDelegates: [
+//            GlobalMaterialLocalizations.delegate,
+//            GlobalWidgetsLocalizations.delegate,
+//            EasylocaLizationDelegate(locale: gd.localeData.locale, path: 'lang')
+//          ],
+//          locale: gd.localeData.savedLocale,
+//          supportedLocales: [Locale('en', 'US'), Locale('sv', 'SE')],
+          debugShowCheckedModeBanner: false,
+          theme: currentTheme,
+          title: 'HassKit',
+          home: HomeView(),
+        );
+      },
+//      ),
     );
   }
 }
@@ -221,12 +214,8 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
       log.w("build gd.mediaQueryHeight ${gd.mediaQueryHeight}");
     }
 
-    try {
-      for (String activeCamera in gd.activeCameras.keys) {
-        gd.requestCameraImage(activeCamera);
-      }
-    } catch (e) {
-      log.e("timer1Callback $e");
+    for (String entityId in gd.cameraInfosActive) {
+      gd.cameraInfosUpdate(entityId);
     }
   }
 

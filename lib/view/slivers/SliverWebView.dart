@@ -142,7 +142,7 @@ class _WebViewState extends State<WebView> {
 
   //FUCK WebView/InAppWebView with parent ClipRRect will crash in iOS, take 1 day to figure out.
   Widget buildInAppWebView() {
-    print("buildInAppWebView currentUrl $currentUrl");
+//    print("buildInAppWebView currentUrl $currentUrl");
     return Container(
       child: InAppWebView(
         initialUrl: currentUrl,
@@ -356,9 +356,9 @@ class _WebViewState extends State<WebView> {
           if (showAddress) changeUrl(textController.text.trim());
           showAddress = !showAddress;
           Flushbar(
-            message: showAddress ? 
-              Translate.getString("webview.edit", context) : 
-              Translate.getString("webview.saved", context),
+            message: showAddress
+                ? Translate.getString("webview.edit", context)
+                : Translate.getString("webview.saved", context),
             duration: Duration(seconds: 3),
             shouldIconPulse: true,
             icon: Icon(
