@@ -20,6 +20,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:devicelocale/devicelocale.dart';
 
+var localeData;
+
 void main() {
 //  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(
@@ -34,13 +36,13 @@ void main() {
   );
 }
 
-void SetLocale() {
+void setLocale() {
   if(gd.currentLocale == "sv_SE") {
-    gd.localeData.changeLocale(Locale("sv","SE"));
+    localeData.changeLocale(Locale("sv","SE"));
   }
   else {
     //SET ENG
-    gd.localeData.changeLocale(Locale("en","US"));
+    localeData.changeLocale(Locale("en","US"));
   }
 }
 
@@ -51,11 +53,11 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    gd.localeData = EasyLocalizationProvider.of(context).data;
-    SetLocale();
+    localeData = EasyLocalizationProvider.of(context).data;
+    setLocale();
     return 
     EasyLocalizationProvider(
-        data: gd.localeData,
+        data: localeData,
         child: Selector<GeneralData, ThemeData>(
         selector: (_, generalData) => generalData.currentTheme,
         builder: (_, currentTheme, __) {
@@ -64,11 +66,11 @@ class MyApp extends StatelessWidget {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               EasylocaLizationDelegate(
-                locale: gd.localeData.locale,
+                locale: localeData.locale,
                 path: 'lang'
               )
             ],
-            locale: gd.localeData.savedLocale,
+            locale: localeData.savedLocale,
             supportedLocales: [
               Locale('en', 'US'), 
               Locale('sv', 'SE')
