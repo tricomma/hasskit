@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hasskit/helper/GeneralData.dart';
@@ -167,7 +166,8 @@ class _SettingPageState extends State<SettingPage> {
                             decoration: InputDecoration(
                               prefixText: gd.useSSL ? "https://" : "http://",
                               hintText: 'sample.duckdns.org:8123',
-                              labelText: Translate.getString("settings.new_connection", context),
+                              labelText: Translate.getString(
+                                  "settings.new_connection", context),
                               suffixIcon: Opacity(
                                 opacity: showCancel ? 1 : 0,
                                 child: IconButton(
@@ -197,7 +197,8 @@ class _SettingPageState extends State<SettingPage> {
                                   onChanged: (val) {
                                     gd.useSSL = val;
                                   }),
-                              Text(Translate.getString("settings.use_https", context)),
+                              Text(Translate.getString(
+                                  "settings.use_https", context)),
                               Expanded(child: Container()),
                               RaisedButton(
                                 onPressed: showConnect
@@ -239,7 +240,8 @@ class _SettingPageState extends State<SettingPage> {
                                         );
                                       }
                                     : null,
-                                child: Text(Translate.getString("settings.connect", context)),
+                                child: Text(Translate.getString(
+                                    "settings.connect", context)),
                               ),
                             ],
                           )
@@ -462,7 +464,8 @@ class _ThemeSelector extends StatelessWidget {
                             Image.asset("assets/images/icon_transparent.png"),
                             Spacer(),
                             Text(
-                              Translate.getString("theme_selector.dark", context),
+                              Translate.getString(
+                                  "theme_selector.dark", context),
                               style: TextStyle(color: Colors.white),
                               textScaleFactor: gd.textScaleFactor,
                             ),
@@ -496,7 +499,8 @@ class _ThemeSelector extends StatelessWidget {
                             Image.asset("assets/images/icon_transparent.png"),
                             Spacer(),
                             Text(
-                              Translate.getString("theme_selector.light", context),
+                              Translate.getString(
+                                  "theme_selector.light", context),
                               style: TextStyle(color: Colors.black),
                               textScaleFactor: gd.textScaleFactor,
                             ),
@@ -555,7 +559,8 @@ class _LayoutSelector extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              Translate.getString("settings.3_buttons", context),
+                              Translate.getString(
+                                  "settings.3_buttons", context),
                               style: Theme.of(context).textTheme.body1,
                               overflow: TextOverflow.ellipsis,
                               textScaleFactor: gd.textScaleFactor,
@@ -593,7 +598,8 @@ class _LayoutSelector extends StatelessWidget {
                             ),
                             Spacer(),
                             Text(
-                              Translate.getString("settings.4_buttons", context),
+                              Translate.getString(
+                                  "settings.4_buttons", context),
                               style: Theme.of(context).textTheme.body1,
                               overflow: TextOverflow.ellipsis,
                               textScaleFactor: gd.textScaleFactor,
