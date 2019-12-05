@@ -2124,7 +2124,17 @@ class GeneralData with ChangeNotifier {
 
   int webViewSupportMax = 3;
 
-  String currentLocale;
+  String _currentLocale;
+
+  String get currentLocale => _currentLocale;
+
+  set currentLocale(String val) {
+    if(val != null && val != "" && _currentLocale != val) {
+      _currentLocale = val;
+      setLocale();
+    }
+  }
+
   var localeData;
 
   List<bool> selectedLanguageIndex = [true, false, false];
@@ -2137,4 +2147,13 @@ class GeneralData with ChangeNotifier {
 //    _selectedLanguage = val;
 //    notifyListeners();
 //  }
+}
+
+void setLocale() {
+  log.d("setLocale ${gd.localeData.toString()} ");
+  if (gd.currentLocale == "sv_SE") {
+    gd.localeData.changeLocale(Locale("sv", "SE"));
+  } else {
+    gd.localeData.changeLocale(Locale("en", "US"));
+  }
 }
