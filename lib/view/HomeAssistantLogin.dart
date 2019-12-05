@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
@@ -73,7 +72,8 @@ class HomeAssistantLogin extends StatelessWidget {
                   width: 100,
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.pop(context, Translate.getString("login.cancel", context));
+                      Navigator.pop(context,
+                          Translate.getString("login.cancel", context));
                     },
                     child: Text(Translate.getString("global.cancel", context)),
                   ),
@@ -174,7 +174,8 @@ class _HomeAssistantLoginWebViewState extends State<HomeAssistantLoginWebView> {
                         widget.closePage();
 //                        Navigator.pop(context);
                       },
-                      child: Text(Translate.getString("global.cancel", context)),
+                      child:
+                          Text(Translate.getString("global.cancel", context)),
                     ),
                     SizedBox(width: 8),
                     RaisedButton(
