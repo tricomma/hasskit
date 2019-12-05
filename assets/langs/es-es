@@ -1,0 +1,119 @@
+{
+    "global": {
+        "duration": "Duración",
+        "open": "abierto",
+        "closed": "cerrado",
+        "on": "on",
+        "off": "off",
+        "error": "Error",
+        "no_data": "no hay datos disponibles",
+        "reset": "Reset",
+        "ok": "Ok",
+        "left": "Izquierda",
+        "right": "Derecha",
+        "connect_hass": "Por favor conecta con Home Assistant",
+        "last_update": "Última actualización",
+        "cancel": "Cancelar",
+        "settings": "Ajustes",
+        "rooms": "Habitaciones",
+        "disconnect": "Desconectar",
+        "refresh": "Refrescar",
+        "last_access": "Último Acceso",
+        "connected": "Conectado",
+        "disconnected": "Desconectado"
+    },
+    "edit": {
+        "select_icon": "Seleccionar Icono",
+        "reset_icon": "Borrar Icono",
+        "rbg_color": "Pulsación larga para cambiar color",
+        "edit": "Editar",
+        "arrange": "Ordenar",
+        "move": "Mover",
+        "delete": "Borrar",
+        "devices": "Dispositivos",
+        "add_room": "Añadir nueva habitación"
+    },
+    "alarm_panel": {
+        "arm_home":"Armar en casa",
+        "arm_away": "Armar fuera de casa",
+        "disarmed": "Desarmado",
+        "pending": "Pendiente",
+        "armed_away": "Armado fuera de casa",
+        "armed_home": "Armado en casa",
+        "armed_night": "Armado noche",
+        "armed": "Armado"
+    },
+    "toggle": {
+        "require_slide_open_disabled": "Requiere deslizar para abrir Deshabilitado",
+        "require_slide_open_enabled": "Requiere deslizar para abrir Habilitado",
+        "prevent_accidentally_open": "Prevenir accidentalmente Abierto",
+        "1_touch": "puede abrirse con 1 toque"
+    },
+    "rgb": {
+        "pick_color": "¡Elige un color!"
+    },
+    "webview": {
+        "edit": "Editar Web",
+        "saved": "Web guardada",
+        "reload": "Recargar Web",
+        "pin": "Marcar Web - Prevenir scroll",
+        "unpin": "Desmarcar Web - Permitir scroll",
+        "windy": "Viento",
+        "y_weather": "Y! Weather",
+        "live_score": "LiveScore",
+        "aspect": "Aspecto"
+    },
+    "login": {
+        "connecting": "Conectando con",
+        "correct_info": "Comprueba que la información es correcta",
+        "cancel": "Cancelar el login"
+    },
+    "settings": {
+        "home_assistant": "Conexión ",
+        "new_connection": "Crear nueva conexión...",
+        "use_https": "Usar https",
+        "connect": "Conectar",
+        "sync": "Google Cloud Sync",
+        "theme_color": "Color del tema",
+        "language": "Idioma",
+        "layout": "Esquema",
+        "about": "Acerca de HassKit",
+        "about_info": "HassKit is a Touch-Friendly - Zero Config App to help users instantly start using Home Assistant (Hass).\n\nHass is one of the best platforms for Home Automation, with powerful features and the world's widest range of device support. Hass only requires some simple/cheap hardware to get started.\n\nHowever, Hass is not easy to set up and requires a few months to master. HassKit aims to ease the learning steps and improve the quality of life for Hass users by providing a stunning look and 10-second setup to start using this wonderful Home Automation platform.\n\nHassKit is free, open-source and under development. We need your help to improve the app's features for us to better serve you.\n\nPlease find us on Discord and Facebook. Your contributions are always welcome.",
+        "3_buttons": "3 Botones",
+        "4_buttons": "4 Botones"
+    },
+    "google_sync": {
+        "use": "Use Cloud Data Sync",
+        "info": "Keep your rooms layout and device customization synchronized accross devices. HassKit won't upload your login data online...",
+        "sign_out": "Cerrar sesión",
+        "sign_in": "Iniciar sesión",
+        "force_download": "Forzar descarga de datos de la nube",
+        "sync_problem": "Use ONLY when you have sync issue",
+        "force_upload": "Force upload data to cloud",
+        "force_reset": "Force reset data on cloud"
+    },
+    "theme_selector": {
+        "dark": "Tema Oscuro",
+        "light": "Tema Claro"
+    },
+    "states": {
+        "off": "Apagado",
+        "on": "Encendido",
+        "closed": "Cerrado",
+        "open": "Abierto",
+        "locked": "Bloqueado",
+        "unlocked": "Desbloqueado",
+        "disarmed": "Desarmado",
+        "arm_pending": "Pendiente",
+        "armed_away": "Armado fuera de casa",
+        "armed_home": "Armado en casa",
+        "armed_night": "Armed night",
+        "armed": "Armed",
+        "fan_high": "High",
+        "fan_high_medium": "Medium High",
+        "fan_medium": "Medium",
+        "fan_medium_low": "Medium Low",
+        "fan_low": "Low",
+        "fan_lowest": "Lowest"
+    }
+}
