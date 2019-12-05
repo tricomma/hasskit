@@ -30,7 +30,7 @@
         "arrange": "Xắp xếp",
         "move": "Di chuyển",
         "delete": "Xóa",
-        "devices": "Các thiệt bị",
+        "devices": "",
         "add_room": "Thêm phòng mới"
     },
     "alarm_panel": {
@@ -84,7 +84,7 @@
     },
     "google_sync": {
         "use": "Sử dụng động bộ dữ liệu đám mây",
-        "info": "Giữ bố trí phòng của bạn và tùy chỉnh thiết bị được đồng bộ hóa trên các thiết bị. HassKit không tải lên dữ liệu đăng nhập của bạn lên mạng ...",
+        "info": "Đồng bộ hóa thiết lập phòng và tùy chỉnh các thiết bị thông qua điện toán đám mây. HassKit không tải lên dữ liệu đăng nhập của bạn lên mạng...",
         "sign_out": "Đăng xuất",
         "sign_in": "Đăng nhập",
         "force_download": "Tải dữ liệu từ đám mây",

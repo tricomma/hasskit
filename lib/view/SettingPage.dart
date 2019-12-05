@@ -88,10 +88,6 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
-  void reload() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     // log.w("Widget build SettingPage");
@@ -290,7 +286,7 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 title: Translate.getString("settings.language", context),
               ),
-              _LanguageSelector(reload: reload),
+              _LanguageSelector(),
               SliverHeaderNormal(
                 icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
@@ -639,9 +635,6 @@ class _LayoutSelector extends StatelessWidget {
 }
 
 class _LanguageSelector extends StatelessWidget {
-  final Function reload;
-  const _LanguageSelector({@required this.reload});
-
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -651,18 +644,27 @@ class _LanguageSelector extends StatelessWidget {
             alignment: Alignment.center,
             child: ToggleButtons(
               isSelected: gd.selectedLanguageIndex,
+              constraints: BoxConstraints.tight(Size(42, 32)),
+              borderColor: Colors.transparent,
+              selectedBorderColor: ThemeInfo.colorBottomSheetReverse,
               children: <Widget>[
                 Image.asset(
                   "assets/flags/gb.png",
+                  fit: BoxFit.cover,
                   width: 40,
+                  height: 30,
                 ),
                 Image.asset(
                   "assets/flags/se.png",
+                  fit: BoxFit.cover,
                   width: 40,
+                  height: 30,
                 ),
                 Image.asset(
                   "assets/flags/vn.png",
+                  fit: BoxFit.cover,
                   width: 40,
+                  height: 30,
                 ),
               ],
               onPressed: (int index) {
@@ -682,7 +684,6 @@ class _LanguageSelector extends StatelessWidget {
                     gd.selectedLanguageIndex[buttonIndex] = false;
                   }
                 }
-                reload();
               },
             ),
           ),

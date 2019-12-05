@@ -2129,7 +2129,7 @@ class GeneralData with ChangeNotifier {
   String get currentLocale => _currentLocale;
 
   set currentLocale(String val) {
-    if(val != null && val != "" && _currentLocale != val) {
+    if (val != null && val != "" && _currentLocale != val) {
       _currentLocale = val;
       setLocale();
     }
@@ -2141,19 +2141,29 @@ class GeneralData with ChangeNotifier {
   List<String> languageCode = ["en", "sv", "vi"];
   List<String> countryCode = ["US", "SE", "VN"];
 
-//  String _selectedLanguage;
-//  String get selectedLanguage => _selectedLanguage;
-//  set selectedLanguage(String val) {
-//    _selectedLanguage = val;
-//    notifyListeners();
-//  }
-}
-
-void setLocale() {
-  log.d("setLocale ${gd.localeData.toString()} ");
-  if (gd.currentLocale == "sv_SE") {
-    gd.localeData.changeLocale(Locale("sv", "SE"));
-  } else {
-    gd.localeData.changeLocale(Locale("en", "US"));
+  void setLocale() {
+    log.d("setLocale ${gd.localeData.toString()} ");
+    if (gd.currentLocale == "sv_SE") {
+      gd.localeData.changeLocale(Locale("sv", "SE"));
+      selectedLanguageIndex = [
+        false,
+        true,
+        false,
+      ];
+    } else if (gd.currentLocale == "vi_VN") {
+      gd.localeData.changeLocale(Locale("vi", "VN"));
+      selectedLanguageIndex = [
+        false,
+        false,
+        true,
+      ];
+    } else {
+      gd.localeData.changeLocale(Locale("en", "US"));
+      selectedLanguageIndex = [
+        true,
+        false,
+        false,
+      ];
+    }
   }
 }
