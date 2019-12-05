@@ -18,7 +18,6 @@ import 'helper/Logger.dart';
 import 'helper/MaterialDesignIcons.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:devicelocale/devicelocale.dart';
 
 void main() {
 //  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -45,7 +44,6 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
     ]);
     gd.localeData = EasyLocalizationProvider.of(context).data;
-
     return EasyLocalizationProvider(
       data: gd.localeData,
       child: Selector<GeneralData, ThemeData>(
@@ -126,38 +124,9 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  Future<void> initPlatformState() async {
-    List languages;
-    String currentLocale;
-
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      languages = await Devicelocale.preferredLanguages;
-      print(languages);
-    } on PlatformException {
-      print("Error obtaining preferred languages");
-    }
-    try {
-      currentLocale = await Devicelocale.currentLocale;
-      print(currentLocale);
-    } on PlatformException {
-      print("Error obtaining current locale");
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      gd.currentLocale = currentLocale;
-    });
-  }
-
   @override
   void initState() {
-    super.initState();
-    initPlatformState();
+    super.initState();   
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     WidgetsBinding.instance.addObserver(this);
