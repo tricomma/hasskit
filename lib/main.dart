@@ -124,19 +124,9 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  Future<void> initPlatformState() async {
-
-    setState(() {
-      //gd.currentLocale = currentLocale;
-    });
-  }
-
   @override
   void initState() {
-    super.initState();
-    initPlatformState();
-
-    
+    super.initState();   
 
     WidgetsBinding.instance.addPostFrameCallback(_afterLayout);
     WidgetsBinding.instance.addObserver(this);
