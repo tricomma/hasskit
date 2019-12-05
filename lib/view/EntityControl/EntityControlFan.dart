@@ -119,7 +119,7 @@ class _EntityControlFanState extends State<EntityControlFan> {
                   Positioned(
                     bottom: 0,
                     child: Container(
-                      alignment: Alignment.bottomCenter,
+                      alignment: Alignment.topCenter,
                       width: buttonWidth,
                       height: buttonHeightInner + diffY,
                       padding: const EdgeInsets.all(2.0),

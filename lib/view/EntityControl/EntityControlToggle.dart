@@ -81,7 +81,7 @@ class _EntityControlToggleState extends State<EntityControlToggle> {
               Positioned(
                 bottom: 0,
                 child: Container(
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.topCenter,
                   width: buttonWidth,
                   height: buttonValue,
                   padding: const EdgeInsets.all(2.0),
@@ -104,7 +104,6 @@ class _EntityControlToggleState extends State<EntityControlToggle> {
                           color: gd.entities[widget.entityId].isStateOn
                               ? ThemeInfo.colorIconActive
                               : ThemeInfo.colorIconInActive),
-                      SizedBox(height: 8),
                       Text(
                         gd.textToDisplay(gd.entities[widget.entityId].state),
                         style: ThemeInfo.textStatusButtonActive,
@@ -114,7 +113,6 @@ class _EntityControlToggleState extends State<EntityControlToggle> {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 8),
                     ],
                   ),
                 ),
