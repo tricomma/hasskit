@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               EasylocaLizationDelegate(
-                  locale: gd.localeData.locale, path: 'lang')
+                  locale: gd.localeData.locale, path: 'assets/langs')
             ],
             locale: gd.localeData.savedLocale,
             supportedLocales: [Locale('en', 'US'), Locale('sv', 'SE')],
@@ -220,6 +220,7 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     return Selector<GeneralData, String>(
       selector: (_, generalData) =>
           "${generalData.viewMode} | " +
+          "${Localizations.localeOf(context).languageCode} | " +
           "${generalData.baseSetting.itemsPerRow} | " +
           "${generalData.mediaQueryHeight} | " +
           "${generalData.connectionStatus} | " +

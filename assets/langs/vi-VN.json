@@ -1,0 +1,119 @@
+{
+    "global": {
+        "duration": "Độ dài",
+        "open": "Mở",
+        "closed": "Đóng",
+        "on": "Bật",
+        "off": "Tắt",
+        "error": "Lỗi",
+        "no_data": "Không có dữ liệu",
+        "reset": "Đặt lại",
+        "ok": "Ok",
+        "left": "Trái",
+        "right": "Phải",
+        "connect_hass": "Vui lòng kết nối với\nHome Assistant",
+        "last_update": "Cập nhật lần cuối",
+        "cancel": "Hủy",
+        "settings": "Cài đặt",
+        "rooms": "Phòng",
+        "disconnect": "Ngắt kết nối",
+        "refresh": "Làm mới",
+        "last_access": "Kết nối lần cuối",
+        "connected": "Đã kết nối",
+        "disconnected": "Ngắt kết nối"
+    },
+    "edit": {
+        "select_icon": "Lựa chọn biểu tượng tùy chọn",
+        "reset_icon": "Đặt lại biểu tượng",
+        "rbg_color": "Giữ lâu để sửa mầu",
+        "edit": "Sửa",
+        "arrange": "Xắp xếp",
+        "move": "Di chuyển",
+        "delete": "Xóa",
+        "devices": "Các thiệt bị",
+        "add_room": "Thêm phòng mới"
+    },
+    "alarm_panel": {
+        "arm_home":"Ở nhà",
+        "arm_away": "Đi vắng",
+        "disarmed": "Vô hiệu hóa",
+        "pending": "Chuẩn bị",
+        "armed_away": "Đi vắng",
+        "armed_home": "Ở nhà",
+        "armed_night": "Ban đêm",
+        "armed": "Đã bật"
+    },
+    "toggle": {
+        "require_slide_open_disabled": "Bỏ chế độ trượt để mở",
+        "require_slide_open_enabled": "Bật chết độ trượt để mở",
+        "prevent_accidentally_open": "Ngăn chặn vô tình mở",
+        "1_touch": "Có thể mở với 1 chạm"
+    },
+    "rgb": {
+        "pick_color": "Chọn mầu!"
+    },
+    "webview": {
+        "edit": "Sửa website",
+        "saved": "Website đã lưu",
+        "reload": "Tải lại website",
+        "pin": "Đính website - không cho phép cuộn",
+        "unpin": "Gỡ đính website - cho phép cuộn",
+        "windy": "Windy",
+        "y_weather": "Y! Weather",
+        "live_score": "LiveScore",
+        "aspect": "Tỉ lệ"
+    },
+    "login": {
+        "connecting": "Đang kết nối tới",
+        "correct_info": "Đảm bảo các thông tin sau đây chính xác",
+        "cancel": "Hủy kết nối đăng nhập web"
+    },
+    "settings": {
+        "home_assistant": "Kết nối Home Assistant",
+        "new_connection": "Tạo kết nối mới...",
+        "use_https": "Dùng https",
+        "connect": "Kêt nối",
+        "sync": "Đồng bộ qua Google Cloud",
+        "theme_color": "Chủ đề mầu",
+        "language": "Ngôn ngữ",
+        "layout": "Bố trí",
+        "about": "Thông tin về HassKit",
+        "about_info": "HassKit là một ứng dụng mạnh mẽ và thân thiện giúp người dùng ngay lập tức bằng cách sử dụng Home Assistant (Hass) mà không cần qua các thao tác cài đặt phức tạp.\n\nHass là một trong những nền tảng tốt nhất cho nhà thông minh, với các tính năng mạnh mẽ và phạm vi hỗ trợ thiết bị rộng nhất thế giới. Hass chỉ yêu cầu một số phần cứng đơn giản / không đắt tiền để bắt đầu điều khiển nhà thông minh.\n\nTuy nhiên, Hass không dễ thiết lập và cần vài tháng để thành thạo. HassKit nhằm mục đích đơn giản hóa các yêu cầu cấu hình  phức tạp của Hass bằng cách cung cấp giao diện tuyệt đẹp và thiết lập 10 giây để bắt đầu sử dụng nền tảng nhà thông minh tuyệt vời này.\n\nHassKit miễn phí, mã nguồn mở và đang được phát triển. Chúng tôi cần sự giúp đỡ của bạn để cải thiện các tính năng của ứng dụng để chúng tôi phục vụ bạn tốt hơn.\n\nHãy tham gia cùng chúng tôi trên Discord và Facebook. Xin cảm ơn đóng góp dưới mọi hình thức của bạn.",
+        "3_buttons": "3 nút một hàng",
+        "4_buttons": "4 nút một hàng"
+    },
+    "google_sync": {
+        "use": "Sử dụng động bộ dữ liệu đám mây",
+        "info": "Giữ bố trí phòng của bạn và tùy chỉnh thiết bị được đồng bộ hóa trên các thiết bị. HassKit không tải lên dữ liệu đăng nhập của bạn lên mạng ...",
+        "sign_out": "Đăng xuất",
+        "sign_in": "Đăng nhập",
+        "force_download": "Tải dữ liệu từ đám mây",
+        "sync_problem": "Chỉ sử dụng khi bạn gặp sự cố đồng bộ hóa",
+        "force_upload": "Tải dữ liệu lên đám mây",
+        "force_reset": "Đặt lại dữ liệu trên đám mây"
+    },
+    "theme_selector": {
+        "dark": "Chủ đề tối",
+        "light": "Chủ đề sáng"
+    },
+    "states": {
+        "off": "Tắt",
+        "on": "Bật",
+        "closed": "Đóng",
+        "open": "Mở",
+        "locked": "Khóa",
+        "unlocked": "Mở",
+        "disarmed": "Disarmed",
+        "arm_pending": "Đang chờ",
+        "armed_away": "Armed away",
+        "armed_home": "Armed home",
+        "armed_night": "Armed night",
+        "armed": "Armed",
+        "fan_high": "Nhanh",
+        "fan_high_medium": "Nhanh vừa",
+        "fan_medium": "Vừa",
+        "fan_medium_low": "Chậm vừa",
+        "fan_low": "Chậm",
+        "fan_lowest": "Chậm nhất"
+    }
+}

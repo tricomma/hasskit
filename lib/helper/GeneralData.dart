@@ -2126,4 +2126,15 @@ class GeneralData with ChangeNotifier {
 
   String currentLocale;
   var localeData;
+
+  List<bool> selectedLanguageIndex = [true, false, false];
+  List<String> languageCode = ["en", "sv", "vi"];
+  List<String> countryCode = ["US", "SE", "VN"];
+
+//  String _selectedLanguage;
+//  String get selectedLanguage => _selectedLanguage;
+//  set selectedLanguage(String val) {
+//    _selectedLanguage = val;
+//    notifyListeners();
+//  }
 }

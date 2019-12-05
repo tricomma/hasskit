@@ -75,6 +75,7 @@
         "connect": "Anslut",
         "sync": "Google Cloud Sync",
         "theme_color": "Tema färg",
+        "language": "Språk",
         "layout": "Layout",
         "about": "Om HassKit",
         "about_info": "HassKit är en touch-vänlig - noll konfigurerings app för att hjälpa till att få det lätt att komma igång med Home Assistant (Hass).\n\nHass är en av de bästa plattformarna för hem automatition, med kraftfulla funktioner och stödjer väldigt många enheter. Hass kräver väldigt lite av hårdvaran och han köras på billig hårdvara. Dock så är Hass inte lätt att komma igång med då det kräver mycket konfigurering och även lite script kunskaper. HassKits mål är att ta bort denna tröskel och göra Hass tillgängligt för alla.\n\nHassKit är gratis och open source. Det är under utveckling. Vi behöver hjälp med att göra appen ännu bättre med mer funktioner!\n\nNi kan hitta oss på Discord eller Facebook. Dina bidrag är alltid välkomna.",

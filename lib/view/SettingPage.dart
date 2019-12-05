@@ -88,6 +88,10 @@ class _SettingPageState extends State<SettingPage> {
     }
   }
 
+  void reload() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     // log.w("Widget build SettingPage");
@@ -282,6 +286,13 @@ class _SettingPageState extends State<SettingPage> {
               _LayoutSelector(),
               SliverHeaderNormal(
                 icon: Icon(
+                  MaterialDesignIcons.getIconDataFromIconName("mdi:web"),
+                ),
+                title: Translate.getString("settings.language", context),
+              ),
+              _LanguageSelector(reload: reload),
+              SliverHeaderNormal(
+                icon: Icon(
                   MaterialDesignIcons.getIconDataFromIconName(
                       "mdi:account-circle"),
                 ),
@@ -431,6 +442,7 @@ class _SettingPageState extends State<SettingPage> {
   Future<void> _initPackageInfo() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
     setState(() {
+      log.d("_packageInfo $_packageInfo");
       _packageInfo = info;
     });
   }
@@ -618,6 +630,60 @@ class _LayoutSelector extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LanguageSelector extends StatelessWidget {
+  final Function reload;
+  const _LanguageSelector({@required this.reload});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          Container(
+            alignment: Alignment.center,
+            child: ToggleButtons(
+              isSelected: gd.selectedLanguageIndex,
+              children: <Widget>[
+                Image.asset(
+                  "assets/flags/gb.png",
+                  width: 40,
+                ),
+                Image.asset(
+                  "assets/flags/se.png",
+                  width: 40,
+                ),
+                Image.asset(
+                  "assets/flags/vn.png",
+                  width: 40,
+                ),
+              ],
+              onPressed: (int index) {
+                for (int buttonIndex = 0;
+                    buttonIndex < gd.selectedLanguageIndex.length;
+                    buttonIndex++) {
+                  if (buttonIndex == index) {
+                    log.d(
+                        "buttonIndex $buttonIndex gd.languageCode[buttonIndex] ${gd.languageCode[buttonIndex]} gd.countryCode[buttonIndex] ${gd.countryCode[buttonIndex]}");
+
+                    gd.selectedLanguageIndex[buttonIndex] = true;
+                    gd.localeData.changeLocale(Locale(
+                      gd.languageCode[buttonIndex],
+                      gd.countryCode[buttonIndex],
+                    ));
+                  } else {
+                    gd.selectedLanguageIndex[buttonIndex] = false;
+                  }
+                }
+                reload();
+              },
             ),
           ),
         ],
